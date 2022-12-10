@@ -1,0 +1,58 @@
+.CategoryTile {
+  background-color: #243145;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-radius: 7px;
+  margin-bottom: 20px;
+}
+
+.CategoryTile .right-column {
+  flex-grow: 1;
+}
+
+.CategoryTile .text {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.CategoryTile i {
+  font-size: 40px;
+  margin-right: 20px;
+}
+
+.CategoryTile.MISSINGCATEGORY i {
+  color: #e74c3c;
+}
+.CategoryTile.Utilities i {
+  color: #f1c40f;
+}
+.CategoryTile.EatOut i {
+  color: #9b59b6;
+}
+.CategoryTile.Market i {
+  color: #1abc9c;
+}
+.CategoryTile.Others i {
+  color: #2ecc71;
+}
+.CategoryTile.Gas i {
+  color: #3498db;
+}
+
+.CategoryTile .progress-bar {
+  height: 5px;
+  width: 100%;
+  background-color: green;
+}
+
+.CategoryTile .amount {
+  font-size: 25px;
+}
+
+.CategoryTile .amount span {
+  font-size: 16px;
+  color: #7f8c8d
+}

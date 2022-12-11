@@ -1,31 +1,41 @@
 import { CategoryTile } from "./CategoryTile";
-import mockData from "../constants/mockData.json";
+import { mockTransactionData, mockLimitPerCategory } from "../constants/mockData.js";
+import "./MainDashboard.css";
 
 const aggregateExpansesPerCategory = (itemIdsInCategory, allItems) =>
-  itemIdsInCategory.reduce((acc, itemId) => {
-    const currentItem = allItems[itemId];
-    const amount = parseFloat(currentItem.amount.slice(1))
-    return acc + amount;
-  }, 0);
-
-
+  itemIdsInCategory.reduce(
+    (acc, itemId) => acc + allItems[itemId].amount,
+    0
+  );
 
 export const MainDashboard = () => {
   // TODO: this should be in a provider
-  const data = mockData;
-  const categoriesList = Object.keys(data.grouping.category);
+  const transactionData = mockTransactionData;
+  const limitPerCategory = mockLimitPerCategory;
+  const categoriesList = Object.keys(transactionData.grouping.category);
   const spentPerCategory = categoriesList.reduce((acc, category) => ({
     ...acc,
-    [category]: aggregateExpansesPerCategory(data.grouping.category[category], data.items)
+    [category]: aggregateExpansesPerCategory(transactionData.grouping.category[category], transactionData.items)
   }), {})
 
+  categoriesList.sort((a, b) => {
+    const percentageA = (spentPerCategory[a]/limitPerCategory[a]) * 100;
+    const percentageB = (spentPerCategory[b]/limitPerCategory[b]) * 100;
+    if (percentageA < percentageB) {
+      return 1;
+    }
+    if (percentageA > percentageB) {
+      return -1;
+    }
+    return 0;
+  });
 
   return (
-    <div className="App">
+    <div className="main-dashboard">
       {categoriesList.map(category => (
         <CategoryTile
           category={category}
-          limit={100}
+          limit={limitPerCategory[category]}
           amountSpent={spentPerCategory[category]}
         />
       ))}

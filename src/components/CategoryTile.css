@@ -1,58 +1,104 @@
-.CategoryTile {
+.category-tile {
   background-color: #243145;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 15px;
   border-radius: 7px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+  width: 45%;
+  box-sizing: border-box;
 }
 
-.CategoryTile .right-column {
+.category-tile .circular-progress-bar-content {
+  text-align: center;
+}
+
+.category-tile .circular-progress-bar-content .amount-spent {
+  margin: 0;
+  font-size: 1.75em;
+  border-bottom: solid 1px #4f688f;
+}
+
+.category-tile.good {
+  color: #2ecc71;
+}
+.category-tile.good .CircularProgressbar .CircularProgressbar-path {
+  stroke: #2ecc71;
+}
+
+.category-tile.warning {
+  color: #f1c40f;
+}
+.category-tile.warning .CircularProgressbar .CircularProgressbar-path {
+  stroke: #f1c40f;
+}
+
+.category-tile.danger {
+  color: #e74c3c;
+}
+.category-tile.danger .CircularProgressbar .CircularProgressbar-path {
+  stroke: #e74c3c;
+}
+
+
+.category-tile .circular-progress-bar-content .limit {
+  margin: 0;
+  color: #a1a1a1;
+}
+
+.category-tile .CircularProgressbar .CircularProgressbar-path {
+  stroke: red;
+}
+.category-tile .CircularProgressbar .CircularProgressbar-trail {
+  stroke: gray;
+}
+
+/* .category-tile .right-column {
   flex-grow: 1;
-}
+} */
 
-.CategoryTile .text {
+/* .category-tile .text {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.CategoryTile i {
+.category-tile i {
   font-size: 40px;
   margin-right: 20px;
 }
 
-.CategoryTile.MISSINGCATEGORY i {
+.category-tile.MISSINGCATEGORY i {
   color: #e74c3c;
 }
-.CategoryTile.Utilities i {
+.category-tile.Utilities i {
   color: #f1c40f;
 }
-.CategoryTile.EatOut i {
+.category-tile.EatOut i {
   color: #9b59b6;
 }
-.CategoryTile.Market i {
+.category-tile.Market i {
   color: #1abc9c;
 }
-.CategoryTile.Others i {
+.category-tile.Others i {
   color: #2ecc71;
 }
-.CategoryTile.Gas i {
+.category-tile.Gas i {
   color: #3498db;
 }
 
-.CategoryTile .progress-bar {
+.category-tile .progress-bar {
   height: 5px;
   width: 100%;
   background-color: green;
 }
 
-.CategoryTile .amount {
+.category-tile .amount {
   font-size: 25px;
 }
 
-.CategoryTile .amount span {
+.category-tile .amount span {
   font-size: 16px;
   color: #7f8c8d
-}
+} */

@@ -12,7 +12,8 @@ export const MainDashboard = () => {
   // TODO: this should be in a provider
   const transactionData = mockTransactionData;
   const limitPerCategory = mockLimitPerCategory;
-  const categoriesList = Object.keys(transactionData.grouping.category);
+  const categoriesList = Object.keys(transactionData.grouping.category)
+    .filter(category => category !== "MISSING CATEGORY");
   const spentPerCategory = categoriesList.reduce((acc, category) => ({
     ...acc,
     [category]: aggregateExpansesPerCategory(transactionData.grouping.category[category], transactionData.items)

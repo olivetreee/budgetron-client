@@ -1,8 +1,6 @@
 .category-tile {
   background-color: #243145;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  text-align: center;
   padding: 15px;
   border-radius: 7px;
   margin-bottom: 15px;
@@ -10,40 +8,50 @@
   box-sizing: border-box;
 }
 
+.category-tile p {
+  margin: 0;
+}
+
+.category-tile p.category {
+  margin-top: 10px;
+  font-size: 1.5em;
+}
+
+.category-tile p.category i {
+  margin-right: 10px;
+}
+
 .category-tile .circular-progress-bar-content {
   text-align: center;
 }
 
 .category-tile .circular-progress-bar-content .amount-spent {
-  margin: 0;
   font-size: 1.75em;
   border-bottom: solid 1px #4f688f;
 }
 
-.category-tile.good {
+.category-tile.good .circular-progress-bar-content {
   color: #2ecc71;
 }
 .category-tile.good .CircularProgressbar .CircularProgressbar-path {
   stroke: #2ecc71;
 }
 
-.category-tile.warning {
+.category-tile.warning .circular-progress-bar-content {
   color: #f1c40f;
 }
 .category-tile.warning .CircularProgressbar .CircularProgressbar-path {
   stroke: #f1c40f;
 }
 
-.category-tile.danger {
+.category-tile.danger .circular-progress-bar-content {
   color: #e74c3c;
 }
 .category-tile.danger .CircularProgressbar .CircularProgressbar-path {
   stroke: #e74c3c;
 }
 
-
 .category-tile .circular-progress-bar-content .limit {
-  margin: 0;
   color: #a1a1a1;
 }
 
@@ -53,52 +61,3 @@
 .category-tile .CircularProgressbar .CircularProgressbar-trail {
   stroke: gray;
 }
-
-/* .category-tile .right-column {
-  flex-grow: 1;
-} */
-
-/* .category-tile .text {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.category-tile i {
-  font-size: 40px;
-  margin-right: 20px;
-}
-
-.category-tile.MISSINGCATEGORY i {
-  color: #e74c3c;
-}
-.category-tile.Utilities i {
-  color: #f1c40f;
-}
-.category-tile.EatOut i {
-  color: #9b59b6;
-}
-.category-tile.Market i {
-  color: #1abc9c;
-}
-.category-tile.Others i {
-  color: #2ecc71;
-}
-.category-tile.Gas i {
-  color: #3498db;
-}
-
-.category-tile .progress-bar {
-  height: 5px;
-  width: 100%;
-  background-color: green;
-}
-
-.category-tile .amount {
-  font-size: 25px;
-}
-
-.category-tile .amount span {
-  font-size: 16px;
-  color: #7f8c8d
-} */

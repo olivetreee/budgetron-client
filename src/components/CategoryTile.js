@@ -15,29 +15,17 @@ export const CategoryTile = ({
   if (percentageConsumed > 75) status = "danger";
 
   return (
-    <>
-      <div className={`category-tile ${category.split(" ").join("")} ${status}`}>
+    <div className={`category-tile ${category.split(" ").join("")} ${status}`}>
       <CircularProgressbarWithChildren value={percentageConsumed}>
         <div className="circular-progress-bar-content">
           <p className="amount-spent">${Math.ceil(amountSpent)}</p>
           <p className="limit">${limit}</p>
         </div>
       </CircularProgressbarWithChildren>
-    {/* <i className={`fa fa-light ${CATEGORY_ICON[category]}`} />
-        <div className="right-column">
-          <div className="text">
-            <h2>{category}</h2>
-            <div>
-              <p className="amount">
-                {`$${amountSpent}`}
-                <br/>
-                <span>{`out of $${limit}`}</span>
-              </p>
-            </div>
-          </div>
-          <div className="progress-bar" />
-        </div> */}
-      </div>
-    </>
+      <p className="category">
+        <i className={`fa fa-light ${CATEGORY_ICON[category]}`} />
+        {category}
+      </p>
+    </div>
   )
 };

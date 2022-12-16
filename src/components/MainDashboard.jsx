@@ -12,6 +12,9 @@ const aggregateExpansesPerCategory = (itemIdsInCategory = [], allItems) =>
 export const MainDashboard = () => {
   const [transactionData] = useTransactions();
   const limitPerCategory = mockLimitPerCategory;
+  if (!transactionData) {
+    return null;
+  }
   const categoriesList = Object.keys(mockLimitPerCategory);
     // .filter(category => category !== "MISSING CATEGORY");
   const spentPerCategory = categoriesList.reduce((acc, category) => ({

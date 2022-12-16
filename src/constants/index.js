@@ -12,3 +12,5 @@ export const CATEGORY_ICON = {
   "Childcare": "fa-children",
   "Gas": "fa-gas-pump"
 }
+
+export const BASE_API_URL = "https://roch217xrc.execute-api.us-west-2.amazonaws.com";

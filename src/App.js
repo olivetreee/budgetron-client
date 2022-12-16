@@ -1,13 +1,16 @@
 import './App.css';
 import { MainDashboard } from "./components/MainDashboard";
 import { TransactionsProvider } from './components/TransactionsProvider';
+import { CategoriesProvider } from './components/CategoriesProvider';
 
 function App() {
   return (
     <div className="App">
-      <TransactionsProvider>
-        <MainDashboard />
-      </TransactionsProvider>
+      <CategoriesProvider>
+        <TransactionsProvider>
+          <MainDashboard />
+        </TransactionsProvider>
+      </CategoriesProvider>
     </div>
   );
 }

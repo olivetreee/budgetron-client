@@ -23,7 +23,7 @@ export const CategoryTile = ({
         </div>
       </CircularProgressbarWithChildren>
       <p className="category">
-        <i className={`fa fa-light ${CATEGORY_ICON[category]}`} />
+        {/* <i className={`fa fa-light ${CATEGORY_ICON[category]}`} /> */}
         {category}
       </p>
     </div>

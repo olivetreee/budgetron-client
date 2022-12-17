@@ -5,7 +5,15 @@ import "./MainDashboard.css";
 
 const aggregateExpansesPerCategory = (itemIdsInCategory = [], allItems) =>
   itemIdsInCategory.reduce(
-    (acc, itemId) => acc + allItems[itemId].amount,
+    (acc, itemId) => {
+      const rawAmount = allItems[itemId].amount;
+      // Make it back-compat with older data that was saved as a string
+      const amount = typeof rawAmount === "string" && rawAmount.includes("$")
+        ? parseFloat(rawAmount.replace("$",""))
+        : rawAmount;
+      console.log('@@@amount', amount);
+      return acc + amount
+    },
     0
   );
 

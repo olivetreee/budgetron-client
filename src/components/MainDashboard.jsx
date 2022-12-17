@@ -1,7 +1,7 @@
 import { CategoryTile } from "./CategoryTile";
-import { mockLimitPerCategory } from "../constants/mockData.js";
 import { useTransactions } from "./TransactionsProvider";
 import "./MainDashboard.css";
+import { useCategories } from "./CategoriesProvider";
 
 const aggregateExpansesPerCategory = (itemIdsInCategory = [], allItems) =>
   itemIdsInCategory.reduce(
@@ -19,11 +19,12 @@ const aggregateExpansesPerCategory = (itemIdsInCategory = [], allItems) =>
 
 export const MainDashboard = () => {
   const [transactionData] = useTransactions();
-  const limitPerCategory = mockLimitPerCategory;
-  if (!transactionData) {
+  const [categoriesData] = useCategories();
+  if (!transactionData || !categoriesData) {
     return null;
   }
-  const categoriesList = Object.keys(mockLimitPerCategory);
+  const limitPerCategory = categoriesData.items;
+  const categoriesList = Object.keys(limitPerCategory);
     // .filter(category => category !== "MISSING CATEGORY");
   const spentPerCategory = categoriesList.reduce((acc, category) => ({
     ...acc,

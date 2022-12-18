@@ -7,8 +7,10 @@ import { TransactionsProvider } from './components/TransactionsProvider';
 import { CategoriesProvider } from './components/CategoriesProvider';
 import { VendorTile } from "./components/VendorTile";
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { FixVendors } from "./components/FixVendors";
+
 
 const router = createBrowserRouter([
   {
@@ -21,11 +23,11 @@ const router = createBrowserRouter([
   },
   {
     path: "/vendors",
-    element: <VendorTile />,
+    element: <div>Placeholder for Vendors page</div>,
   },
   {
     path: "/fix-vendors",
-    element: <div>Placeholder for Fix Vendors page</div>,
+    element: <FixVendors />,
   },
 ]);
 

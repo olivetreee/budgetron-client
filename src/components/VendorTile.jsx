@@ -1,8 +1,11 @@
 import Dropdown from 'react-bootstrap/Dropdown';
 
-export const VendorTile = (vendor) => (
+export const VendorTile = ({ vendor }) => (
   <div className="vendor-tile">
-    <p>Vendor Name</p>
+    {console.log(vendor)}
+    <p>{vendor.name}</p>
+    {/* TODO: use the following list to update the transactions that has this merchant */}
+    <p>{vendor.transactions.join(", ")}</p>
     <Dropdown>
       <Dropdown.Toggle variant="success" id="dropdown-basic">
         Dropdown Button

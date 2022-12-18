@@ -11,7 +11,6 @@ const aggregateExpansesPerCategory = (itemIdsInCategory = [], allItems) =>
       const amount = typeof rawAmount === "string" && rawAmount.includes("$")
         ? parseFloat(rawAmount.replace("$",""))
         : rawAmount;
-      console.log('@@@amount', amount);
       return acc + amount
     },
     0

@@ -19,13 +19,11 @@ const aggregateExpansesPerCategory = (itemIdsInCategory = [], allItems) =>
 
 export const MainDashboard = () => {
   const [transactionData] = useTransactions();
-  const [categoriesData] = useCategories();
-  if (!transactionData || !categoriesData) {
+  const [categoryLimits, categoriesList] = useCategories();
+  if (!transactionData || !categoryLimits) {
     return null;
   }
-  const limitPerCategory = categoriesData.items;
-  const categoriesList = Object.keys(limitPerCategory);
-    // .filter(category => category !== "MISSING CATEGORY");
+  const limitPerCategory = categoryLimits.items;
   const spentPerCategory = categoriesList.reduce((acc, category) => ({
     ...acc,
     [category]: aggregateExpansesPerCategory(transactionData.grouping.category[category], transactionData.items)

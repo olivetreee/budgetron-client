@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useMemo } from "react";
 import useSWR from 'swr'
 import { BASE_API_URL } from "../constants";
 
@@ -13,9 +13,13 @@ const fetcher = async (...params) => {
 }
 
 export const CategoriesProvider = ({ children }) => {
-  // const [transactions, setTransactions] = useState(mockTransactionData);
   const url = `${BASE_API_URL}/categories`;
-  const { data, error } = useSWR(url, fetcher);
+  const { data: categoryLimits, error } = useSWR(url, fetcher);
+
+  const categoriesList = useMemo(() => error || !categoryLimits
+    ? []
+    : Object.keys(categoryLimits.items),
+  [error, categoryLimits]);
 
   if (error) {
     console.error(error);
@@ -23,7 +27,7 @@ export const CategoriesProvider = ({ children }) => {
   }
 
   return (
-    <CategoriesContext.Provider value={[ data ]}>
+    <CategoriesContext.Provider value={[ categoryLimits, categoriesList ]}>
       {children}
     </CategoriesContext.Provider>
   )

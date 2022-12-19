@@ -4,11 +4,13 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import Accordion from 'react-bootstrap/Accordion';
 import { CategoriesDropdown } from './CategoriesDropdown';
 
 import "./VendorTile.scss";
 import { LoadingIndicator } from './LoadingIndicator';
 import { BASE_API_URL } from '../constants';
+import { useTransactions } from './TransactionsProvider';
 
 const StatusIcon = ({ status }) => (
   <>
@@ -36,6 +38,25 @@ const StatusIcon = ({ status }) => (
     }
   </>
 );
+
+const RelevantTransactions = ({ transactionIds }) => {
+  const [allTransactions] = useTransactions();
+  const relatedTransactions = transactionIds.map(id => allTransactions.items[id]);
+  // TODO: Maybe change this to <Collapse>? If not, figure out how to render collapsed by default
+  return (
+    <Accordion>
+      <Accordion.Item>
+        <Accordion.Header>Transactions</Accordion.Header>
+        <Accordion.Body>
+          <pre>
+            {JSON.stringify(relatedTransactions, null, 2)}
+          </pre>
+        </Accordion.Body>
+      </Accordion.Item>
+
+    </Accordion>
+  )
+}
 
 export const VendorTile = ({ vendor }) => {
   const [vendorName, setVendorName] = useState(vendor.name);
@@ -136,6 +157,9 @@ export const VendorTile = ({ vendor }) => {
               </>
             )
           }
+        </Row>
+        <Row>
+          <RelevantTransactions transactionIds={vendor.transactions}/>
         </Row>
       </Container>
     </div>

@@ -8,17 +8,69 @@ import { CategoriesDropdown } from './CategoriesDropdown';
 
 import "./VendorTile.scss";
 import { LoadingIndicator } from './LoadingIndicator';
+import { BASE_API_URL } from '../constants';
+
+const StatusIcon = ({ status }) => (
+  <>
+    {
+      !status
+      && (
+        <Col xs={1} />
+      )
+    }
+    {
+      status === "success"
+      && (
+        <Col xs={1} className="success-icon d-flex align-items-center">
+          <i className="fa-solid fa-square-check" />
+        </Col>
+      )
+    }
+    {
+      status === "error"
+      && (
+        <Col xs={1} className="error-icon d-flex align-items-center">
+          <i className="fa-solid fa-square-xmark"></i>
+        </Col>
+      )
+    }
+  </>
+);
 
 export const VendorTile = ({ vendor }) => {
   const [vendorName, setVendorName] = useState(vendor.name);
   const [vendorHumanName, setVendorHumanName] = useState(vendor.name);
   const [category, setCategory] = useState(vendor.category);
   const [loading, setLoading] = useState(false);
+  const [fetchStatus, setFetchStatus] = useState("");
 
-  const onSave = () => {
-    console.log("@@@SAVING!", vendorName, category);
+  const onSave = async () => {
     setLoading(true);
-    setTimeout(() => setLoading(false), 2000)
+    const fetchOptions = {
+      method: "POST",
+      body: JSON.stringify({
+        vendor: vendorName,
+        category,
+        humanReadableName: vendorHumanName
+      })
+    }
+
+    try {
+      const response = await fetch(`${BASE_API_URL}/vendor-categories`, fetchOptions);
+      // const response = { status: 204, json: () => ({yo: "yo"}) };
+      if (response.status === 204) {
+        setFetchStatus("success");
+      } else {
+        const responseBody = await response.json();
+        console.debug(responseBody);
+        throw new Error(`Non-200 status: ${response.status}`);
+
+      }
+    } catch (err) {
+      setFetchStatus("error");
+    }
+    setLoading(false);
+    setTimeout(() => setFetchStatus(""), 3000);
   }
 
   const onDismiss = () => {
@@ -43,12 +95,13 @@ export const VendorTile = ({ vendor }) => {
                   <Form.Control onChange={ev => setVendorHumanName(ev.target.value)} value={vendorHumanName} />
                 </Form.Group>
               </Col>
-              <Col sm={12} lg={3}>
+              <Col xs={11} lg={3}>
                 <Form.Group className="mb-3">
                   <Form.Label>Category</Form.Label>
                     <CategoriesDropdown currentValue={category} onChange={setCategory}/>
                 </Form.Group>
               </Col>
+              <StatusIcon status={fetchStatus} />
             </Row>
           </Col>
         </Row>

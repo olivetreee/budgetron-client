@@ -10,4 +10,14 @@
     display: flex;
     justify-content: center;
   }
+
+  .success-icon {
+    color: #2ecc71;
+    font-size: 2em;
+  }
+
+  .error-icon {
+    color: #e74c3c;
+    font-size: 2em;
+  }
 }

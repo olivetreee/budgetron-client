@@ -2,10 +2,12 @@
   .form {
     background-color: #273143;
     border-radius: 7px;
+    padding: 1rem 0;
+    margin: 1rem 0;
   }
 
   .save-button {
     display: flex;
-    align-items: center;
+    justify-content: center;
   }
 }

@@ -3,7 +3,6 @@ import { VendorTile } from "./VendorTile";
 
 export const FixVendors = () => {
   const [transactionData, loadingTransactions] = useTransactions();
-  console.log('@@@loadingTransactions', loadingTransactions);
   if (loadingTransactions) {
     return "Loading..."
   };

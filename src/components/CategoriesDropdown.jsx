@@ -5,7 +5,7 @@ import { useCategories } from "./CategoriesProvider";
 export const CategoriesDropdown = ({ currentValue, onChange }) => {
   const [, categoriesList] = useCategories();
   return (
-    <DropdownButton variant="secondary" onSelect={onChange} title={currentValue}>
+    <DropdownButton variant="light" onSelect={onChange} title={currentValue}>
       {categoriesList.map(category => (
         <Dropdown.Item key={category} eventKey={category}>{category}</Dropdown.Item>
       ))}

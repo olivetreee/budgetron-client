@@ -2,8 +2,8 @@
   .form {
     background-color: #273143;
     border-radius: 7px;
-    padding: 1rem 0;
-    margin: 1rem 0;
+    padding-top: 1rem;
+    margin: 1rem auto;
   }
 
   .save-button {
@@ -19,5 +19,24 @@
   .error-icon {
     color: #e74c3c;
     font-size: 2em;
+  }
+
+  .relevant-transactions-wrapper {
+    border-top: solid 2px #7f8c8d;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    background-color: #384660;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
+
+    button {
+      color: #ecf0f1;
+      text-decoration: none;
+
+      i {
+        margin-left: 1rem;
+      }
+    }
   }
 }

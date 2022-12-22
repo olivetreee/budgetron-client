@@ -4,13 +4,16 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import Accordion from 'react-bootstrap/Accordion';
-import { CategoriesDropdown } from './CategoriesDropdown';
+// import Accordion from 'react-bootstrap/Accordion';
+import Collapse from 'react-bootstrap/Collapse';
 
-import "./VendorTile.scss";
+import { CategoriesDropdown } from './CategoriesDropdown';
 import { LoadingIndicator } from './LoadingIndicator';
 import { BASE_API_URL } from '../constants';
 import { useTransactions } from './TransactionsProvider';
+
+import "./VendorTile.scss";
+import { TransactionsTable } from './TransactionsTable';
 
 const StatusIcon = ({ status }) => (
   <>
@@ -42,19 +45,30 @@ const StatusIcon = ({ status }) => (
 const RelevantTransactions = ({ transactionIds }) => {
   const [allTransactions] = useTransactions();
   const relatedTransactions = transactionIds.map(id => allTransactions.items[id]);
-  // TODO: Maybe change this to <Collapse>? If not, figure out how to render collapsed by default
-  return (
-    <Accordion>
-      <Accordion.Item>
-        <Accordion.Header>Transactions</Accordion.Header>
-        <Accordion.Body>
-          <pre>
-            {JSON.stringify(relatedTransactions, null, 2)}
-          </pre>
-        </Accordion.Body>
-      </Accordion.Item>
 
-    </Accordion>
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <>
+      <Button
+        variant="link"
+        onClick={() => setIsOpen(!isOpen)}
+        aria-expanded={isOpen}
+      >
+        Transactions
+        {
+          isOpen
+          ? <i class="fa-solid fa-chevron-up"></i>
+          : <i class="fa-solid fa-chevron-down"></i>
+        }
+      </Button>
+      <Collapse in={isOpen}>
+        {/* Need the next div to get the proper bootstrap collapse class, since
+        the table component will oevrwrite the collapse class. */}
+        <div>
+          <TransactionsTable transactions={relatedTransactions} />
+        </div>
+      </Collapse>
+    </>
   )
 }
 
@@ -158,7 +172,7 @@ export const VendorTile = ({ vendor }) => {
             )
           }
         </Row>
-        <Row>
+        <Row className="relevant-transactions-wrapper">
           <RelevantTransactions transactionIds={vendor.transactions}/>
         </Row>
       </Container>

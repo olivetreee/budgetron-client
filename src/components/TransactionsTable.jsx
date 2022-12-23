@@ -15,7 +15,7 @@ export const TransactionsTable = ({ transactions }) => (
     <tbody>
       {
         transactions.map((transaction, idx) => (
-        <tr>
+        <tr key={transaction.emailId}>
           <td>{idx+1}</td>
           <td>{transaction.vendor}</td>
           <td>{printMoney(transaction.amount)}</td>

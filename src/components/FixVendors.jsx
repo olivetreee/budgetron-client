@@ -1,10 +1,12 @@
+import { LoadingIndicator } from "./LoadingIndicator";
 import { useTransactions } from "./TransactionsProvider";
 import { VendorTile } from "./VendorTile";
 
 export const FixVendors = () => {
-  const [transactionData, loadingTransactions] = useTransactions();
-  if (loadingTransactions) {
-    return "Loading..."
+  const [transactionData] = useTransactions();
+  console.log('@@@transactionData', transactionData);
+  if (transactionData.loading) {
+    return <LoadingIndicator />;
   };
 
   const missingCategoryTransactionIds = transactionData.grouping.category["MISSING CATEGORY"];
@@ -28,6 +30,6 @@ export const FixVendors = () => {
     }, {});
 
   return Object.values(missingCategoryVendors).map(vendor => (
-    <VendorTile vendor={vendor} />
+    <VendorTile key={vendor.name} vendor={vendor} />
   ));
 }

@@ -3,6 +3,7 @@ import { useTransactions } from "./TransactionsProvider";
 import { useCategories } from "./CategoriesProvider";
 
 import "./MainDashboard.css";
+import { LoadingIndicator } from "./LoadingIndicator";
 
 const aggregateExpansesPerCategory = (itemIdsInCategory = [], allItems) =>
   itemIdsInCategory.reduce(
@@ -20,8 +21,8 @@ const aggregateExpansesPerCategory = (itemIdsInCategory = [], allItems) =>
 export const MainDashboard = () => {
   const [transactionData] = useTransactions();
   const [categoryLimits, categoriesList] = useCategories();
-  if (!transactionData || !categoryLimits) {
-    return null;
+  if (transactionData.loading || !categoryLimits) {
+    return <LoadingIndicator />;
   }
   const limitPerCategory = categoryLimits.items;
   const spentPerCategory = categoriesList.reduce((acc, category) => ({
@@ -45,6 +46,7 @@ export const MainDashboard = () => {
     <div className="main-dashboard">
       {categoriesList.map(category => (
         <CategoryTile
+          key={category}
           category={category}
           limit={limitPerCategory[category]}
           amountSpent={spentPerCategory[category]}

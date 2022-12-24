@@ -4,7 +4,6 @@ import { VendorTile } from "./VendorTile";
 
 export const FixVendors = () => {
   const [transactionData] = useTransactions();
-  console.log('@@@transactionData', transactionData);
   if (transactionData.loading) {
     return <LoadingIndicator />;
   };

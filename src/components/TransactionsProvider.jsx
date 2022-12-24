@@ -14,8 +14,8 @@ const fetcher = async (...params) => {
   return parsedResponse;
 }
 
-const getInitialState = (data, error) => ({
-  loading: !data &&!error,
+const getInitialState = (data, error, isLoading) => ({
+  loading: isLoading,
   items: data?.items,
   size: data?.size,
   grouping: data?.grouping,
@@ -48,31 +48,31 @@ const transactionsReducer = (state, { type, payload }) => {
         error: payload
       }
     };
-    case 'update-transactions': {
+    case 'update-transaction': {
       const groupingKey = Object.keys(state.grouping)[0];
       const newGroupings = { ...state.grouping[groupingKey] };
-      payload.items.forEach(transaction => {
-        const currentGroupingValue = state.items[transaction.emailId][groupingKey];
-        const newGroupingValue = payload.items[transaction.emailId][groupingKey];
-        if (currentGroupingValue !== newGroupingValue) {
-          const currentGroupingAsSet = new Set(newGroupings[currentGroupingValue]);
-          currentGroupingAsSet.delete(transaction.emailId);
-          newGroupings[currentGroupingValue] = Array.from(currentGroupingAsSet);
+      const currentGroupingValue = state.items[payload.emailId][groupingKey];
+      const newGroupingValue = payload[groupingKey];
+      if (currentGroupingValue !== newGroupingValue) {
+        const currentGroupingAsSet = new Set(newGroupings[currentGroupingValue]);
+        currentGroupingAsSet.delete(payload.emailId);
+        newGroupings[currentGroupingValue] = Array.from(currentGroupingAsSet);
 
-          const newGroupingAsSet = new Set(newGroupings[newGroupingValue]);
-          newGroupingAsSet.add(transaction.emailId);
-          newGroupings[currentGroupingValue] = Array.from(newGroupingAsSet);
-        }
-      })
+        const newGroupingAsSet = new Set(newGroupings[newGroupingValue]);
+        newGroupingAsSet.add(payload.emailId);
+        newGroupings[newGroupingAsSet] = Array.from(newGroupingAsSet);
+      }
 
       return {
         ...state,
         loading: false,
         items: {
           ...state.items,
-          ...payload.items
+          [payload.emailId]: payload
         },
-        grouping: newGroupings
+        grouping: {
+          [groupingKey]: newGroupings
+        }
       }
     }
     default: {
@@ -88,18 +88,36 @@ export const TransactionsProvider = ({
 }) => {
   const dateToQuery = date.replace("/", "-");
   const url = `${BASE_API_URL}/transactions?date=${dateToQuery}&groupBy=${groupBy}`;
-  const { data, error } = useSWR(url, fetcher);
-  const [state, dispatch] = useReducer(transactionsReducer, getInitialState(data, error));
+  const { data, error, isLoading } = useSWR(url, fetcher, { revalidateOnFocus: false, shouldRetryOnError: false });
+  const [state, dispatch] = useReducer(transactionsReducer, getInitialState(data, error, isLoading));
 
   const actions = useMemo(() => ({
     setLoading: () => dispatch({ type: 'set-loading'}),
     setTransactions: payload => dispatch({ type: 'set-transactions', payload }),
     setError: payload => dispatch({ type: 'set-error', payload }),
-    updateTransactions: payload => dispatch({ type: 'update-transactions', payload }),
+    updateTransaction: payload => dispatch({ type: 'update-transaction', payload }),
+    editTransaction: async (transactionData) => {
+      const fetchOptions = {
+        method: "PATCH",
+        body: JSON.stringify(transactionData)
+      }
+
+      try {
+        const response = await fetch(`${BASE_API_URL}/transactions`, fetchOptions);
+        const responseBody = await response.json();
+        if (response.ok) {
+          dispatch({ type: 'update-transaction', payload: responseBody })
+        } else {
+          console.debug(responseBody);
+          actions.setError(responseBody);
+        }
+      } catch (err) {
+        actions.setError(err);
+      }
+    }
   }), []);
 
   useEffect(() => {
-    console.log('@@@inside useEffect');
     !data && !error && actions.setLoading();
 
     error && actions.setError(error);
@@ -112,29 +130,8 @@ export const TransactionsProvider = ({
     return null;
   }
 
-  // const editTransactions = async (transactions) => {
-  //   const fetchOptions = {
-  //     method: "PATCH",
-  //     body: JSON.stringify(transactions)
-  //   }
-
-  //   try {
-  //     const response = await fetcher(`${BASE_API_URL}/transactions`, fetchOptions);
-  //     if (response.status === 200) {
-  //       setFetchStatus("success");
-  //     } else {
-  //       const responseBody = await response.json();
-  //       console.debug(responseBody);
-  //       throw new Error(`Non-200 status: ${response.status}`);
-
-  //     }
-  //   } catch (err) {
-  //     setFetchStatus("error");
-  //   }
-  // }
-
   return (
-    <TransactionsContext.Provider value={[ state, error ]}>
+    <TransactionsContext.Provider value={[ state, actions, error ]}>
       {children}
     </TransactionsContext.Provider>
   )

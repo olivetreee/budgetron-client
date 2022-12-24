@@ -73,6 +73,7 @@ const RelevantTransactions = ({ transactionIds }) => {
 }
 
 export const VendorTile = ({ vendor }) => {
+  const [{ items: transactions }, { editTransaction }] = useTransactions();
   const [vendorName, setVendorName] = useState(vendor.name);
   const [vendorHumanName, setVendorHumanName] = useState(vendor.name);
   const [category, setCategory] = useState(vendor.category);
@@ -114,6 +115,23 @@ export const VendorTile = ({ vendor }) => {
     } catch (err) {
       setFetchStatus("error");
     }
+
+    try {
+      Promise.all(vendor.transactions.map(transId => {
+        const { monthYear, emailId } = transactions[transId];
+        return editTransaction({
+          monthYear,
+          emailId,
+          path: 'category',
+          newValue: category
+        });
+      }))
+      setFetchStatus("success");
+    } catch (err) {
+      console.error('Error when updating transactions:', err);
+      setFetchStatus('error');
+    }
+
     setLoading(false);
     setTimeout(() => setFetchStatus(""), 3000);
   }

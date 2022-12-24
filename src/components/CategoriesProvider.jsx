@@ -14,7 +14,7 @@ const fetcher = async (...params) => {
 
 export const CategoriesProvider = ({ children }) => {
   const url = `${BASE_API_URL}/categories`;
-  const { data: categoryLimits, error } = useSWR(url, fetcher);
+  const { data: categoryLimits, error } = useSWR(url, fetcher, { revalidateOnFocus: false, shouldRetryOnError: false });
 
   const categoriesList = useMemo(() => error || !categoryLimits
     ? []

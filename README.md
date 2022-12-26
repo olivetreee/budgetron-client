@@ -1,5 +1,12 @@
 # TODO to make this public
-* Remove mockData from git history
+* add auth wall to client
+* add auth layer to API
+* add page menu
+
+Post MVP:
+* add toaster to vendor editing for operation status (one for adding category and one for editing transactions)
+* add transactions table modal to main dashboard when clicking on category
+* flip background color of categories that have surpassed limit to red
 
 
 # Getting Started with Create React App

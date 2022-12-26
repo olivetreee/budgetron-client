@@ -2,20 +2,30 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import { MainDashboard } from "./components/MainDashboard";
 import { TransactionsProvider } from './components/TransactionsProvider';
 import { CategoriesProvider } from './components/CategoriesProvider';
-import { VendorTile } from "./components/VendorTile";
+import { FixVendors } from "./components/FixVendors";
+import { AuthProvider, ProtectedRoute } from "./components/AuthProvider";
+import { Login } from "./components/Login";
 
 import './App.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { FixVendors } from "./components/FixVendors";
 
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <MainDashboard />,
+    element: <Login />
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <ProtectedRoute>
+        <MainDashboard />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/transactions",
@@ -34,11 +44,13 @@ const router = createBrowserRouter([
 function App() {
   return (
     <div className="App">
-      <CategoriesProvider>
-        <TransactionsProvider>
-          <RouterProvider router={router} />
-        </TransactionsProvider>
-      </CategoriesProvider>
+      <AuthProvider>
+        <CategoriesProvider>
+          <TransactionsProvider>
+            <RouterProvider router={router} />
+          </TransactionsProvider>
+        </CategoriesProvider>
+      </AuthProvider>
     </div>
   );
 }

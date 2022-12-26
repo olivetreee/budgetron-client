@@ -3,7 +3,7 @@ import { Navigate } from 'react-router';
 import { useAuth } from './AuthProvider';
 
 export const Login = () => {
-  const { token, onLogin } = useAuth();
+  const { sub, onLogin } = useAuth();
 
 	const initGoogleAuth = () => {
 		setTimeout(() => {
@@ -21,12 +21,12 @@ export const Login = () => {
 	}
 
   useEffect(() => {
-    if (!token) {
+    if (!sub) {
       initGoogleAuth();
     }
   })
 
-  if (token) {
+  if (sub) {
     return <Navigate to="/dashboard" replace />;
   }
 

@@ -29,15 +29,27 @@ const router = createBrowserRouter([
   },
   {
     path: "/transactions",
-    element: <div>Placeholder for Transactions?category=something page</div>,
+    element: (
+      <ProtectedRoute>
+        <div>Placeholder for Transactions?category=something page</div>
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/vendors",
-    element: <div>Placeholder for Vendors page</div>,
+    element: (
+      <ProtectedRoute>
+        <div>Placeholder for Vendors page</div>
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/fix-vendors",
-    element: <FixVendors />,
+    element: (
+      <ProtectedRoute>
+        <FixVendors />
+      </ProtectedRoute>
+    ),
   },
 ]);
 

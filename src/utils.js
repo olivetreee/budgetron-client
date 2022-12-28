@@ -11,3 +11,21 @@ export const printMoney = amount => {
 }
 
 export const printDate = timestamp => new Date(timestamp).toDateString()
+
+export const fetcher = async (url, options = {}, ...params) => {
+  const gid = localStorage.getItem("profile");
+  const headers = {
+    ...options.headers,
+    "x-amzcpt-current-user": gid
+  }
+  const optionsWithHeaders = {
+    ...options,
+    headers
+  }
+  return fetch(url, optionsWithHeaders, ...params);
+}
+
+export const simpleFetcher = async (...params) => {
+  const response = await fetcher(...params);
+  return response.json();
+}

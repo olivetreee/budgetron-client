@@ -14,6 +14,7 @@ import { useTransactions } from './TransactionsProvider';
 
 import "./VendorTile.scss";
 import { TransactionsTable } from './TransactionsTable';
+import { fetcher } from '../utils';
 
 const StatusIcon = ({ status }) => (
   <>
@@ -103,12 +104,11 @@ export const VendorTile = ({ vendor }) => {
     }
 
     try {
-      const response = await fetch(`${BASE_API_URL}/vendor-categories`, fetchOptions);
+      const response = await fetcher(`${BASE_API_URL}/vendor-categories`, fetchOptions);
       if (response.status === 204) {
         setFetchStatus("success");
       } else {
-        const responseBody = await response.json();
-        console.debug(responseBody);
+        console.debug(response.body);
         throw new Error(`Non-200 status: ${response.status}`);
 
       }

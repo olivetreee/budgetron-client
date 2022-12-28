@@ -1,18 +1,13 @@
 import { createContext, useContext, useMemo, useEffect, useReducer } from "react";
 import useSWR from 'swr'
 import { BASE_API_URL } from "../constants";
+import { fetcher, simpleFetcher } from "../utils";
 
 export const TransactionsContext = createContext();
 
 export const useTransactions = () => useContext(TransactionsContext);
 
 const todaysMonthYear = `${new Date().getUTCMonth() + 1}/${new Date().getUTCFullYear()}`;
-
-const fetcher = async (...params) => {
-  const response = await fetch(...params);
-  const parsedResponse = await response.json();
-  return parsedResponse;
-}
 
 const getInitialState = (data, error, isLoading) => ({
   loading: isLoading,
@@ -88,7 +83,7 @@ export const TransactionsProvider = ({
 }) => {
   const dateToQuery = date.replace("/", "-");
   const url = `${BASE_API_URL}/transactions?date=${dateToQuery}&groupBy=${groupBy}`;
-  const { data, error, isLoading } = useSWR(url, fetcher, { revalidateOnFocus: false, shouldRetryOnError: false });
+  const { data, error, isLoading } = useSWR(url, simpleFetcher, { revalidateOnFocus: false, shouldRetryOnError: false });
   const [state, dispatch] = useReducer(transactionsReducer, getInitialState(data, error, isLoading));
 
   const actions = useMemo(() => ({
@@ -103,7 +98,7 @@ export const TransactionsProvider = ({
       }
 
       try {
-        const response = await fetch(`${BASE_API_URL}/transactions`, fetchOptions);
+        const response = await fetcher(`${BASE_API_URL}/transactions`, fetchOptions);
         const responseBody = await response.json();
         if (response.ok) {
           dispatch({ type: 'update-transaction', payload: responseBody })

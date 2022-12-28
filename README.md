@@ -1,6 +1,4 @@
 # TODO to make this public
-* add auth wall to client
-* add auth layer to API
 * add page menu
 
 Post MVP:

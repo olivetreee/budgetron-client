@@ -1,20 +1,15 @@
 import { createContext, useContext, useMemo } from "react";
 import useSWR from 'swr'
 import { BASE_API_URL } from "../constants";
+import { simpleFetcher } from "../utils";
 
 export const CategoriesContext = createContext();
 
 export const useCategories = () => useContext(CategoriesContext);
 
-const fetcher = async (...params) => {
-  const response = await fetch(...params);
-  const parsedResponse = await response.json();
-  return parsedResponse;
-}
-
 export const CategoriesProvider = ({ children }) => {
   const url = `${BASE_API_URL}/categories`;
-  const { data: categoryLimits, error } = useSWR(url, fetcher, { revalidateOnFocus: false, shouldRetryOnError: false });
+  const { data: categoryLimits, error } = useSWR(url, simpleFetcher, { revalidateOnFocus: false, shouldRetryOnError: false });
 
   const categoriesList = useMemo(() => error || !categoryLimits
     ? []

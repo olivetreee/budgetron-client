@@ -13,4 +13,4 @@ export const CATEGORY_ICON = {
   "Gas": "fa-gas-pump"
 }
 
-export const BASE_API_URL = "https://roch217xrc.execute-api.us-west-2.amazonaws.com";
+export const BASE_API_URL = "https://yc323wz0jd.execute-api.us-west-2.amazonaws.com";

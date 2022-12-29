@@ -1,5 +1,5 @@
 import {
-  createBrowserRouter,
+  createHashRouter,
   RouterProvider,
 } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -10,11 +10,23 @@ import { CategoriesProvider } from './components/CategoriesProvider';
 import { FixVendors } from "./components/FixVendors";
 import { AuthProvider, ProtectedRoute } from "./components/AuthProvider";
 import { Login } from "./components/Login";
+import { Nav } from "react-bootstrap";
 
-import './App.css';
+import './App.scss';
+
+const NavBar = () => (
+  <Nav className="navbar justify-content-around" variant="pills" defaultActiveKey="/#/dashboard">
+    <Nav.Item>
+      <Nav.Link href="/#/dashboard">Dashboard</Nav.Link>
+    </Nav.Item>
+    <Nav.Item>
+      <Nav.Link href="/#/fix-vendors">Fix Vendors</Nav.Link>
+    </Nav.Item>
+  </Nav>
+)
 
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <Login />
@@ -23,6 +35,7 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: (
       <ProtectedRoute>
+        <NavBar />
         <MainDashboard />
       </ProtectedRoute>
     ),
@@ -31,6 +44,7 @@ const router = createBrowserRouter([
     path: "/transactions",
     element: (
       <ProtectedRoute>
+        <NavBar />
         <div>Placeholder for Transactions?category=something page</div>
       </ProtectedRoute>
     ),
@@ -39,6 +53,7 @@ const router = createBrowserRouter([
     path: "/vendors",
     element: (
       <ProtectedRoute>
+        <NavBar />
         <div>Placeholder for Vendors page</div>
       </ProtectedRoute>
     ),
@@ -47,6 +62,7 @@ const router = createBrowserRouter([
     path: "/fix-vendors",
     element: (
       <ProtectedRoute>
+        <NavBar />
         <FixVendors />
       </ProtectedRoute>
     ),

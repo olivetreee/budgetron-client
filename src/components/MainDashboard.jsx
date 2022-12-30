@@ -1,9 +1,9 @@
 import { CategoryTile } from "./CategoryTile";
 import { useTransactions } from "./TransactionsProvider";
 import { useCategories } from "./CategoriesProvider";
-
-import "./MainDashboard.css";
 import { LoadingIndicator } from "./LoadingIndicator";
+
+import "./MainDashboard.scss";
 
 const aggregateExpansesPerCategory = (itemIdsInCategory = [], allItems) =>
   itemIdsInCategory.reduce(

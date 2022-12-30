@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { Navigate } from 'react-router';
 import { useAuth } from './AuthProvider';
 
+import "./Login.scss";
+
 export const Login = () => {
   const { sub, onLogin } = useAuth();
 

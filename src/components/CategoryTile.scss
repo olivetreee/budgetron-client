@@ -6,6 +6,7 @@
   margin-bottom: 15px;
   width: 45%;
   box-sizing: border-box;
+  position: relative;
 
   p {
     margin: 0;
@@ -17,6 +18,15 @@
         margin-right: 10px;
       }
     }
+  }
+
+  .transactions-link {
+    position: absolute;
+    top: 5px;
+    right: 10px;
+    color: #ecf0f1;
+    font-size: 1.25rem;
+    z-index: 1;
   }
 
   .circular-progress-bar-content {
@@ -79,13 +89,4 @@
       }
 
     }
-
-    // .CircularProgressbar {
-    //   .CircularProgressbar-path {
-    //     stroke: red;
-    //   }
-    //   .CircularProgressbar-trail {
-    //     stroke: gray;
-    //   }
-    // }
 }

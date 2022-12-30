@@ -3,6 +3,7 @@ import './CategoryTile.scss';
 import 'react-circular-progressbar/dist/styles.css';
 
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
+import { Link } from "react-router-dom";
 
 export const CategoryTile = ({
   category,
@@ -15,8 +16,12 @@ export const CategoryTile = ({
   if (percentageConsumed > 75) status = "danger";
   if (percentageConsumed > 100) status = "surpassed";
 
+  const categoryCode = category.replace(" ", "_");
   return (
-    <div className={`category-tile ${category.split(" ").join("")} ${status}`}>
+    <div className={`category-tile ${categoryCode} ${status}`}>
+      <Link className="transactions-link" to={`/transactions?category=${categoryCode}`}>
+        <i className="fa-solid fa-circle-info" />
+      </Link>
       <CircularProgressbarWithChildren value={percentageConsumed}>
         <div className="circular-progress-bar-content">
           <p className="amount-spent">${Math.ceil(amountSpent)}</p>

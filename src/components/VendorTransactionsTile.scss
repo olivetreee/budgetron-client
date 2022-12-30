@@ -1,0 +1,45 @@
+.vendor-transactions {
+  background-color: #243145;
+  border-radius: 7px;
+  box-sizing: border-box;
+  position: relative;
+
+  h2 {
+    text-align: center;
+    background-color: #384660;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+  }
+
+  table {
+    color: #ecf0f1;
+
+    td {
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+    }
+
+    .time {
+      padding-left: 1rem;
+    }
+
+    .edit {
+      padding-right: 1rem;
+    }
+
+    .money {
+      text-align: right;
+      padding-right: 2rem
+    }
+
+    .author {
+      padding-right: 2rem
+    }
+
+    tr:last-child {
+      td {
+        border-bottom: none
+      }
+    }
+  }
+}

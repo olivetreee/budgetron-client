@@ -1,11 +1,13 @@
 import { useLocation } from 'react-router-dom'
-import Table from 'react-bootstrap/Table';
+import dateUtils from 'date-and-time';
 
 import { useTransactions } from '../components/TransactionsProvider';
+import { VendorTransactionsTile } from '../components/VendorTransactionsTile';
 import { CATEGORY_ICON } from '../constants';
-import { printDate, printMoney } from '../utils';
 
-const groupByVendor = (transactions) => transactions.reduce((acc, transaction) => {
+import "./CategoryTransactions.scss";
+
+const groupByVendorOrderByAmount = (transactions) => transactions.reduce((acc, transaction) => {
   const vendorTransactions = (acc[transaction.vendor] || [])
     .concat(transaction)
     .sort((a,b) => {
@@ -25,28 +27,7 @@ const groupByVendor = (transactions) => transactions.reduce((acc, transaction) =
   };
 }, {})
 
-const VendorTransactionsTile = ({ vendor, transactions }) => (
-  <div className="vendor-transactions">
-    <h2>{ vendor }</h2>
-    <Table variant="dark" className="transactions-table">
-      <tbody>
-        {
-          transactions.map(transaction => (
-            <tr>
-              <td>{printDate(transaction.timestamp)}</td>
-              <td>{printMoney(transaction.amount)}</td>
-              <td>{transaction.author[0]}</td>
-              <td>Edit</td>
-            </tr>
-          ))
-        }
-      </tbody>
-
-    </Table>
-  </div>
-)
-
-export const CategoryTransactions = () => {
+export const CategoryTransactions = ({ date = new Date() }) => {
   const location = useLocation();
   const [{ items, grouping }] = useTransactions();
 
@@ -54,27 +35,24 @@ export const CategoryTransactions = () => {
   const category = queryParams.get("category").replace("_", " ");
 
   const categoryTransactionIds = grouping.category[category];
-  const groupedTransactions = groupByVendor(
+  const groupedTransactions = groupByVendorOrderByAmount(
     categoryTransactionIds.map(id => items[id])
   );
-  const orderedTransactions = Object.entries
 
   return (
-    <>
+    <div className="category-transactions">
       <h1>
-        <span className="category-name">
-          <i className={`fa fa-light ${CATEGORY_ICON[category]}`} />
-          { category }
-        </span>
+        <i className={`fa fa-light ${CATEGORY_ICON[category]}`} />
+        { category }
         <br />
-        Transactions
+        <span>{dateUtils.format(date, "MMM YYYY")}</span>
       </h1>
       {
         Object.entries(groupedTransactions).map(([vendor, transactions]) => (
           <VendorTransactionsTile vendor={vendor} transactions={transactions} />
         ))
       }
-    </>
+    </div>
 
   );
 };

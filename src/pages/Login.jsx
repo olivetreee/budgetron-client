@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Navigate } from 'react-router';
-import { useAuth } from './AuthProvider';
+import { useAuth } from '../components/AuthProvider';
 
 import "./Login.scss";
 

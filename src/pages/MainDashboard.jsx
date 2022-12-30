@@ -1,7 +1,7 @@
-import { CategoryTile } from "./CategoryTile";
-import { useTransactions } from "./TransactionsProvider";
-import { useCategories } from "./CategoriesProvider";
-import { LoadingIndicator } from "./LoadingIndicator";
+import { CategoryTile } from "../components/CategoryTile";
+import { useTransactions } from "../components/TransactionsProvider";
+import { useCategories } from "../components/CategoriesProvider";
+import { LoadingIndicator } from "../components/LoadingIndicator";
 
 import "./MainDashboard.scss";
 

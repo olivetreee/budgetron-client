@@ -1,6 +1,6 @@
-import { LoadingIndicator } from "./LoadingIndicator";
-import { useTransactions } from "./TransactionsProvider";
-import { VendorTile } from "./VendorTile";
+import { LoadingIndicator } from "../components/LoadingIndicator";
+import { useTransactions } from "../components/TransactionsProvider";
+import { VendorTile } from "../components/VendorTile";
 
 export const FixVendors = () => {
   const [transactionData] = useTransactions();

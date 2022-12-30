@@ -4,12 +4,12 @@ import {
 } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import { MainDashboard } from "./components/MainDashboard";
+import { MainDashboard } from "./pages/MainDashboard";
 import { TransactionsProvider } from './components/TransactionsProvider';
 import { CategoriesProvider } from './components/CategoriesProvider';
-import { FixVendors } from "./components/FixVendors";
+import { FixVendors } from "./pages/FixVendors";
 import { AuthProvider, ProtectedRoute } from "./components/AuthProvider";
-import { Login } from "./components/Login";
+import { Login } from "./pages/Login";
 import { NavBar } from "./components/NavBar";
 
 import './App.scss';

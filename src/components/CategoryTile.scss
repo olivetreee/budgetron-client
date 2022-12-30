@@ -1,0 +1,91 @@
+.category-tile {
+  background-color: #243145;
+  text-align: center;
+  padding: 15px;
+  border-radius: 7px;
+  margin-bottom: 15px;
+  width: 45%;
+  box-sizing: border-box;
+
+  p {
+    margin: 0;
+    &.category {
+      margin-top: 10px;
+      font-size: 1.2em;
+
+      i {
+        margin-right: 10px;
+      }
+    }
+  }
+
+  .circular-progress-bar-content {
+    text-align: center;
+
+    .limit {
+      color: #a1a1a1;
+    }
+
+    .amount-spent {
+      font-size: 1.75em;
+      border-bottom: solid 1px #4f688f;
+    }
+  }
+
+  &.good {
+    .circular-progress-bar-content {
+      color: #2ecc71;
+    }
+    .CircularProgressbar .CircularProgressbar-path {
+      stroke: #2ecc71;
+    }
+  }
+
+  &.warning {
+    .circular-progress-bar-content {
+      color: #f1c40f;
+    }
+    .CircularProgressbar .CircularProgressbar-path {
+      stroke: #f1c40f;
+    }
+  }
+
+  &.danger {
+    .circular-progress-bar-content {
+        color: #e74c3c;
+      }
+    .CircularProgressbar .CircularProgressbar-path {
+        stroke: #e74c3c;
+      }
+    }
+
+    &.surpassed {
+      background-color: #c0392b;
+      color: #dbcdcb;
+
+      .CircularProgressbar .CircularProgressbar-path {
+        stroke: #3f130f;
+      }
+
+      .circular-progress-bar-content {
+        .amount-spent {
+          font-size: 1.75em;
+          border-color: #3f130f;
+        }
+
+        .limit {
+          color: #3f130f;
+        }
+      }
+
+    }
+
+    // .CircularProgressbar {
+    //   .CircularProgressbar-path {
+    //     stroke: red;
+    //   }
+    //   .CircularProgressbar-trail {
+    //     stroke: gray;
+    //   }
+    // }
+}

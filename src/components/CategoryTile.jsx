@@ -1,5 +1,5 @@
 import { CATEGORY_ICON } from "../constants";
-import './CategoryTile.css';
+import './CategoryTile.scss';
 import 'react-circular-progressbar/dist/styles.css';
 
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
@@ -13,6 +13,7 @@ export const CategoryTile = ({
   let status = "good";
   if (percentageConsumed > 50) status = "warning";
   if (percentageConsumed > 75) status = "danger";
+  if (percentageConsumed > 100) status = "surpassed";
 
   return (
     <div className={`category-tile ${category.split(" ").join("")} ${status}`}>

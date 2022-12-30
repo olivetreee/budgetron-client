@@ -13,6 +13,7 @@ import { Login } from "./pages/Login";
 import { NavBar } from "./components/NavBar";
 
 import './App.scss';
+import { CategoryTransactions } from "./pages/CategoryTransactions";
 
 const router = createHashRouter([
   {
@@ -33,7 +34,7 @@ const router = createHashRouter([
     element: (
       <ProtectedRoute>
         <NavBar />
-        <div>Placeholder for Transactions?category=something page</div>
+        <CategoryTransactions />
       </ProtectedRoute>
     ),
   },

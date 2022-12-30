@@ -10,21 +10,9 @@ import { CategoriesProvider } from './components/CategoriesProvider';
 import { FixVendors } from "./components/FixVendors";
 import { AuthProvider, ProtectedRoute } from "./components/AuthProvider";
 import { Login } from "./components/Login";
-import { Nav } from "react-bootstrap";
+import { NavBar } from "./components/NavBar";
 
 import './App.scss';
-
-const NavBar = () => (
-  <Nav className="navbar justify-content-around" variant="pills" defaultActiveKey="/#/dashboard">
-    <Nav.Item>
-      <Nav.Link href="/#/dashboard">Dashboard</Nav.Link>
-    </Nav.Item>
-    <Nav.Item>
-      <Nav.Link href="/#/fix-vendors">Fix Vendors</Nav.Link>
-    </Nav.Item>
-  </Nav>
-)
-
 
 const router = createHashRouter([
   {

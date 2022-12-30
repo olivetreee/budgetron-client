@@ -22,7 +22,11 @@ export const MainDashboard = () => {
   const [transactionData] = useTransactions();
   const [categoryLimits, categoriesList] = useCategories();
   if (transactionData.loading || !categoryLimits) {
-    return <LoadingIndicator />;
+    return (
+      <div className="main-dashboard">
+        <LoadingIndicator />
+      </div>
+    )
   }
   const limitPerCategory = categoryLimits.items;
   const spentPerCategory = categoriesList.reduce((acc, category) => ({

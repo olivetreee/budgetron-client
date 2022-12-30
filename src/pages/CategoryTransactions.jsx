@@ -35,6 +35,20 @@ export const CategoryTransactions = ({ date = new Date() }) => {
   const category = queryParams.get("category").replace("_", " ");
 
   const categoryTransactionIds = grouping.category[category];
+
+  if (!categoryTransactionIds || !categoryTransactionIds.length) {
+    return (
+      <div className="category-transactions empty">
+        <h1>
+          <i className={`fa fa-light ${CATEGORY_ICON[category]}`} />
+          { category }
+          <br />
+          <span>{dateUtils.format(date, "MMM YYYY")}</span>
+        </h1>
+        <h2>No transactions found</h2>
+      </div>
+    )
+  }
   const groupedTransactions = groupByVendorOrderByAmount(
     categoryTransactionIds.map(id => items[id])
   );
@@ -53,6 +67,5 @@ export const CategoryTransactions = ({ date = new Date() }) => {
         ))
       }
     </div>
-
   );
 };

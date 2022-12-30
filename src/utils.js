@@ -10,7 +10,8 @@ export const printMoney = amount => {
   return `$${Math.floor(amount)}.${decimal}`;
 }
 
-export const printDate = timestamp => new Date(timestamp).toDateString()
+// It doesn't print the year, since it's not needed, at least for now...
+export const printDate = timestamp => new Date(timestamp).toDateString().replace(/[0-9]{4}$/, "");
 
 export const fetcher = async (url, options = {}, ...params) => {
   const gid = localStorage.getItem("profile");

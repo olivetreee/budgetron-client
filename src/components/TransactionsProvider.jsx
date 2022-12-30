@@ -2,6 +2,7 @@ import { createContext, useContext, useMemo, useEffect, useReducer } from "react
 import useSWR from 'swr'
 import { BASE_API_URL } from "../constants";
 import { fetcher, simpleFetcher } from "../utils";
+import { useAuth } from "./AuthProvider";
 
 export const TransactionsContext = createContext();
 
@@ -81,8 +82,9 @@ export const TransactionsProvider = ({
   groupBy = "category",
   children
 }) => {
+  const { sub } = useAuth();
   const dateToQuery = date.replace("/", "-");
-  const url = `${BASE_API_URL}/transactions?date=${dateToQuery}&groupBy=${groupBy}`;
+  const url = sub ? `${BASE_API_URL}/transactions?date=${dateToQuery}&groupBy=${groupBy}` : "";
   const { data, error, isLoading } = useSWR(url, simpleFetcher, { revalidateOnFocus: false, shouldRetryOnError: false });
   const [state, dispatch] = useReducer(transactionsReducer, getInitialState(data, error, isLoading));
 

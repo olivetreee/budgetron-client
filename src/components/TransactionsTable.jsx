@@ -1,5 +1,6 @@
 import Table from 'react-bootstrap/Table';
-import { printDate, printMoney } from '../utils';
+import dateUtils from 'date-and-time';
+import { printMoney } from '../utils';
 
 export const TransactionsTable = ({ transactions }) => (
   <Table striped bordered hover variant="dark">
@@ -19,7 +20,7 @@ export const TransactionsTable = ({ transactions }) => (
           <td>{idx+1}</td>
           <td>{transaction.vendor}</td>
           <td>{printMoney(transaction.amount)}</td>
-          <td>{printDate(transaction.timestamp)}</td>
+          <td>{dateUtils.format(new Date(transaction.timestamp), "DD MMM")}</td>
           <td>{transaction.author}</td>
         </tr>
         ))

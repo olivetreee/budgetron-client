@@ -62,8 +62,8 @@ export const CategoryTransactions = ({ date = new Date() }) => {
         <span>{dateUtils.format(date, "MMM YYYY")}</span>
       </h1>
       {
-        Object.entries(groupedTransactions).map(([vendor, transactions]) => (
-          <VendorTransactionsTile vendor={vendor} transactions={transactions} />
+        Object.entries(groupedTransactions).map(([vendorName, transactions]) => (
+          <VendorTransactionsTile vendorName={vendorName} transactions={transactions} key={vendorName}/>
         ))
       }
     </div>

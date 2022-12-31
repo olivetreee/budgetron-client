@@ -1,5 +1,7 @@
+ @import "../variables.scss";
+
 .category-tile {
-  background-color: #243145;
+  background-color: $dark-2;
   text-align: center;
   padding: 15px;
   border-radius: 7px;
@@ -24,7 +26,7 @@
     position: absolute;
     top: 5px;
     right: 10px;
-    color: #ecf0f1;
+    color: $white;
     font-size: 1.25rem;
     z-index: 1;
   }
@@ -44,47 +46,47 @@
 
   &.good {
     .circular-progress-bar-content {
-      color: #2ecc71;
+      color: $emerald;
     }
     .CircularProgressbar .CircularProgressbar-path {
-      stroke: #2ecc71;
+      stroke: $emerald;
     }
   }
 
   &.warning {
     .circular-progress-bar-content {
-      color: #f1c40f;
+      color: $sunflower;
     }
     .CircularProgressbar .CircularProgressbar-path {
-      stroke: #f1c40f;
+      stroke: $sunflower;
     }
   }
 
   &.danger {
     .circular-progress-bar-content {
-        color: #e74c3c;
+        color: $alizarin;
       }
     .CircularProgressbar .CircularProgressbar-path {
-        stroke: #e74c3c;
+        stroke: $alizarin;
       }
     }
 
     &.surpassed {
-      background-color: #c0392b;
+      background-color: $pomegrenate;
       color: #dbcdcb;
 
       .CircularProgressbar .CircularProgressbar-path {
-        stroke: #3f130f;
+        stroke: $dark-4;
       }
 
       .circular-progress-bar-content {
         .amount-spent {
           font-size: 1.75em;
-          border-color: #3f130f;
+          border-color: $dark-4;
         }
 
         .limit {
-          color: #3f130f;
+          color: $dark-4;
         }
       }
 

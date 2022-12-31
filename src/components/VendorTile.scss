@@ -1,6 +1,8 @@
+@import "../variables.scss";
+
 .vendor-tile {
   .form {
-    background-color: #273143;
+    background-color: $dark-2;
     border-radius: 7px;
     padding-top: 1rem;
     margin: 1rem auto;
@@ -12,12 +14,12 @@
   }
 
   .success-icon {
-    color: #2ecc71;
+    color: $emerald;
     font-size: 2em;
   }
 
   .error-icon {
-    color: #e74c3c;
+    color: $alizarin;
     font-size: 2em;
   }
 
@@ -26,12 +28,12 @@
     margin-top: 1rem;
     padding-top: 1rem;
     padding-bottom: 1rem;
-    background-color: #384660;
+    background-color: $dark-3;
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
 
     button {
-      color: #ecf0f1;
+      color: white;
       text-decoration: none;
 
       i {

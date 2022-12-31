@@ -1,3 +1,5 @@
+@import "./variables.scss";
+
 .App {
   height: 100%;
   padding: 20px;
@@ -6,8 +8,8 @@
     margin-bottom: 1rem;
 
     a {
-      color: #ecf0f1;
-      border: solid 1px #ecf0f1;
+      color: $white;
+      border: solid 1px $white;
       border-radius: var(--bs-nav-pills-border-radius);
 
       &.active {

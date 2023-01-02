@@ -8,6 +8,10 @@ export const FixVendors = () => {
     return <LoadingIndicator />;
   };
 
+  if (!transactionData.size) {
+    return "No transactions found";
+  }
+
   const missingCategoryTransactionIds = transactionData.grouping.category["MISSING CATEGORY"];
   const allTransactions = transactionData.items;
   const missingCategoryVendors = missingCategoryTransactionIds

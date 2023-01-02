@@ -28,6 +28,14 @@ export const MainDashboard = () => {
       </div>
     )
   }
+
+  if (!transactionData.size) {
+    return (
+      <div className="main-dashboard">
+        No transactions found.
+      </div>
+    )
+  }
   const limitPerCategory = categoryLimits.items;
   const spentPerCategory = categoriesList.reduce((acc, category) => ({
     ...acc,

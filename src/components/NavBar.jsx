@@ -4,7 +4,7 @@ import { useTransactions } from "./TransactionsProvider";
 
 export const NavBar = () => {
   const [{ grouping }] = useTransactions();
-  const numberOfMissingCategories = grouping?.category["MISSING CATEGORY"].length;
+  const numberOfMissingCategories = grouping?.category?.["MISSING CATEGORY"]?.length;
   return (
     <Nav className="navbar justify-content-around" variant="pills" defaultActiveKey="/#/dashboard">
       <Nav.Item>

@@ -56,7 +56,7 @@ const transactionsReducer = (state, { type, payload }) => {
 
         const newGroupingAsSet = new Set(newGroupings[newGroupingValue]);
         newGroupingAsSet.add(payload.emailId);
-        newGroupings[newGroupingAsSet] = Array.from(newGroupingAsSet);
+        newGroupings[newGroupingValue] = Array.from(newGroupingAsSet);
       }
 
       return {

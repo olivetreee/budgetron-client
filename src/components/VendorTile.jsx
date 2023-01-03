@@ -122,8 +122,10 @@ export const VendorTile = ({ vendor }) => {
         return editTransaction({
           monthYear,
           emailId,
-          path: 'category',
-          newValue: category
+          changes: [{
+            path: 'category',
+            newValue: category
+          }]
         });
       }))
       setFetchStatus("success");

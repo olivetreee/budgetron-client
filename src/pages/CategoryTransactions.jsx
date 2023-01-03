@@ -37,7 +37,16 @@ const EditTransactionModal = ({ transaction, onSave, onCancel, isOpen }) => {
   const [editedTransaction, setEditedTransaction] = useState(transaction);
   useEffect(() => {
     setEditedTransaction(transaction);
-  }, [transaction])
+  }, [transaction]);
+
+  const makePatchBody = () => ({
+    monthYear: editedTransaction.monthYear,
+    emailId: editedTransaction.emailId,
+    changes: [
+      { path: 'category', newValue: editedTransaction.category },
+      { path: 'author', newValue: editedTransaction.author },
+    ],
+  });
 
   return (
     <Modal className="edit-transactions-modal" show={isOpen} onHide={onCancel}>
@@ -66,10 +75,13 @@ const EditTransactionModal = ({ transaction, onSave, onCancel, isOpen }) => {
       </Form.Group>
     </Modal.Body>
     <Modal.Footer>
-      <Button variant="secondary" onClick={onCancel}>
+      <Button variant="secondary" onClick={() => {
+          setEditedTransaction(transaction);
+          onCancel();
+        }}>
         Close
       </Button>
-      <Button variant="primary" onClick={onSave}>
+      <Button variant="primary" onClick={() => onSave(makePatchBody())}>
         Save Changes
       </Button>
     </Modal.Footer>
@@ -79,9 +91,10 @@ const EditTransactionModal = ({ transaction, onSave, onCancel, isOpen }) => {
 
 export const CategoryTransactions = ({ date = new Date() }) => {
   const location = useLocation();
-  const [{ items, grouping }] = useTransactions();
+  const [{ items, grouping }, { editTransaction }] = useTransactions();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transactionToEdit, setTransactionToEdit] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const queryParams = new URLSearchParams(location.search);
   const category = queryParams.get("category").replace("_", " ");
@@ -93,8 +106,14 @@ export const CategoryTransactions = ({ date = new Date() }) => {
     setIsModalOpen(true);
   }
 
-  const onEditSave = () => {
-    setIsModalOpen(false);
+  const onEditSave = async (patchData) => {
+    try {
+      await editTransaction(patchData);
+      setIsModalOpen(false);
+    } catch (err) {
+      console.error("Error when PATCHING");
+      console.error(err);
+    }
   }
 
   const onEditCancel = () => {

@@ -82,17 +82,6 @@ export const VendorTile = ({ vendor }) => {
   const [fetchStatus, setFetchStatus] = useState("");
 
   const onSave = async () => {
-    /*
-      TODO:
-      Now we need to edit all transactions accordingly, updating its category.
-      I can make the PATCH request here, but should I? Or should it be from the TransactionsProvider?
-      The hook could be rewritten as const { data, actions } = useTransactions()
-      Either way, once the fetch request comes back, should I update local state? I don't want
-      to dispatch another useSWR call, since that'd mean pinging the DDB, which is wasted RCUs, given that
-      I should have the updated data as part of the response, and also maybe I don't need
-      to update the client... Is there a benefit in updating it?
-    */
-
     setLoading(true);
     const fetchOptions = {
       method: "POST",

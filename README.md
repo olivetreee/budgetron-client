@@ -8,9 +8,34 @@
 
 * new route: Category Limit (for maintenance)
   * track historical limits (will be needed once we can pull budget reports from previous months)
-  * edit limit
+  ```json
+  {
+    "category": "Market",
+    "limit": 100,
+    "history": [
+      { "endPeriod": 1672830746616, "limit":  900 },
+      { "endPeriod": 1672820124295, "limit":  750 },
+    ]
+  }
+  ```
+    * when selecting a different budget period, iterate through the array to find the matching date. Grab the first date such that endPeriod becomes bigger than period. For example:
+    ```json
+      [
+        { "endPeriod": "Dec 2022", "limit":  900 },
+        { "endPeriod": "Feb 2023", "limit":  750 },
+        { "endPeriod": "Aug 2023", "limit":  850 },
+      ]
+    ```
+    * In this case, if we want to check the budget for May 2023, we iterate through the array starting at Dec 2023. That's smaller than May 2023, so go to the next. Feb 2023 is still smaller, so go to the next. Aug 2023 is the first one that's bigger, which means its limit value was in effect during May. Take that limit value.
+    * Similarly, if we wanted to check on Sep 2023, we iterate through it all and, since the last period was Aug 2023, which is smaller, it means that whatever current limit is the one to consider.
+    * Lastly, for present-month budget, always take the current limit and disregard the `history` values.
+    * IMPORTANT: this hinges on the fact that each new limit gets Array.pushed into the array, meaning the last element will always be the newest, and the first element will always be the oldest. This means that some amount of sorting logic might be required on the API side when adding said limits... Or maybe not... build the UI first and see how it feels.
+  * edit limit value
+    * specify the month/year the new limit is to be considered, defaulting to today's month/year.
+    * at the API, grab the current (now old) limit and save it to `history` array. `endPeriod` should ALWAYS round it down to the beginning of the specified month, then -1 ms. This will ensure that this now previous limit ended on the last millisecond of the month before the one specified. For example: current limit is 800. Specifying 1000 to start on Jul 2023 means saving 800 with an `endDate` of `new Date(Jul 2023).getMiliseconds() - 1`, meaning Jun 30 23:59:59:999
   * add category
   * remove category (this might entail a new DB column, like `active`)
+  * for fun: plot changes over time
 
 * edit transaction modal
   * split transaction

@@ -1,0 +1,25 @@
+@import "../variables.scss";
+
+.toaster {
+  :not(.bg-danger) {
+    .toast-body {
+      color: $dark-1;
+    };
+  }
+
+  .toast-header i {
+    margin-right: 0.5rem;
+  }
+
+  .bg-warning {
+    .toast-header i {
+      color: $warning;
+    }
+  }
+
+  .bg-danger {
+    .toast-header i {
+      color: $danger;
+    }
+  }
+}

@@ -14,6 +14,7 @@ import { NavBar } from "./components/NavBar";
 
 import './App.scss';
 import { CategoryTransactions } from "./pages/CategoryTransactions";
+import { ToasterProvider } from "./components/ToasterProvider";
 
 const router = createHashRouter([
   {
@@ -62,11 +63,13 @@ function App() {
   return (
     <div className="App">
       <AuthProvider>
-        <CategoriesProvider>
-          <TransactionsProvider>
-            <RouterProvider router={router} />
-          </TransactionsProvider>
-        </CategoriesProvider>
+        <ToasterProvider>
+          <CategoriesProvider>
+            <TransactionsProvider>
+              <RouterProvider router={router} />
+            </TransactionsProvider>
+          </CategoriesProvider>
+        </ToasterProvider>
       </AuthProvider>
     </div>
   );

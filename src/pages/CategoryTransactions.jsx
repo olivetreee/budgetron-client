@@ -1,18 +1,13 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import dateUtils from 'date-and-time';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 
 import { useTransactions } from '../components/TransactionsProvider';
 import { VendorTransactionsTile } from '../components/VendorTransactionsTile';
 import { CATEGORY_ICON } from '../constants';
-import { printMoney } from '../utils';
-import { CategoriesDropdown } from '../components/CategoriesDropdown';
+import { EditTransactionModal } from '../components/EditTransactionsModal';
 
 import "./CategoryTransactions.scss";
-import { useToaster } from '../components/ToasterProvider';
 
 const groupByVendorOrderByAmount = (transactions) => transactions.reduce((acc, transaction) => {
   const vendorTransactions = (acc[transaction.vendor] || [])
@@ -34,71 +29,11 @@ const groupByVendorOrderByAmount = (transactions) => transactions.reduce((acc, t
   };
 }, {})
 
-const EditTransactionModal = ({ transaction, onSave, onCancel, isOpen }) => {
-  const [editedTransaction, setEditedTransaction] = useState(transaction);
-  useEffect(() => {
-    setEditedTransaction(transaction);
-  }, [transaction]);
-
-  const makePatchBody = () => ({
-    monthYear: editedTransaction.monthYear,
-    emailId: editedTransaction.emailId,
-    changes: [
-      { path: 'category', newValue: editedTransaction.category },
-      { path: 'author', newValue: editedTransaction.author },
-    ],
-  });
-
-  return (
-    <Modal className="edit-transactions-modal" show={isOpen} onHide={onCancel}>
-    <Modal.Header>
-      <Modal.Title>Edit Transaction</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-      <Form.Group className="mb-3">
-        <Form.Label>Vendor</Form.Label>
-        <p>{editedTransaction.vendor}</p>
-      </Form.Group>
-      <Form.Group className="mb-3">
-        <Form.Label>Amount</Form.Label>
-        <p>{printMoney(editedTransaction.amount)}</p>
-      </Form.Group>
-      <Form.Group className="mb-3">
-        <Form.Label>Category</Form.Label>
-        <CategoriesDropdown
-          currentValue={editedTransaction.category}
-          onChange={newValue => setEditedTransaction({ ...editedTransaction, category: newValue })} />
-      </Form.Group>
-      <Form.Group className="mb-3">
-        <Form.Label>Author</Form.Label>
-        <Form.Control onChange={ev => setEditedTransaction({ ...editedTransaction, author: ev.target.value})}
-        value={editedTransaction.author} />
-      </Form.Group>
-    </Modal.Body>
-    <Modal.Footer>
-      <Button variant="secondary" onClick={() => {
-          setEditedTransaction(transaction);
-          onCancel();
-        }}>
-        Close
-      </Button>
-      <Button variant="primary" onClick={() => onSave(makePatchBody())}>
-        Save Changes
-      </Button>
-    </Modal.Footer>
-  </Modal>
-  )
-}
-
 export const CategoryTransactions = ({ date = new Date() }) => {
   const location = useLocation();
-  const [{ items, grouping }, { editTransaction }] = useTransactions();
-  const toaster = useToaster();
+  const [{ items, grouping }] = useTransactions();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transactionToEdit, setTransactionToEdit] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [showToast, setShowToast] = useState(false);
-  const [saveError, setSaveError] = useState("");
 
   const queryParams = new URLSearchParams(location.search);
   const category = queryParams.get("category").replace("_", " ");
@@ -110,18 +45,8 @@ export const CategoryTransactions = ({ date = new Date() }) => {
     setIsModalOpen(true);
   }
 
-  const onEditSave = async (patchData) => {
-    try {
-      setSaveError("");
-      await editTransaction(patchData);
-      setIsModalOpen(false);
-    } catch (err) {
-      toaster({ body: err.message, isAutohide: false, variant: "warning" });
-      setSaveError(err.message);
-      setShowToast(true);
-      console.error("Error when PATCHING");
-      console.error(err);
-    }
+  const onSuccess = () => {
+    setIsModalOpen(false);
   }
 
   const onEditCancel = () => {
@@ -158,11 +83,10 @@ export const CategoryTransactions = ({ date = new Date() }) => {
           <VendorTransactionsTile vendorName={vendorName} transactions={transactions} onEdit={onEditClick} key={vendorName}/>
         ))
       }
-      {/* TODO: this and the save logic should be ported into the modal itself */}
       <EditTransactionModal
         isOpen={isModalOpen}
         transaction={transactionToEdit}
-        onSave={onEditSave}
+        onSuccess={onSuccess}
         onCancel={onEditCancel}
         />
     </div>

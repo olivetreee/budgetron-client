@@ -12,6 +12,7 @@ import { printMoney } from '../utils';
 import { CategoriesDropdown } from '../components/CategoriesDropdown';
 
 import "./CategoryTransactions.scss";
+import { useToaster } from '../components/ToasterProvider';
 
 const groupByVendorOrderByAmount = (transactions) => transactions.reduce((acc, transaction) => {
   const vendorTransactions = (acc[transaction.vendor] || [])
@@ -50,7 +51,7 @@ const EditTransactionModal = ({ transaction, onSave, onCancel, isOpen }) => {
 
   return (
     <Modal className="edit-transactions-modal" show={isOpen} onHide={onCancel}>
-    <Modal.Header closeButton>
+    <Modal.Header>
       <Modal.Title>Edit Transaction</Modal.Title>
     </Modal.Header>
     <Modal.Body>
@@ -92,9 +93,12 @@ const EditTransactionModal = ({ transaction, onSave, onCancel, isOpen }) => {
 export const CategoryTransactions = ({ date = new Date() }) => {
   const location = useLocation();
   const [{ items, grouping }, { editTransaction }] = useTransactions();
+  const toaster = useToaster();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transactionToEdit, setTransactionToEdit] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [saveError, setSaveError] = useState("");
 
   const queryParams = new URLSearchParams(location.search);
   const category = queryParams.get("category").replace("_", " ");
@@ -108,9 +112,13 @@ export const CategoryTransactions = ({ date = new Date() }) => {
 
   const onEditSave = async (patchData) => {
     try {
+      setSaveError("");
       await editTransaction(patchData);
       setIsModalOpen(false);
     } catch (err) {
+      toaster({ body: err.message, isAutohide: false, variant: "warning" });
+      setSaveError(err.message);
+      setShowToast(true);
       console.error("Error when PATCHING");
       console.error(err);
     }
@@ -150,6 +158,7 @@ export const CategoryTransactions = ({ date = new Date() }) => {
           <VendorTransactionsTile vendorName={vendorName} transactions={transactions} onEdit={onEditClick} key={vendorName}/>
         ))
       }
+      {/* TODO: this and the save logic should be ported into the modal itself */}
       <EditTransactionModal
         isOpen={isModalOpen}
         transaction={transactionToEdit}

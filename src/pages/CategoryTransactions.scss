@@ -18,5 +18,9 @@
 .edit-transactions-modal {
   .modal-content {
     background-color: $dark-1;
+
+    .btn-close {
+      color: $white
+    }
   }
 }

@@ -1,10 +1,30 @@
-# TODO to make this public
-* add page menu
+# TODOs:
 
-Post MVP:
+## tech debt
+* get API under my domain
+
+## new features
+* ErrorBoundary with error toaster/state
+
+* new route: Category Limit (for maintenance)
+  * track historical limits (will be needed once we can pull budget reports from previous months)
+  * edit limit
+  * add category
+  * remove category (this might entail a new DB column, like `active`)
+
+* edit transaction modal
+  * split transaction
+
 * add toaster to vendor editing for operation status (one for adding category and one for editing transactions)
-* add transactions table modal to main dashboard when clicking on category
-* flip background color of categories that have surpassed limit to red
+
+* new route: vendor maintenance
+  * search by vendor name
+  * edit vendor code, name and category
+  * consider adding handling for ?include param in transactions API
+    * ?include=vendor includes the whole vendor object
+
+* new route: total spending / total limit
+  * lower pri: graph it out timewise
 
 
 # Getting Started with Create React App

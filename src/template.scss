@@ -1,0 +1,48 @@
+// Required
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+@import "../node_modules/bootstrap/scss/mixins";
+
+// Colors
+$white: #ecf0f1;
+$dark-1: #151E29;
+$dark-2: #243145;
+$dark-3: #384660;
+$dark-4: #3f130f;
+
+$nephritis: #27ae60;
+$emerald: #2ecc71;
+
+$alizarin: #e74c3c;
+$pomegrenate: #c0392b;
+
+$sunflower: #f1c40f;
+$orange: #f39c12;
+
+.tile {
+  background-color: $dark-2;
+  border-radius: 7px;
+  box-sizing: border-box;
+  position: relative;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+
+  h2 {
+    margin-bottom: 0;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    text-align: center;
+    background-color: $dark-3;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+  }
+
+  &.no-title {
+    padding-top: 1rem;
+
+    h2 {
+      background: none;
+      padding: 0;
+    }
+  }
+}

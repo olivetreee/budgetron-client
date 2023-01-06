@@ -11,10 +11,11 @@ import { FixVendors } from "./pages/FixVendors";
 import { AuthProvider, ProtectedRoute } from "./components/AuthProvider";
 import { Login } from "./pages/Login";
 import { NavBar } from "./components/NavBar";
-
-import './App.scss';
 import { CategoryTransactions } from "./pages/CategoryTransactions";
 import { ToasterProvider } from "./components/ToasterProvider";
+import { Categories } from "./pages/Categories";
+
+import './App.scss';
 
 const router = createHashRouter([
   {
@@ -54,6 +55,15 @@ const router = createHashRouter([
       <ProtectedRoute>
         <NavBar />
         <FixVendors />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/categories",
+    element: (
+      <ProtectedRoute>
+        <NavBar />
+        <Categories />
       </ProtectedRoute>
     ),
   },

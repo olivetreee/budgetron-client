@@ -1,0 +1,13 @@
+@import "../template.scss";
+
+.categories {
+  .balance {
+    .positive {
+      color: $green;
+    }
+
+    .negative {
+      color: $red;
+    }
+  }
+}

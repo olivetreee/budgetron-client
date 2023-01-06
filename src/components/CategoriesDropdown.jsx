@@ -3,7 +3,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton';
 import { useCategories } from "./CategoriesProvider";
 
 export const CategoriesDropdown = ({ currentValue, onChange }) => {
-  const [, categoriesList] = useCategories();
+  const [, { all: categoriesList }] = useCategories();
   return (
     <DropdownButton variant="light" onSelect={onChange} title={currentValue}>
       {categoriesList.map(category => (

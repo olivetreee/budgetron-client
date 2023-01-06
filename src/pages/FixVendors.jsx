@@ -13,6 +13,10 @@ export const FixVendors = () => {
   }
 
   const missingCategoryTransactionIds = transactionData.grouping.category["MISSING CATEGORY"];
+
+  if (!missingCategoryTransactionIds || !missingCategoryTransactionIds.length) {
+    return "🎉 All vendors have categories!";
+  }
   const allTransactions = transactionData.items;
   const missingCategoryVendors = missingCategoryTransactionIds
     .reduce((acc, id) => {

@@ -9,6 +9,7 @@ export const TransactionsContext = createContext();
 export const useTransactions = () => useContext(TransactionsContext);
 
 const todaysMonthYear = `${new Date().getUTCMonth() + 1}/${new Date().getUTCFullYear()}`;
+// const todaysMonthYear = "12/2022";
 
 const getInitialState = (data, error, isLoading) => ({
   loading: isLoading,
@@ -100,6 +101,7 @@ export const TransactionsProvider = ({
       }
 
       try {
+        // throw new Error("HOWDY! This is a muuuuch longer error message to see if it wraps.");
         const response = await fetcher(`${BASE_API_URL}/transactions`, fetchOptions);
         const responseBody = await response.json();
         if (response.ok) {
@@ -107,9 +109,16 @@ export const TransactionsProvider = ({
         } else {
           console.debug(responseBody);
           actions.setError(responseBody);
+          throw new Error(responseBody);
         }
       } catch (err) {
-        actions.setError(err);
+        throw err;
+        // TODO: Seems like setting the error here breaks the app, as
+        // the data vanishes and breaks some components...
+        // Also, we should probably rethrow and let downstream handle it? Or maybe not,
+        // since components have access to the error state itself, and can liste to that
+        // and react accordingly.
+        // actions.setError(err);
       }
     }
   }), []);

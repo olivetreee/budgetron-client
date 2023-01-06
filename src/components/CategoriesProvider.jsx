@@ -13,9 +13,20 @@ export const CategoriesProvider = ({ children }) => {
   const url = sub ? `${BASE_API_URL}/categories` : "";
   const { data: categoryLimits, error } = useSWR(url, simpleFetcher, { revalidateOnFocus: false, shouldRetryOnError: false });
 
-  const categoriesList = useMemo(() => error || !categoryLimits
-    ? []
-    : Object.keys(categoryLimits.items),
+  const categoriesList = useMemo(() => {
+    if (error || !categoryLimits) {
+      return {};
+    };
+
+    return Object.keys(categoryLimits.items).reduce((acc, category) => {
+      const categoryType = categoryLimits.items[category].type;
+      return {
+        ...acc,
+        [categoryType]: (acc[categoryType] || []).concat(category),
+        all: (acc.all || []).concat(category)
+      }
+    }, {})
+  },
   [error, categoryLimits]);
 
   if (error) {

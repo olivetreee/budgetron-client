@@ -65,20 +65,27 @@ export const Categories = () => {
                   <td className="category-limit">
                     <Form.Control
                       disabled={ !newLimits?.[category]?.isActive }
+                      value={newLimits?.[category]?.limit}
                       onChange={ev => setNewLimits({
                         ...newLimits,
                         [category]: {
                           ...newLimits[category],
                           limit: parseInt(ev.target.value)
-
                         }
                       })}
-                      value={newLimits?.[category]?.limit} />
+                    />
                   </td>
                   <td className="active">
-                    <Form.Check>
-                      {newLimits?.[category]?.isActive}
-                    </Form.Check>
+                    <Form.Check
+                      checked={newLimits?.[category]?.isActive}
+                      onChange={ev => setNewLimits({
+                        ...newLimits,
+                        [category]: {
+                          ...newLimits[category],
+                          isActive: ev.target.checked
+                        }
+                      })}
+                      />
                     </td>
                   <td className="difference">{printDifference(categoryItems?.items?.[category]?.limit, newLimits?.[category]?.limit)}</td>
                 </tr>
@@ -109,9 +116,16 @@ export const Categories = () => {
                       value={newLimits?.[category]?.limit} />
                   </td>
                   <td className="active">
-                    <Form.Check>
-                      {newLimits?.[category]?.isActive}
-                    </Form.Check>
+                    <Form.Check
+                      checked={newLimits?.[category]?.isActive}
+                      onChange={ev => setNewLimits({
+                        ...newLimits,
+                        [category]: {
+                          ...newLimits[category],
+                          isActive: ev.target.checked
+                        }
+                      })}
+                      />
                     </td>
                   <td className="difference">{printDifference(categoryItems?.items?.[category]?.limit, newLimits?.[category]?.limit)}</td>
                 </tr>

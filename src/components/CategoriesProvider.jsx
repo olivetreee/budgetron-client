@@ -11,7 +11,7 @@ export const useCategories = () => useContext(CategoriesContext);
 export const CategoriesProvider = ({ children }) => {
   const { sub } = useAuth();
   const url = sub ? `${BASE_API_URL}/categories` : "";
-  const { data: categoryLimits, error } = useSWR(url, simpleFetcher, { revalidateOnFocus: false, shouldRetryOnError: false });
+  const { data: categoryLimits, error, isLoading } = useSWR(url, simpleFetcher, { revalidateOnFocus: false, shouldRetryOnError: false });
 
   const categoriesList = useMemo(() => {
     if (error || !categoryLimits) {
@@ -35,7 +35,7 @@ export const CategoriesProvider = ({ children }) => {
   }
 
   return (
-    <CategoriesContext.Provider value={[ categoryLimits, categoriesList ]}>
+    <CategoriesContext.Provider value={[ categoryLimits, categoriesList, isLoading ]}>
       {children}
     </CategoriesContext.Provider>
   )

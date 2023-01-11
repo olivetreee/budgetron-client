@@ -37,6 +37,8 @@
   * remove category (this might entail a new DB column, like `active`)
   * for fun: plot changes over time
 
+* hamburger menu w/ slide in drawer
+
 * edit transaction modal
   * split transaction
 

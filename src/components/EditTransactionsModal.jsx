@@ -58,7 +58,7 @@ export const EditTransactionModal = ({ transaction, onSuccess, onCancel, isOpen 
         <Form.Control
           type="number"
           step="0.01"
-          onChange={ev => setEditedTransaction({ ...editedTransaction, amount: ev.target.value})}
+          onChange={ev => setEditedTransaction({ ...editedTransaction, amount: parseFloat(ev.target.value)})}
           value={editedTransaction.amount} />
       </Form.Group>
       <Form.Group className="mb-3">

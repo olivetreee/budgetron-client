@@ -9,7 +9,7 @@ export const printMoney = (amount, showDecimal = true) => {
   // and removes the "0."" initial part of the string.
   const decimal = showDecimal ? "." + (amount % 1).toFixed(2).slice(2,4) : "";
 
-  return `$${Math.floor(amount)}${decimal}`;
+  return `$${Math.floor(amount).toLocaleString()}${decimal}`;
 }
 
 export const fetcher = async (url, options = {}, ...params) => {

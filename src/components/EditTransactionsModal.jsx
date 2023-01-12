@@ -25,6 +25,7 @@ export const EditTransactionModal = ({ transaction, onSuccess, onCancel, isOpen 
     changes: [
       { path: 'category', newValue: editedTransaction.category },
       { path: 'author', newValue: editedTransaction.author },
+      { path: 'amount', newValue: editedTransaction.amount },
     ],
   });
 
@@ -54,7 +55,11 @@ export const EditTransactionModal = ({ transaction, onSuccess, onCancel, isOpen 
       </Form.Group>
       <Form.Group className="mb-3">
         <Form.Label>Amount</Form.Label>
-        <p>{printMoney(editedTransaction.amount)}</p>
+        <Form.Control
+          type="number"
+          step="0.01"
+          onChange={ev => setEditedTransaction({ ...editedTransaction, amount: ev.target.value})}
+          value={editedTransaction.amount} />
       </Form.Group>
       <Form.Group className="mb-3">
         <Form.Label>Category</Form.Label>
@@ -65,7 +70,7 @@ export const EditTransactionModal = ({ transaction, onSuccess, onCancel, isOpen 
       <Form.Group className="mb-3">
         <Form.Label>Author</Form.Label>
         <Form.Control onChange={ev => setEditedTransaction({ ...editedTransaction, author: ev.target.value})}
-        value={editedTransaction.author} />
+          value={editedTransaction.author} />
       </Form.Group>
     </Modal.Body>
     <Modal.Footer>

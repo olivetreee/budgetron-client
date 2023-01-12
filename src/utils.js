@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react'
-
 export const printMoney = (amount, showDecimal = true) => {
   if (typeof amount === "string" && amount[0] === "$") {
     return amount;

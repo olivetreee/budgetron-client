@@ -13,17 +13,17 @@
     "category": "Market",
     "limit": 100,
     "history": [
-      { "endPeriod": 1672830746616, "limit":  900 },
-      { "endPeriod": 1672820124295, "limit":  750 },
+      { "endPeriod": 1672830746616, "limit":  900, "isActive": true },
+      { "endPeriod": 1672820124295, "limit":  750, "isActive": false },
     ]
   }
   ```
     * when selecting a different budget period, iterate through the array to find the matching date. Grab the first date such that endPeriod becomes bigger than period. For example:
     ```json
       [
-        { "endPeriod": "Dec 2022", "limit":  900 },
-        { "endPeriod": "Feb 2023", "limit":  750 },
-        { "endPeriod": "Aug 2023", "limit":  850 },
+        { "endPeriod": "Dec 2022", "limit":  900, "isActive": true },
+        { "endPeriod": "Feb 2023", "limit":  750, "isActive": true },
+        { "endPeriod": "Aug 2023", "limit":  850, "isActive": true },
       ]
     ```
     * In this case, if we want to check the budget for May 2023, we iterate through the array starting at Dec 2023. That's smaller than May 2023, so go to the next. Feb 2023 is still smaller, so go to the next. Aug 2023 is the first one that's bigger, which means its limit value was in effect during May. Take that limit value.

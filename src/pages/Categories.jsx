@@ -1,14 +1,43 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useState } from "react";
 import { Button, Form, Table } from "react-bootstrap";
 import { useCategories } from "../components/CategoriesProvider";
 import { LoadingIndicator } from "../components/LoadingIndicator";
-import { printMoney } from "../utils";
+import { fetcher, printMoney } from "../utils";
 
 import "./Categories.scss";
 
+const mockBody = {
+  "changes": [
+      {
+          "category": "Others",
+          "limit": 123,
+          "isActive": false,
+          "type": "expense"
+      },
+      {
+          "category": "Eat Out",
+          "limit": 456,
+          "isActive": false,
+          "type": "expense"
+      }
+  ]
+};
+
+const mockPatch = async () => {
+
+  const repsonse = await fetcher(
+    "https://yc323wz0jd.execute-api.us-west-2.amazonaws.com/categories",
+    {
+      method: "PATCH",
+      body: JSON.stringify(mockBody)
+    }
+  )
+  console.log('@@@repsonse', repsonse);
+};
+
 const printDifference = (oldValue, newValue) => {
-  const diff = oldValue - newValue;
+  const diff = oldValue - (newValue || oldValue);
   let iconClass = '';
   if (diff > 0) iconClass = "fa-arrow-up";
   if (diff < 0) iconClass = "fa-arrow-down";
@@ -30,22 +59,30 @@ const printDifference = (oldValue, newValue) => {
 
 export const Categories = () => {
   const [
-    categoryItems,
-    { expense: expenseCategories, intake: intakeCategories },
-    isLoading
+    {
+      categoryLimits,
+      categoriesByType: { expense: expenseCategories, intake: intakeCategories },
+      loading
+    },
+    { batchEditCategories }
   ] = useCategories();
-  const [newLimits, setNewLimits] = useState(categoryItems?.items);
+  const [newLimits, setNewLimits] = useState({});
 
-  useEffect(() => {
-    setNewLimits(categoryItems?.items);
-  }, [categoryItems?.items]);
+  const limitsToRender = useMemo(() => ({
+    ...categoryLimits,
+    ...newLimits
+  }), [categoryLimits, newLimits])
 
-  if (isLoading) {
-    return <LoadingIndicator />;
+  if (loading) {
+    return (
+      <div className="text-center">
+        <LoadingIndicator />
+      </div>
+    );
   }
 
-  const intakeBalance = intakeCategories.reduce((acc, category) => acc + newLimits?.[category]?.limit, 0);
-  const expenseBalance = expenseCategories.reduce((acc, category) => acc + newLimits?.[category]?.limit, 0);
+  const intakeBalance = intakeCategories.reduce((acc, category) => acc + limitsToRender[category]?.limit, 0);
+  const expenseBalance = expenseCategories.reduce((acc, category) => acc + limitsToRender[category]?.limit, 0);
   const totalBalance = intakeBalance - expenseBalance;
 
   // TODO: WTF is going on w/ those undefined objects?!?!
@@ -64,30 +101,30 @@ export const Categories = () => {
                   <td className="category">{category}</td>
                   <td className="category-limit">
                     <Form.Control
-                      disabled={ !newLimits?.[category]?.isActive }
-                      value={newLimits?.[category]?.limit}
+                      disabled={ !limitsToRender[category].isActive }
+                      value={limitsToRender[category]?.limit}
                       onChange={ev => setNewLimits({
                         ...newLimits,
                         [category]: {
-                          ...newLimits[category],
-                          limit: parseInt(ev.target.value)
+                          ...limitsToRender[category],
+                          limit: parseInt(ev.target.value) || 0
                         }
                       })}
                     />
                   </td>
                   <td className="active">
                     <Form.Check
-                      checked={newLimits?.[category]?.isActive}
+                      checked={limitsToRender[category].isActive}
                       onChange={ev => setNewLimits({
                         ...newLimits,
                         [category]: {
-                          ...newLimits[category],
+                          ...limitsToRender[category],
                           isActive: ev.target.checked
                         }
                       })}
                       />
                     </td>
-                  <td className="difference">{printDifference(categoryItems?.items?.[category]?.limit, newLimits?.[category]?.limit)}</td>
+                  <td className="difference">{printDifference(categoryLimits[category]?.limit, newLimits[category]?.limit)}</td>
                 </tr>
               ))
             }
@@ -104,30 +141,30 @@ export const Categories = () => {
                   <td className="category">{category}</td>
                   <td className="category-limit">
                     <Form.Control
-                      disabled={ !newLimits?.[category]?.isActive }
+                      disabled={ !limitsToRender[category].isActive }
                       onChange={ev => setNewLimits({
                         ...newLimits,
                         [category]: {
-                          ...newLimits[category],
-                          limit: parseInt(ev.target.value)
+                          ...limitsToRender[category],
+                          limit: parseInt(ev.target.value) || 0
 
                         }
                       })}
-                      value={newLimits?.[category]?.limit} />
+                      value={limitsToRender[category]?.limit} />
                   </td>
                   <td className="active">
                     <Form.Check
-                      checked={newLimits?.[category]?.isActive}
+                      checked={limitsToRender[category].isActive}
                       onChange={ev => setNewLimits({
                         ...newLimits,
                         [category]: {
-                          ...newLimits[category],
+                          ...limitsToRender[category],
                           isActive: ev.target.checked
                         }
                       })}
                       />
                     </td>
-                  <td className="difference">{printDifference(categoryItems?.items?.[category]?.limit, newLimits?.[category]?.limit)}</td>
+                  <td className="difference">{printDifference(categoryLimits[category]?.limit, newLimits[category]?.limit)}</td>
                 </tr>
               ))
             }
@@ -135,7 +172,14 @@ export const Categories = () => {
         </Table>
       </section>
       <section className="d-grid gap-2">
-        <Button>Save</Button>
+        <Button
+          onClick={() => {
+            const changes = Object.values(newLimits);
+            batchEditCategories({ changes });
+          }}
+        >
+          Save
+        </Button>
       </section>
     </div>
   )

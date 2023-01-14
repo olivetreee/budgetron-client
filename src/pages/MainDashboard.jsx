@@ -20,8 +20,12 @@ const aggregateExpansesPerCategory = (itemIdsInCategory = [], allItems) =>
 
 export const MainDashboard = () => {
   const [transactionData] = useTransactions();
-  const [categoryLimits, { expense: categoriesList }] = useCategories({ type: "expense" });
-  if (transactionData.loading || !categoryLimits) {
+  const [{
+    categoryLimits,
+    categoriesByType: { expense: categoriesList },
+    loading: categoriesLoading,
+  }] = useCategories();
+  if (transactionData.loading || categoriesLoading) {
     return (
       <div className="main-dashboard">
         <LoadingIndicator />
@@ -36,15 +40,14 @@ export const MainDashboard = () => {
       </div>
     )
   }
-  const categoryLimitItems = categoryLimits.items;
   const spentPerCategory = categoriesList.reduce((acc, category) => ({
     ...acc,
     [category]: aggregateExpansesPerCategory(transactionData.grouping.category[category], transactionData.items)
   }), {})
 
   categoriesList.sort((a, b) => {
-    const percentageA = (spentPerCategory[a]/categoryLimitItems[a].limit) * 100;
-    const percentageB = (spentPerCategory[b]/categoryLimitItems[b].limit) * 100;
+    const percentageA = (spentPerCategory[a]/categoryLimits[a].limit) * 100;
+    const percentageB = (spentPerCategory[b]/categoryLimits[b].limit) * 100;
     if (percentageA < percentageB) {
       return 1;
     }
@@ -60,7 +63,7 @@ export const MainDashboard = () => {
         <CategoryTile
           key={category}
           category={category}
-          limit={categoryLimitItems[category].limit}
+          limit={categoryLimits[category].limit}
           amountSpent={spentPerCategory[category]}
         />
       ))}

@@ -1,40 +1,12 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useState } from "react";
 import { Button, Form, Table } from "react-bootstrap";
 import { useCategories } from "../components/CategoriesProvider";
 import { LoadingIndicator } from "../components/LoadingIndicator";
-import { fetcher, printMoney } from "../utils";
+import { useToaster } from "../components/ToasterProvider";
+import { printMoney } from "../utils";
 
 import "./Categories.scss";
-
-const mockBody = {
-  "changes": [
-      {
-          "category": "Others",
-          "limit": 123,
-          "isActive": false,
-          "type": "expense"
-      },
-      {
-          "category": "Eat Out",
-          "limit": 456,
-          "isActive": false,
-          "type": "expense"
-      }
-  ]
-};
-
-const mockPatch = async () => {
-
-  const repsonse = await fetcher(
-    "https://yc323wz0jd.execute-api.us-west-2.amazonaws.com/categories",
-    {
-      method: "PATCH",
-      body: JSON.stringify(mockBody)
-    }
-  )
-  console.log('@@@repsonse', repsonse);
-};
 
 const printDifference = (oldValue, newValue) => {
   const diff = oldValue - (newValue || oldValue);
@@ -58,6 +30,7 @@ const printDifference = (oldValue, newValue) => {
 }
 
 export const Categories = () => {
+  const toaster = useToaster();
   const [
     {
       categoryLimits,
@@ -173,9 +146,12 @@ export const Categories = () => {
       </section>
       <section className="d-grid gap-2">
         <Button
-          onClick={() => {
+          disabled={!Object.keys(newLimits).length}
+          onClick={async () => {
             const changes = Object.values(newLimits);
-            batchEditCategories({ changes });
+            await batchEditCategories({ changes });
+            setNewLimits({});
+            toaster({ variant: "success" });
           }}
         >
           Save

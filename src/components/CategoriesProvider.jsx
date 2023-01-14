@@ -118,6 +118,7 @@ export const CategoriesProvider = ({ children }) => {
             [categoryChange.category]: categoryChange
           }), {});
           dispatch({ type: 'set-categories', payload: updatedPayload })
+          return;
         } else {
           const responseBody = await response.json();
           console.debug(responseBody);

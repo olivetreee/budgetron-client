@@ -1,4 +1,4 @@
-import { createContext, useState, useContext, useMemo, useEffect, useReducer } from "react";
+import { createContext, useState, useContext } from "react";
 import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
 
@@ -9,6 +9,14 @@ export const ToasterContext = createContext();
 export const useToaster = () => useContext(ToasterContext);
 
 const VARIANT_TITLE = {
+  success: (
+    <>
+      <strong className="me-auto">
+        <i className="xfa-solid fa-circle-check" />
+        Success
+      </strong>
+    </>
+  ),
   info: (
     <>
       <strong className="me-auto">
@@ -41,7 +49,7 @@ export const ToasterProvider = ({ children }) => {
   const [autohide, setAutohide] = useState(true);
   const [toastBody, setToastBody] = useState("");
 
-  const toaster = ({ title, body, variant, isAutohide = true }) => {
+  const toaster = ({ body, variant, isAutohide = true }) => {
     setToastBody(body);
     if (variant) {
       setToastVariant(variant);

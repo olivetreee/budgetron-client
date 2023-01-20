@@ -10,10 +10,9 @@ import { CategoriesProvider } from './components/CategoriesProvider';
 import { FixVendors } from "./pages/FixVendors";
 import { AuthProvider, ProtectedRoute } from "./components/AuthProvider";
 import { Login } from "./pages/Login";
-// import { NavBar } from "./components/NavBar";
+import { Header } from "./components/Header";
 import { CategoryTransactions } from "./pages/CategoryTransactions";
 import { ToasterProvider } from "./components/ToasterProvider";
-import { Hamburger } from "./components/Hamburger";
 import { Categories } from "./pages/Categories";
 import { PAGE_DATA } from "./constants";
 
@@ -28,7 +27,7 @@ const router = createHashRouter([
     path: PAGE_DATA.dashboard.path,
     element: (
       <ProtectedRoute>
-        <Hamburger />
+        <Header title={PAGE_DATA.dashboard.name}/>
         <MainDashboard />
       </ProtectedRoute>
     ),
@@ -37,25 +36,25 @@ const router = createHashRouter([
     path: PAGE_DATA.transactions.path,
     element: (
       <ProtectedRoute>
-        <Hamburger />
+        <Header title={PAGE_DATA.transactions.name}/>
         <CategoryTransactions />
       </ProtectedRoute>
     ),
   },
-  {
-    path: "/vendors",
-    element: (
-      <ProtectedRoute>
-        <Hamburger />
-        <div>Placeholder for Vendors page</div>
-      </ProtectedRoute>
-    ),
-  },
+  // {
+  //   path: PAGE_DATA.vendors.path,
+  //   element: (
+  //     <ProtectedRoute>
+  //       <Header title={PAGE_DATA.vendors.name}/>
+  //       <div>Placeholder for Vendors page</div>
+  //     </ProtectedRoute>
+  //   ),
+  // },
   {
     path: PAGE_DATA.fixVendors.path,
     element: (
       <ProtectedRoute>
-        <Hamburger />
+        <Header title={PAGE_DATA.fixVendors.name}/>
         <FixVendors />
       </ProtectedRoute>
     ),
@@ -64,7 +63,7 @@ const router = createHashRouter([
     path: PAGE_DATA.categories.path,
     element: (
       <ProtectedRoute>
-        <Hamburger />
+        <Header title={PAGE_DATA.categories.name}/>
         <Categories />
       </ProtectedRoute>
     ),

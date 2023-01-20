@@ -4,17 +4,19 @@
   height: 100%;
   padding: 20px;
 
-  .navbar {
-    margin-bottom: 1rem;
+  // .top-header {
+  //   position: fixed;
+  // }
+  //   margin-bottom: 1rem;
 
-    a {
-      color: $white;
-      border: solid 1px $white;
-      border-radius: var(--bs-nav-pills-border-radius);
+  //   a {
+  //     color: $white;
+  //     border: solid 1px $white;
+  //     border-radius: var(--bs-nav-pills-border-radius);
 
-      &.active {
-        border: none;
-      }
-    }
-  }
+  //     &.active {
+  //       border: none;
+  //     }
+  //   }
+  // }
 }

@@ -110,7 +110,14 @@ nav.hamburger-menu aside ul ul li span {
 //   }
 .hamburger {
   border: none;
-  margin: 1rem;
+  // margin: 1rem;
+}
+nav.hamburger-menu button.hamburger {
+  position: relative;
+  line-height: 2rem;
+  padding: 0.25rem 0.75rem 0.75rem;
+  font-size: 2rem;
+  border-right: solid 1px $white;
 }
 nav.hamburger-menu aside {
   width: 150px;                /* menu width */
@@ -131,6 +138,6 @@ nav.hamburger-menu aside ul li.current >a,
 nav.hamburger-menu aside ul li >span:hover,
 nav.hamburger-menu aside ul li >a:hover {
   color: white;                /* menu font highlight color */
-  background-color: purple;  /* menu background highlight color */
+  background-color: $pink;  /* menu background highlight color */
   }
 /******************************************************************************/

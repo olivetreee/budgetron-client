@@ -11,8 +11,8 @@ import "./Categories.scss";
 const printDifference = (oldValue, newValue) => {
   const diff = oldValue - (newValue || oldValue);
   let iconClass = '';
-  if (diff > 0) iconClass = "fa-arrow-up";
-  if (diff < 0) iconClass = "fa-arrow-down";
+  if (diff > 0) iconClass = "fa-arrow-down";
+  if (diff < 0) iconClass = "fa-arrow-up";
 
   return (
     <>

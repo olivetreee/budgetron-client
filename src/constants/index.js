@@ -13,4 +13,23 @@ export const CATEGORY_ICON = {
   "Gas": "fa-gas-pump"
 }
 
+export const PAGE_DATA = {
+  dashboard: {
+    path: '/dashboard',
+    name: "Dashboard"
+  },
+  fixVendors: {
+    path: '/fix-vendors',
+    name: "Fix Vendors"
+  },
+  categories: {
+    path: '/categories',
+    name: "Categories"
+  },
+  transactions: {
+    path: '/transactions',
+    name: "Transactions"
+  },
+}
+
 export const BASE_API_URL = "https://yc323wz0jd.execute-api.us-west-2.amazonaws.com";

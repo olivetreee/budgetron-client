@@ -4,6 +4,10 @@ import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+// The following is so hamburger-menu does not require jQuery or their JS file,
+// as per https://github.com/center-key/hamburger-menu#f-removing-jquery-dependency
+document.addEventListener('click', () => {});  //workaround for sticky hover on mobile
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>

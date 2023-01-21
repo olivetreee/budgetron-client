@@ -16,19 +16,23 @@ export const CATEGORY_ICON = {
 export const PAGE_DATA = {
   dashboard: {
     path: '/dashboard',
-    name: "Dashboard"
+    name: "Dashboard",
+    icon: "fa-gauge",
   },
   fixVendors: {
     path: '/fix-vendors',
-    name: "Fix Vendors"
+    name: "Fix Vendors",
+    icon: "fa-circle-question",
   },
   categories: {
     path: '/categories',
-    name: "Categories"
+    name: "Categories",
+    icon: "fa-dollar-sign",
   },
   transactions: {
     path: '/transactions',
-    name: "Transactions"
+    name: "Transactions",
+    icon: "fa-credit-card",
   },
 }
 

@@ -117,21 +117,28 @@ nav.hamburger-menu button.hamburger {
   line-height: 2rem;
   padding: 0.25rem 0.75rem 0.75rem;
   font-size: 2rem;
-  border-right: solid 1px $white;
+  border-right: solid 2px #4a0caf;
 }
 nav.hamburger-menu aside {
-  width: 150px;                /* menu width */
-  }
+  width: 175px;
+  box-shadow: 0px 0px 5px black;          /* menu width */
+}
 nav.hamburger-menu {
   color: $white;            /* menu font color */
   background-color: $indigo;      /* menu background color */
-  }
+}
 nav.hamburger-menu aside ul li.current> a {
   font-weight: bold;
   border: none;         /* border color for selected menu item */
 }
 nav.hamburger-menu aside ul li a {
   border: none;
+
+  i {
+    margin-right: 0.5rem;
+    width: 1.5rem;
+    text-align: center;
+  }
 }
 nav.hamburger-menu aside ul li.current >span,
 nav.hamburger-menu aside ul li.current >a,
@@ -139,5 +146,20 @@ nav.hamburger-menu aside ul li >span:hover,
 nav.hamburger-menu aside ul li >a:hover {
   color: white;                /* menu font highlight color */
   background-color: $pink;  /* menu background highlight color */
+}
+
+nav.hamburger-menu a[href="#/fix-vendors"] {
+  display: flex;
+  align-items: center;
+
+  span {
+    color: rgb(21, 30, 41);
+    width: 1.5rem;
+    margin-right: 0.5rem;
+    margin-left: 0;
+    padding: 0.25rem 0;
+    font-size: 0.75rem;
+    text-align: center;
   }
+}
 /******************************************************************************/

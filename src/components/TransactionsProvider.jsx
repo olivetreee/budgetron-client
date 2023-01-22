@@ -3,11 +3,13 @@ import useSWR from 'swr'
 import { BASE_API_URL } from "../constants";
 import { fetcher, simpleFetcher } from "../utils";
 import { useAuth } from "./AuthProvider";
+import { usePeriod } from "./PeriodProvider";
 
 export const TransactionsContext = createContext();
 
 export const useTransactions = () => useContext(TransactionsContext);
 
+// TODO: this could use date-and-time
 const todaysMonthYear = `${new Date().getUTCMonth() + 1}/${new Date().getUTCFullYear()}`;
 // const todaysMonthYear = "12/2022";
 
@@ -79,10 +81,10 @@ const transactionsReducer = (state, { type, payload }) => {
 }
 
 export const TransactionsProvider = ({
-  date = todaysMonthYear,
   groupBy = "category",
   children
 }) => {
+  const [date] = usePeriod();
   const { sub } = useAuth();
   const dateToQuery = date.replace("/", "-");
   const url = sub ? `${BASE_API_URL}/transactions?date=${dateToQuery}&groupBy=${groupBy}` : "";

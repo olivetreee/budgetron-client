@@ -17,6 +17,7 @@ import { Categories } from "./pages/Categories";
 import { PAGE_DATA } from "./constants";
 
 import './App.scss';
+import { PeriodProvider } from "./components/PeriodProvider";
 
 const router = createHashRouter([
   {
@@ -74,13 +75,15 @@ function App() {
   return (
     <div className="App">
       <AuthProvider>
-        <ToasterProvider>
-          <CategoriesProvider>
-            <TransactionsProvider>
-              <RouterProvider router={router} />
-            </TransactionsProvider>
-          </CategoriesProvider>
-        </ToasterProvider>
+        <PeriodProvider>
+          <ToasterProvider>
+            <CategoriesProvider>
+              <TransactionsProvider>
+                <RouterProvider router={router} />
+              </TransactionsProvider>
+            </CategoriesProvider>
+          </ToasterProvider>
+        </PeriodProvider>
       </AuthProvider>
     </div>
   );

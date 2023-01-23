@@ -14,21 +14,23 @@ const PeriodPicker = () => {
   const [selectedPeriod, setSelectedPeriod] = usePeriod()
   const periods = useMemo(() => {
     const initialMonthDate = new Date("1/1/2022");
-    const now = new Date();
-    let currentPeriodMonth = initialMonthDate;
+    let currentPeriodMonth = new Date();
     const listOfPeriods = [];
-    while (currentPeriodMonth <= now) {
+    while (currentPeriodMonth >= initialMonthDate) {
       listOfPeriods.push(dateUtils.format(currentPeriodMonth, "M/YYYY"));
-      currentPeriodMonth = dateUtils.addMonths(currentPeriodMonth, 1);
+      currentPeriodMonth = dateUtils.addMonths(currentPeriodMonth, -1);
     }
     return listOfPeriods;
   }, [])
   return (
-    <DropdownButton variant="light" onSelect={setSelectedPeriod} title={selectedPeriod}>
-      {periods.map(period => (
-        <Dropdown.Item key={period} eventKey={period}>{period}</Dropdown.Item>
-      ))}
-    </DropdownButton>
+    <>
+      <h4>Period Picker:</h4>
+      <DropdownButton variant="light" onSelect={setSelectedPeriod} title={dateUtils.transform(selectedPeriod, "M/YYYY", "MMM/YYYY")}>
+        {periods.map(period => (
+          <Dropdown.Item key={period} eventKey={period}>{dateUtils.transform(period, "M/YYYY", "MMM/YYYY")}</Dropdown.Item>
+        ))}
+      </DropdownButton>
+    </>
   )
 }
 
@@ -47,23 +49,30 @@ export const Hamburger = () => {
         &#9776;
       </button>
       <aside>
-          <ul>
-            {
-              Object.values(PAGE_DATA).map(({ path, name, icon }) => (
-                <li key={name} className={location.pathname === path && "current" } onClick={() => setShouldCollapse(true)}>
-                  <Link to={path}>
-                    {
-                      path === "/fix-vendors" && numberOfMissingCategories
-                      ? <Badge bg="warning" pill>{numberOfMissingCategories}</Badge>
-                      : <i className={`fa-solid ${icon}`}/>
-                    }
-                    {name}
-                  </Link>
-                </li>
-              ))
-            }
-          </ul>
-          <PeriodPicker />
+          <section className="close-button">
+            {/* <i class="fa-solid fa-xmark"></i> */}
+          </section>
+          <section className="links">
+            <ul>
+              {
+                Object.values(PAGE_DATA).map(({ path, name, icon }) => (
+                  <li key={name} className={location.pathname === path && "current" } onClick={() => setShouldCollapse(true)}>
+                    <Link to={path}>
+                      {
+                        path === "/fix-vendors" && numberOfMissingCategories
+                        ? <Badge bg="warning" pill>{numberOfMissingCategories}</Badge>
+                        : <i className={`fa-solid ${icon}`}/>
+                      }
+                      {name}
+                    </Link>
+                  </li>
+                ))
+              }
+            </ul>
+          </section>
+          <section className="period-picker">
+            <PeriodPicker />
+          </section>
       </aside>
     </nav>
   )

@@ -143,19 +143,48 @@ nav.hamburger-menu aside ul li >a:hover {
   background-color: $pink;  /* menu background highlight color */
 }
 
-// Badge next to Fix Vendors link
-nav.hamburger-menu a[href="#/fix-vendors"] {
-  display: flex;
-  align-items: center;
+nav {
+  // Badge next to Fix Vendors link
+  &.hamburger-menu {
+    a[href="#/fix-vendors"] {
+      display: flex;
+      align-items: center;
 
-  span {
-    color: rgb(21, 30, 41);
-    width: 1.5rem;
-    margin-right: 0.5rem;
-    margin-left: 0;
-    padding: 0.25rem 0;
-    font-size: 0.75rem;
-    text-align: center;
+      span {
+        color: rgb(21, 30, 41);
+        width: 1.5rem;
+        margin-right: 0.5rem;
+        margin-left: 0;
+        padding: 0.25rem 0;
+        font-size: 0.75rem;
+        text-align: center;
+      }
+    }
+
+    section {
+      border-bottom: solid 2px #4a0caf;
+
+      &.close-button {
+        line-height: 2rem;
+        padding: 0.5rem 1rem;
+        font-size: 2rem;
+      }
+
+      &.period-picker {
+        padding: 1rem;
+
+        .dropdown-toggle {
+          width: 100%;
+        }
+
+        .dropdown-menu {
+          max-height: 200px;
+          overflow-y: scroll;
+          min-width: 100%;
+        }
+      }
+    }
   }
 }
+
 /******************************************************************************/

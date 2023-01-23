@@ -10,9 +10,10 @@ import { useTransactions } from './TransactionsProvider';
 
 export const EditTransactionModal = ({ transaction, onSuccess, onCancel, isOpen }) => {
   const [editedTransaction, setEditedTransaction] = useState(transaction);
+  const [splitNewTransaction, setSplitNewTransaction] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const toaster = useToaster();
-  const [,{ editTransaction }] = useTransactions();
+  const [,{ editTransaction, createTransaction }] = useTransactions();
 
   useEffect(() => {
     setEditedTransaction(transaction);
@@ -31,7 +32,11 @@ export const EditTransactionModal = ({ transaction, onSuccess, onCancel, isOpen 
   const onSave = async () => {
     const patchData = makePatchBody();
     setIsLoading(true);
+    console.log('@@@splitNewTransaction', splitNewTransaction);
     try {
+      if (splitNewTransaction) {
+        await createTransaction(splitNewTransaction);
+      }
       await editTransaction(patchData);
       onSuccess();
     } catch (err) {
@@ -71,14 +76,49 @@ export const EditTransactionModal = ({ transaction, onSuccess, onCancel, isOpen 
         <Form.Control onChange={ev => setEditedTransaction({ ...editedTransaction, author: ev.target.value})}
           value={editedTransaction.author} />
       </Form.Group>
+      {
+        splitNewTransaction && (
+          <section>
+            <Form.Group className="mb-3">
+              <Form.Label>Amount</Form.Label>
+              <Form.Control
+                type="number"
+                step="0.01"
+                onChange={ev => setSplitNewTransaction({ ...splitNewTransaction, amount: parseFloat(ev.target.value)})}
+                value={splitNewTransaction.amount} />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Category</Form.Label>
+              <CategoriesDropdown
+                currentValue={splitNewTransaction.category}
+                onChange={newValue => setSplitNewTransaction({ ...splitNewTransaction, category: newValue })} />
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Author</Form.Label>
+              <Form.Control onChange={ev => setSplitNewTransaction({ ...splitNewTransaction, author: ev.target.value})}
+                value={splitNewTransaction.author} />
+            </Form.Group>
+          </section>
+        )
+      }
     </Modal.Body>
     <Modal.Footer>
       <Button disabled={isLoading} variant="secondary" onClick={() => {
           setEditedTransaction(transaction);
+          setSplitNewTransaction();
           onCancel();
         }}>
         Close
       </Button>
+      {
+        !splitNewTransaction && (
+          <Button disabled={isLoading} variant="info" onClick={() => {
+              setSplitNewTransaction(transaction);
+            }}>
+            Split
+          </Button>
+        )
+      }
       <Button disabled={isLoading} variant="primary" onClick={onSave}>
         Save Changes
       </Button>

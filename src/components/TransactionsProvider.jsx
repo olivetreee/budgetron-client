@@ -39,6 +39,28 @@ const transactionsReducer = (state, { type, payload }) => {
       };
     };
     // eslint-disable-next-line no-lone-blocks
+    case 'add-transaction': {
+      const groupingKey = Object.keys(state.grouping)[0];
+      const payloadGroupingProperty = payload[groupingKey];
+      const currentGroupingList = state.grouping[groupingKey][payloadGroupingProperty] || [];
+      const newGroupingList = currentGroupingList.concat(payload.emailId);
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        items: {
+          ...state.items,
+          [payload.emailId]: payload
+        },
+        grouping: {
+          [groupingKey]: {
+            ...state.grouping[groupingKey],
+            [payloadGroupingProperty]: newGroupingList,
+          }
+        }
+      };
+    };
+    // eslint-disable-next-line no-lone-blocks
     case 'set-error': {
       return {
         items: null,
@@ -65,6 +87,7 @@ const transactionsReducer = (state, { type, payload }) => {
       return {
         ...state,
         loading: false,
+        error: null,
         items: {
           ...state.items,
           [payload.emailId]: payload
@@ -122,8 +145,48 @@ export const TransactionsProvider = ({
         // and react accordingly.
         // actions.setError(err);
       }
+    },
+    createTransaction: async (transactionData) => {
+      // in case the ID is already a split one, we'll need to increment that index
+      const [idBase, idSuffix = 0] = transactionData.emailId.split("-");
+      let newIdSuffix = idSuffix + 1;
+      let newEmailId = `${idBase}-${newIdSuffix}`;
+      // Need to make sure this ID doesn't already exist.
+      // It's unlikely that it'd exist in another month, so we can check against local state.
+      while (state.items[newEmailId]) {
+        newIdSuffix++;
+        newEmailId = `${idBase}-${newIdSuffix}`;
+      }
+      const body = {
+        ...transactionData,
+        emailId: newEmailId
+      }
+      const fetchOptions = {
+        method: "POST",
+        body: JSON.stringify(body)
+      };
+      try {
+        // throw new Error("HOWDY! This is a muuuuch longer error message to see if it wraps.");
+        const response = await fetcher(`${BASE_API_URL}/transactions`, fetchOptions);
+        if (response.ok) {
+          dispatch({ type: 'add-transaction', payload: body })
+        } else {
+          const responseBody = await response.json();
+          console.debug(responseBody);
+          actions.setError(responseBody);
+          throw new Error(responseBody);
+        }
+      } catch (err) {
+        throw err;
+        // TODO: Seems like setting the error here breaks the app, as
+        // the data vanishes and breaks some components...
+        // Also, we should probably rethrow and let downstream handle it? Or maybe not,
+        // since components have access to the error state itself, and can liste to that
+        // and react accordingly.
+        // actions.setError(err);
+      }
     }
-  }), []);
+  }), [state.items]);
 
   useEffect(() => {
     !data && !error && actions.setLoading();

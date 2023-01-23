@@ -32,6 +32,10 @@
     border-bottom-left-radius: 7px;
     border-bottom-right-radius: 7px;
 
+    .collapse {
+      overflow: scroll;
+    }
+
     button {
       color: white;
       text-decoration: none;

@@ -9,10 +9,6 @@ export const TransactionsContext = createContext();
 
 export const useTransactions = () => useContext(TransactionsContext);
 
-// TODO: this could use date-and-time
-const todaysMonthYear = `${new Date().getUTCMonth() + 1}/${new Date().getUTCFullYear()}`;
-// const todaysMonthYear = "12/2022";
-
 const getInitialState = (data, error, isLoading) => ({
   loading: isLoading,
   items: data?.items,
@@ -46,6 +42,7 @@ const transactionsReducer = (state, { type, payload }) => {
       const newGroupingList = currentGroupingList.concat(payload.emailId);
       return {
         ...state,
+        size: Object.keys(state.items).length + 1,
         loading: false,
         error: null,
         items: {
@@ -114,11 +111,16 @@ export const TransactionsProvider = ({
   const { data, error, isLoading } = useSWR(url, simpleFetcher, { revalidateOnFocus: false, shouldRetryOnError: false });
   const [state, dispatch] = useReducer(transactionsReducer, getInitialState(data, error, isLoading));
 
-  const actions = useMemo(() => ({
-    setLoading: () => dispatch({ type: 'set-loading'}),
-    setTransactions: payload => dispatch({ type: 'set-transactions', payload }),
-    setError: payload => dispatch({ type: 'set-error', payload }),
-    updateTransaction: payload => dispatch({ type: 'update-transaction', payload }),
+  const actions = useMemo(() => {
+    return {
+      setLoading: () => dispatch({ type: 'set-loading'}),
+      setTransactions: payload => dispatch({ type: 'set-transactions', payload }),
+      setError: payload => dispatch({ type: 'set-error', payload }),
+      updateTransaction: payload => dispatch({ type: 'update-transaction', payload }),
+    }
+  }, []);
+
+  const apiActions = {
     editTransaction: async (transactionData) => {
       const fetchOptions = {
         method: "PATCH",
@@ -186,7 +188,7 @@ export const TransactionsProvider = ({
         // actions.setError(err);
       }
     }
-  }), [state.items]);
+  }
 
   useEffect(() => {
     !data && !error && actions.setLoading();
@@ -202,7 +204,7 @@ export const TransactionsProvider = ({
   }
 
   return (
-    <TransactionsContext.Provider value={[ state, actions, error ]}>
+    <TransactionsContext.Provider value={[ state, { ...actions, ...apiActions }, error ]}>
       {children}
     </TransactionsContext.Provider>
   )

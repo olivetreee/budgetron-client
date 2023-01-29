@@ -32,7 +32,6 @@ export const EditTransactionModal = ({ transaction, onSuccess, onCancel, isOpen 
   const onSave = async () => {
     const patchData = makePatchBody();
     setIsLoading(true);
-    console.log('@@@splitNewTransaction', splitNewTransaction);
     try {
       if (splitNewTransaction) {
         await createTransaction(splitNewTransaction);

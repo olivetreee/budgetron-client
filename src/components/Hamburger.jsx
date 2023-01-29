@@ -55,7 +55,7 @@ export const Hamburger = () => {
           <section className="links">
             <ul>
               {
-                Object.values(PAGE_DATA).map(({ path, name, icon }) => (
+                Object.values(PAGE_DATA).map(({ path, name, icon, hideFromNav }) => !hideFromNav && (
                   <li key={name} className={location.pathname === path && "current" } onClick={() => setShouldCollapse(true)}>
                     <Link to={path}>
                       {

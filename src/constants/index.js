@@ -33,6 +33,7 @@ export const PAGE_DATA = {
     path: '/transactions',
     name: "Transactions",
     icon: "fa-credit-card",
+    hideFromNav: true
   },
 }
 

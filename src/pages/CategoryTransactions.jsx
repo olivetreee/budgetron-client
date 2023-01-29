@@ -6,6 +6,7 @@ import { useTransactions } from '../components/TransactionsProvider';
 import { VendorTransactionsTile } from '../components/VendorTransactionsTile';
 import { CATEGORY_ICON } from '../constants';
 import { EditTransactionModal } from '../components/EditTransactionsModal';
+import { LoadingIndicator } from '../components/LoadingIndicator';
 
 import "./CategoryTransactions.scss";
 
@@ -31,9 +32,17 @@ const groupByVendorOrderByAmount = (transactions) => transactions.reduce((acc, t
 
 export const CategoryTransactions = ({ date = new Date() }) => {
   const location = useLocation();
-  const [{ items, grouping }] = useTransactions();
+  const [{ loading, items, grouping }] = useTransactions();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transactionToEdit, setTransactionToEdit] = useState({});
+
+  if (loading) {
+    return (
+      <div className="category-transactions">
+        <LoadingIndicator />
+      </div>
+    )
+  }
 
   const queryParams = new URLSearchParams(location.search);
   const category = queryParams.get("category").replace("_", " ");

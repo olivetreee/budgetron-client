@@ -49,9 +49,9 @@ export const Hamburger = () => {
         &#9776;
       </button>
       <aside>
-          <section className="close-button">
-            {/* <i class="fa-solid fa-xmark"></i> */}
-          </section>
+          {/* <section className="close-button">
+            <i class="fa-solid fa-xmark"></i>
+          </section> */}
           <section className="links">
             <ul>
               {

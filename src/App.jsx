@@ -37,7 +37,7 @@ const router = createHashRouter([
     path: PAGE_DATA.transactions.path,
     element: (
       <ProtectedRoute>
-        <Header title={PAGE_DATA.transactions.name}/>
+        <Header title={PAGE_DATA.transactions.name} canNavigateBack={true}/>
         <CategoryTransactions />
       </ProtectedRoute>
     ),

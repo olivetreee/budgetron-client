@@ -29,7 +29,9 @@ const router = createHashRouter([
     element: (
       <ProtectedRoute>
         <Header title={PAGE_DATA.dashboard.name}/>
-        <MainDashboard />
+        <div className="body-wrapper">
+          <MainDashboard />
+        </div>
       </ProtectedRoute>
     ),
   },
@@ -37,8 +39,9 @@ const router = createHashRouter([
     path: PAGE_DATA.transactions.path,
     element: (
       <ProtectedRoute>
-        <Header title={PAGE_DATA.transactions.name} canNavigateBack={true}/>
-        <CategoryTransactions />
+        <div className="body-wrapper">
+          <CategoryTransactions />
+        </div>
       </ProtectedRoute>
     ),
   },
@@ -47,7 +50,9 @@ const router = createHashRouter([
   //   element: (
   //     <ProtectedRoute>
   //       <Header title={PAGE_DATA.vendors.name}/>
-  //       <div>Placeholder for Vendors page</div>
+            // <div className="body-wrapper">
+            //   <div>Placeholder for Vendors page</div>
+            // </div>
   //     </ProtectedRoute>
   //   ),
   // },
@@ -56,7 +61,9 @@ const router = createHashRouter([
     element: (
       <ProtectedRoute>
         <Header title={PAGE_DATA.fixVendors.name}/>
-        <FixVendors />
+        <div className="body-wrapper">
+          <FixVendors />
+        </div>
       </ProtectedRoute>
     ),
   },
@@ -65,7 +72,9 @@ const router = createHashRouter([
     element: (
       <ProtectedRoute>
         <Header title={PAGE_DATA.categories.name}/>
-        <Categories />
+        <div className="body-wrapper">
+          <Categories />
+        </div>
       </ProtectedRoute>
     ),
   },

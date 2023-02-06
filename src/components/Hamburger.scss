@@ -104,6 +104,12 @@ nav.hamburger-menu aside ul ul li span {
 /******************************************************************************/
 /* [override this section to customize]                                       */
 /* HamburgerMenu ☰ Custom width and colors                                    */
+@media (max-width: 667px) {
+  aside {
+    overflow-y: "scroll"
+  }
+}
+
 .hamburger {
   border: none;
 }
@@ -115,8 +121,9 @@ nav.hamburger-menu button.hamburger {
   border-right: solid 2px #4a0caf;
 }
 nav.hamburger-menu aside {
-  width: 175px;
+  width: 200px;
   box-shadow: 0px 0px 5px black;          /* menu width */
+  overflow-y: unset;
 }
 nav.hamburger-menu {
   color: $white;            /* menu font color */

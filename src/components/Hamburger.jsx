@@ -56,7 +56,7 @@ export const Hamburger = () => {
             <ul>
               {
                 Object.values(PAGE_DATA).map(({ path, name, icon, hideFromNav }) => !hideFromNav && (
-                  <li key={name} className={location.pathname === path && "current" } onClick={() => setShouldCollapse(true)}>
+                  <li key={name} className={location.pathname === path ? "current" : "" } onClick={() => setShouldCollapse(true)}>
                     <Link to={path}>
                       {
                         path === "/fix-vendors" && numberOfMissingCategories

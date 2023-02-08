@@ -14,6 +14,7 @@ import { Header } from "./components/Header";
 import { CategoryTransactions } from "./pages/CategoryTransactions";
 import { ToasterProvider } from "./components/ToasterProvider";
 import { Categories } from "./pages/Categories";
+import { NextMonth } from "./pages/NextMonth";
 import { PAGE_DATA } from "./constants";
 
 import './App.scss';
@@ -74,6 +75,17 @@ const router = createHashRouter([
         <Header title={PAGE_DATA.categories.name}/>
         <div className="body-wrapper">
           <Categories />
+        </div>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "next-month",
+    element: (
+      <ProtectedRoute>
+        <Header title="Next Month"/>
+        <div className="body-wrapper">
+          <NextMonth />
         </div>
       </ProtectedRoute>
     ),

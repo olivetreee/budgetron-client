@@ -1,0 +1,17 @@
+@import "../template.scss";
+
+.next-month {
+  table {
+    color: $white;
+  }
+
+  thead {
+    font-weight: bold;
+    border-bottom: solid 3px $white;
+  }
+
+  .has-charge-this-month {
+    background-color: $info;
+    color: $dark-1;
+  }
+}

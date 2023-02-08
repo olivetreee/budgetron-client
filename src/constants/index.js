@@ -35,6 +35,11 @@ export const PAGE_DATA = {
     icon: "fa-credit-card",
     hideFromNav: true,
   },
+  nextMonth: {
+    path: '/next-month',
+    name: "Next Month",
+    icon: "fa-calendar-days",
+  },
 }
 
 export const BASE_API_URL = "https://yc323wz0jd.execute-api.us-west-2.amazonaws.com";

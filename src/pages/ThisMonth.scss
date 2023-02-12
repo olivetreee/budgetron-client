@@ -14,4 +14,16 @@
     background-color: $info;
     color: $dark-1;
   }
+
+  .total {
+    text-align: center;
+    margin-top: 5rem;
+
+    h2 {
+      display: inline-block;
+      border: solid $white 1px;
+      padding: 1rem;
+      border-radius: 1rem;
+    }
+  }
 }

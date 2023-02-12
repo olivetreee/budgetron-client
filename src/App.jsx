@@ -14,11 +14,11 @@ import { Header } from "./components/Header";
 import { CategoryTransactions } from "./pages/CategoryTransactions";
 import { ToasterProvider } from "./components/ToasterProvider";
 import { Categories } from "./pages/Categories";
-import { NextMonth } from "./pages/NextMonth";
+import { ThisMonth } from "./pages/ThisMonth";
 import { PAGE_DATA } from "./constants";
+import { PeriodProvider } from "./components/PeriodProvider";
 
 import './App.scss';
-import { PeriodProvider } from "./components/PeriodProvider";
 
 const router = createHashRouter([
   {
@@ -80,12 +80,12 @@ const router = createHashRouter([
     ),
   },
   {
-    path: "next-month",
+    path: "this-month",
     element: (
       <ProtectedRoute>
-        <Header title="Next Month"/>
+        <Header title="This Month"/>
         <div className="body-wrapper">
-          <NextMonth />
+          <ThisMonth />
         </div>
       </ProtectedRoute>
     ),

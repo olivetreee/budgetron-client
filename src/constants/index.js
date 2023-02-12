@@ -35,9 +35,9 @@ export const PAGE_DATA = {
     icon: "fa-credit-card",
     hideFromNav: true,
   },
-  nextMonth: {
-    path: '/next-month',
-    name: "Next Month",
+  thisMonth: {
+    path: '/this-month',
+    name: "This Month",
     icon: "fa-calendar-days",
   },
 }

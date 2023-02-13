@@ -93,6 +93,30 @@ const transactionsReducer = (state, { type, payload }) => {
           [groupingKey]: newGroupings
         }
       }
+    };
+    case "delete-transaction": {
+      const { emailId } = payload;
+      const { items, grouping } = state;
+      const newItems = { ...items };
+      delete newItems[emailId];
+
+      const groupingKey = Object.keys(grouping)[0];
+      const currentGroupingState = grouping[groupingKey];
+      const currentItemGrouping = payload[groupingKey];
+      const newGroupingSet = new Set(currentGroupingState[currentItemGrouping]);
+      newGroupingSet.delete(emailId);
+      const newGrouping = {
+        ...currentGroupingState,
+        [currentItemGrouping]: Array.from(newGroupingSet)
+      }
+
+      return {
+        ...state,
+        items: newItems,
+        grouping: {
+          [groupingKey]: newGrouping
+        }
+      };
     }
     default: {
       throw new Error(`Unkown action.type: ${type}`);
@@ -187,6 +211,36 @@ export const TransactionsProvider = ({
         // and react accordingly.
         // actions.setError(err);
       }
+    },
+    deleteTransaction: async (transactionData) => {
+      const { monthYear, emailId } = transactionData;
+      const fetchOptions = {
+        method: "DELETE",
+      }
+
+      const transactionId = encodeURIComponent(`${monthYear}+${emailId}`);
+
+      try {
+        // throw new Error("HOWDY! This is a muuuuch longer error message to see if it wraps.");
+        const response = await fetcher(`${BASE_API_URL}/transactions/${transactionId}`, fetchOptions);
+        if (response.ok) {
+          dispatch({ type: 'delete-transaction', payload: transactionData });
+        } else {
+          const responseBody = await response.json();
+          console.debug(responseBody);
+          actions.setError(responseBody);
+          throw new Error(responseBody);
+        }
+      } catch (err) {
+        throw err;
+        // TODO: Seems like setting the error here breaks the app, as
+        // the data vanishes and breaks some components...
+        // Also, we should probably rethrow and let downstream handle it? Or maybe not,
+        // since components have access to the error state itself, and can liste to that
+        // and react accordingly.
+        // actions.setError(err);
+      }
+
     }
   }
 

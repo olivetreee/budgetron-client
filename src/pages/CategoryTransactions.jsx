@@ -7,6 +7,7 @@ import { VendorTransactionsTile } from '../components/VendorTransactionsTile';
 import { CATEGORY_ICON } from '../constants';
 import { EditTransactionModal } from '../components/EditTransactionsModal';
 import { LoadingIndicator } from '../components/LoadingIndicator';
+import { printMoney } from '../utils';
 
 import "./CategoryTransactions.scss";
 
@@ -32,7 +33,7 @@ const groupByVendorOrderByAmount = (transactions) => transactions.reduce((acc, t
 
 export const CategoryTransactions = ({ date = new Date() }) => {
   const location = useLocation();
-  const [{ loading, items, grouping }] = useTransactions();
+  const [{ loading, items, grouping }, { deleteTransaction }] = useTransactions();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [transactionToEdit, setTransactionToEdit] = useState({});
 
@@ -52,6 +53,12 @@ export const CategoryTransactions = ({ date = new Date() }) => {
   const onEditClick = (transaction) => {
     setTransactionToEdit(transaction);
     setIsModalOpen(true);
+  }
+
+  const onDeleteClick = async (transaction) => {
+    if (window.confirm(`Are you sure you want to delete this ${printMoney(transaction.amount)} transaction at ${transaction.vendor}?`)){
+      await deleteTransaction(transaction);
+    }
   }
 
   const onSuccess = () => {
@@ -89,7 +96,7 @@ export const CategoryTransactions = ({ date = new Date() }) => {
       </h1>
       {
         Object.entries(groupedTransactions).map(([vendorName, transactions]) => (
-          <VendorTransactionsTile vendorName={vendorName} transactions={transactions} onEdit={onEditClick} key={vendorName}/>
+          <VendorTransactionsTile vendorName={vendorName} transactions={transactions} onEdit={onEditClick} onDelete={onDeleteClick} key={vendorName}/>
         ))
       }
       <EditTransactionModal

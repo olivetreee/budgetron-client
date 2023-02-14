@@ -85,8 +85,6 @@ export const MainDashboard = () => {
           Balance
           <span className={balances.currentBalance > 0 ? "positive" : "negative"}>{printMoney(balances.currentBalance, false)}</span>
         </h3>
-        {/* <p>Current Expenses: <span>{printMoney(balances.totalExpense, false)}</span></p>
-        <p>Balance: <span className={ balances.currentBalance < 0 ? "negative" : "positive" }>{printMoney(balances.currentBalance, false)}</span></p> */}
       </section>
       <section className="category-breakdown">
         {expenseCategories.map(category => (

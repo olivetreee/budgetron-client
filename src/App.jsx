@@ -40,6 +40,7 @@ const router = createHashRouter([
     path: PAGE_DATA.transactions.path,
     element: (
       <ProtectedRoute>
+        <Header title={PAGE_DATA.transactions.name} canNavigateBack={true} />
         <div className="body-wrapper">
           <CategoryTransactions />
         </div>

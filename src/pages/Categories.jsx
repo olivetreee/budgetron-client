@@ -55,7 +55,10 @@ export const Categories = () => {
   }
 
   const intakeBalance = intakeCategories.reduce((acc, category) => acc + limitsToRender[category]?.limit, 0);
-  const expenseBalance = expenseCategories.reduce((acc, category) => acc + limitsToRender[category]?.limit, 0);
+  const expenseBalance = expenseCategories.reduce((acc, category) => categoryLimits[category].isActive
+    ? acc + limitsToRender[category]?.limit
+    : acc,
+  0);
   const totalBalance = intakeBalance - expenseBalance;
 
   return (

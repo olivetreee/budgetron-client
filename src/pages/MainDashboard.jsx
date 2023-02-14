@@ -30,7 +30,9 @@ export const MainDashboard = () => {
 
   const balances = useMemo(() => {
     const expenses = Object.values(transactionData.items || {}).reduce((acc, item) => acc + item.amount, 0);
-    const expenseLimit = (expenseCategories || []).reduce((acc, categoryType) => acc + categoryLimits[categoryType].limit, 0);
+    const expenseLimit = (expenseCategories || []).reduce((acc, categoryType) => categoryLimits[categoryType].isActive
+      ? acc + categoryLimits[categoryType].limit
+      : acc, 0);
     return {
       expenseLimit,
       totalExpense: expenses,
@@ -58,17 +60,20 @@ export const MainDashboard = () => {
     [category]: aggregateExpansesPerCategory(transactionData.grouping.category[category], transactionData.items)
   }), {})
 
-  expenseCategories.sort((a, b) => {
-    const percentageA = (spentPerCategory[a]/categoryLimits[a].limit) * 100;
-    const percentageB = (spentPerCategory[b]/categoryLimits[b].limit) * 100;
-    if (percentageA < percentageB) {
-      return 1;
-    }
-    if (percentageA > percentageB) {
-      return -1;
-    }
-    return 0;
-  });
+  expenseCategories
+    .sort((a, b) => {
+      const percentageA = (spentPerCategory[a]/categoryLimits[a].limit) * 100;
+      const percentageB = (spentPerCategory[b]/categoryLimits[b].limit) * 100;
+      if (percentageA < percentageB) {
+        return 1;
+      }
+      if (percentageA > percentageB) {
+        return -1;
+      }
+      return 0;
+    });
+
+  const categoriesToRender = expenseCategories.filter(category => categoryLimits[category].isActive);
 
   return (
     <div className="main-dashboard">
@@ -87,7 +92,7 @@ export const MainDashboard = () => {
         </h3>
       </section>
       <section className="category-breakdown">
-        {expenseCategories.map(category => (
+        {categoriesToRender.map(category => (
           <CategoryTile
             key={category}
             category={category}

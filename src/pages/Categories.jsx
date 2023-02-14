@@ -58,7 +58,6 @@ export const Categories = () => {
   const expenseBalance = expenseCategories.reduce((acc, category) => acc + limitsToRender[category]?.limit, 0);
   const totalBalance = intakeBalance - expenseBalance;
 
-  // TODO: WTF is going on w/ those undefined objects?!?!
   return (
     <div className="categories">
       <section className="balance tile no-title">

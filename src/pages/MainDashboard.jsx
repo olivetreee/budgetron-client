@@ -1,7 +1,9 @@
+import { useMemo } from "react";
 import { CategoryTile } from "../components/CategoryTile";
 import { useTransactions } from "../components/TransactionsProvider";
 import { useCategories } from "../components/CategoriesProvider";
 import { LoadingIndicator } from "../components/LoadingIndicator";
+import { printMoney } from "../utils";
 
 import "./MainDashboard.scss";
 
@@ -22,9 +24,20 @@ export const MainDashboard = () => {
   const [transactionData] = useTransactions();
   const [{
     categoryLimits,
-    categoriesByType: { expense: categoriesList },
+    categoriesByType: { expense: expenseCategories },
     loading: categoriesLoading,
   }] = useCategories();
+
+  const balances = useMemo(() => {
+    const expenses = Object.values(transactionData.items || {}).reduce((acc, item) => acc + item.amount, 0);
+    const expenseLimit = (expenseCategories || []).reduce((acc, categoryType) => acc + categoryLimits[categoryType].limit, 0);
+    return {
+      expenseLimit,
+      totalExpense: expenses,
+      currentBalance: expenseLimit - expenses
+    };
+  }, [categoryLimits, expenseCategories, transactionData]);
+
   if (transactionData.loading || categoriesLoading) {
     return (
       <div className="main-dashboard">
@@ -40,12 +53,12 @@ export const MainDashboard = () => {
       </div>
     )
   }
-  const spentPerCategory = categoriesList.reduce((acc, category) => ({
+  const spentPerCategory = expenseCategories.reduce((acc, category) => ({
     ...acc,
     [category]: aggregateExpansesPerCategory(transactionData.grouping.category[category], transactionData.items)
   }), {})
 
-  categoriesList.sort((a, b) => {
+  expenseCategories.sort((a, b) => {
     const percentageA = (spentPerCategory[a]/categoryLimits[a].limit) * 100;
     const percentageB = (spentPerCategory[b]/categoryLimits[b].limit) * 100;
     if (percentageA < percentageB) {
@@ -59,14 +72,32 @@ export const MainDashboard = () => {
 
   return (
     <div className="main-dashboard">
-      {categoriesList.map(category => (
-        <CategoryTile
-          key={category}
-          category={category}
-          limit={categoryLimits[category].limit}
-          amountSpent={spentPerCategory[category]}
-        />
-      ))}
+      <section className="balances tile no-title">
+        <h3 className="line">
+          Expense Limit
+          <span>{printMoney(balances.expenseLimit, false)}</span>
+        </h3>
+        <h3 className="line">
+          Current Expenses
+          <span>{printMoney(balances.totalExpense, false)}</span>
+        </h3>
+        <h3 className="line">
+          Balance
+          <span className={balances.currentBalance > 0 ? "positive" : "negative"}>{printMoney(balances.currentBalance, false)}</span>
+        </h3>
+        {/* <p>Current Expenses: <span>{printMoney(balances.totalExpense, false)}</span></p>
+        <p>Balance: <span className={ balances.currentBalance < 0 ? "negative" : "positive" }>{printMoney(balances.currentBalance, false)}</span></p> */}
+      </section>
+      <section className="category-breakdown">
+        {expenseCategories.map(category => (
+          <CategoryTile
+            key={category}
+            category={category}
+            limit={categoryLimits[category].limit}
+            amountSpent={spentPerCategory[category]}
+          />
+        ))}
+      </section>
     </div>
   );
 }

@@ -47,12 +47,10 @@ export const MainDashboard = () => {
     const categoriesSet = new Set(allCategories);
     return Object.entries(transactionData?.items || {}).reduce((acc, [id, data]) => {
       const category = data.category;
-      const isValidCategory = categoriesSet.has(category) || categoryLimits[category].isActive;
+      const isValidCategory = categoriesSet.has(category) || categoryLimits[category]?.isActive;
       return isValidCategory ? acc : [...acc, id];
     }, [])
   }, [allCategories, transactionData.items, categoryLimits])
-
-  console.log('@@@otherCategoriesTransactions', otherCategoriesTransactions);
 
   if (transactionData.loading || categoriesLoading) {
     return (

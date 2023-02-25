@@ -24,7 +24,7 @@ export const MainDashboard = () => {
   const [transactionData] = useTransactions();
   const [{
     categoryLimits,
-    categoriesByType: { expense: expenseCategories },
+    categoriesByType: { expense: expenseCategories, all: allCategories },
     loading: categoriesLoading,
   }] = useCategories();
 
@@ -40,9 +40,23 @@ export const MainDashboard = () => {
     };
   }, [categoryLimits, expenseCategories, transactionData]);
 
+  // This would only be present if an expense has a category that:
+  // * isn't one of the current categories
+  // * is currnetly inactive
+  const otherCategoriesTransactions = useMemo(() => {
+    const categoriesSet = new Set(allCategories);
+    return Object.entries(transactionData?.items || {}).reduce((acc, [id, data]) => {
+      const category = data.category;
+      const isValidCategory = categoriesSet.has(category) || categoryLimits[category].isActive;
+      return isValidCategory ? acc : [...acc, id];
+    }, [])
+  }, [allCategories, transactionData.items, categoryLimits])
+
+  console.log('@@@otherCategoriesTransactions', otherCategoriesTransactions);
+
   if (transactionData.loading || categoriesLoading) {
     return (
-      <div className="main-dashboard">
+      <div className="main-dashboard loading">
         <LoadingIndicator />
       </div>
     )
@@ -100,6 +114,19 @@ export const MainDashboard = () => {
             amountSpent={spentPerCategory[category]}
           />
         ))}
+      </section>
+      <section className="incorrect-categories">
+      {
+          // TODO: This might not render the correct ones in
+          // CategoryTransactions
+          otherCategoriesTransactions.map(id => (
+            <CategoryTile
+              key={id}
+              category={transactionData?.items[id].category}
+              limit={0}
+              amountSpent={1} />
+          ))
+        }
       </section>
     </div>
   );

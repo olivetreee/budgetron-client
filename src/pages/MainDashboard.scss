@@ -1,6 +1,10 @@
 @import "../template.scss";
 
 .main-dashboard {
+  &.loading {
+    display: flex;
+    justify-content: center;
+  }
   .balances {
     width: 100%;
     padding: 1rem;
@@ -30,5 +34,10 @@
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .incorrect-categories {
+    border-top: solid 3px $dark-2;
+    padding-top: 1rem;
   }
 }

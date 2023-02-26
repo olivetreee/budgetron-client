@@ -29,6 +29,12 @@
       .btn-group, button:not(:last-child):not(.dropdown-toggle) {
         margin-right: 1rem;
       }
+      .dropdown-toggle {
+        width: 38px;
+        &::after  {
+          display: none;
+        }
+      }
       .dropdown-menu {
         background-color: $secondary;
         .dropdown-item {

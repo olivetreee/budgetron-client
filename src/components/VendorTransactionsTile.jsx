@@ -23,7 +23,7 @@ const CopaymentPopover = ({ transaction }) => (
         <Popover.Body className="body">
           <p>Initial: {printMoney(transaction.amount)}</p>
           {
-            transaction.copayments.map(copayment => (
+            transaction.copayments.items.map(copayment => (
               <p>{copayment.payer}: -{printMoney(copayment.amount)}</p>
             ))
           }
@@ -81,7 +81,7 @@ export const VendorTransactionsTile = ({ vendorName, transactions, onDelete }) =
                 <td className="money">
                   {printMoney(calculateamountAfterCopayments(transaction))}&nbsp;
                   {
-                    transaction.copayments?.length ? <CopaymentPopover transaction={transaction} /> : null
+                    transaction.copayments?.total ? <CopaymentPopover transaction={transaction} /> : null
                   }
                 </td>
                 <td className="author">{transaction.author[0]}</td>
@@ -95,7 +95,7 @@ export const VendorTransactionsTile = ({ vendorName, transactions, onDelete }) =
                           <DropdownButton
                             variant="secondary"
                             as={ButtonGroup}
-                            title={<i className="fa-solid fa-pen-to-square"/>}
+                            title={<i className="fa-solid fa-ellipsis-vertical"/>}
                             id="bg-nested-dropdown"
                           >
                             <Dropdown.Item eventKey="1" onClick={async () => onEditClick(transaction)}>
@@ -104,16 +104,16 @@ export const VendorTransactionsTile = ({ vendorName, transactions, onDelete }) =
                             <Dropdown.Item eventKey="2" onClick={async () => onAddCopayClick(transaction)}>
                               <i className="fa-solid fa-comments-dollar"/>Copayments
                             </Dropdown.Item>
+                            <Dropdown.Item eventKey="3"
+                              onClick={async () => {
+                                setIsLoading(true);
+                                await onDelete(transaction);
+                                setIsLoading(false);
+                              }}
+                            >
+                              <i className="fa-solid fa-trash-can" />Delete
+                            </Dropdown.Item>
                           </DropdownButton>
-                          <Button
-                            variant="danger"
-                            onClick={async () => {
-                              setIsLoading(true);
-                              await onDelete(transaction);
-                              setIsLoading(false);
-                            }}>
-                              <i className="fa-solid fa-trash-can"></i>
-                          </Button>
                         </div>
                         <div className="d-none d-sm-block action-buttons">
                           <Button

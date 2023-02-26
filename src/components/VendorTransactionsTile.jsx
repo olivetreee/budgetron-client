@@ -11,6 +11,7 @@ import "./VendorTransactionsTile.scss";
 import { LoadingIndicator } from './LoadingIndicator';
 import { EditTransactionModal } from './EditTransactionsModal';
 import { TransactionCopaymentsModal } from './TransactionCopaymentsModal';
+import { ButtonGroup, Col, Dropdown, DropdownButton } from 'react-bootstrap';
 
 const CopaymentPopover = ({ transaction }) => (
   <OverlayTrigger
@@ -84,31 +85,57 @@ export const VendorTransactionsTile = ({ vendorName, transactions, onDelete }) =
                   }
                 </td>
                 <td className="author">{transaction.author[0]}</td>
-                <td className="action-buttons">
+                <td>
                   {
                     isLoading
                     ? <LoadingIndicator />
                     : (
                       <>
-                        <Button
-                          variant="secondary"
-                          onClick={async () => onAddCopayClick(transaction)}>
-                            <i className="fa-solid fa-comments-dollar" />
-                        </Button>
-                        <Button
-                          variant="secondary"
-                          onClick={async () => onEditClick(transaction)}>
-                            <i className="fa-solid fa-pen-to-square"></i>
-                        </Button>
-                        <Button
-                          variant="danger"
-                          onClick={async () => {
-                            setIsLoading(true);
-                            await onDelete(transaction);
-                            setIsLoading(false);
-                          }}>
-                            <i className="fa-solid fa-trash-can"></i>
-                        </Button>
+                        <div className="d-sm-none action-buttons">
+                          <DropdownButton
+                            variant="secondary"
+                            as={ButtonGroup}
+                            title={<i className="fa-solid fa-pen-to-square"/>}
+                            id="bg-nested-dropdown"
+                          >
+                            <Dropdown.Item eventKey="1" onClick={async () => onEditClick(transaction)}>
+                              <i className="fa-solid fa-pen-to-square"/>Edit
+                            </Dropdown.Item>
+                            <Dropdown.Item eventKey="2" onClick={async () => onAddCopayClick(transaction)}>
+                              <i className="fa-solid fa-comments-dollar"/>Copayments
+                            </Dropdown.Item>
+                          </DropdownButton>
+                          <Button
+                            variant="danger"
+                            onClick={async () => {
+                              setIsLoading(true);
+                              await onDelete(transaction);
+                              setIsLoading(false);
+                            }}>
+                              <i className="fa-solid fa-trash-can"></i>
+                          </Button>
+                        </div>
+                        <div className="d-none d-sm-block action-buttons">
+                          <Button
+                            variant="secondary"
+                            onClick={async () => onAddCopayClick(transaction)}>
+                              <i className="fa-solid fa-comments-dollar" />
+                          </Button>
+                          <Button
+                            variant="secondary"
+                            onClick={async () => onEditClick(transaction)}>
+                              <i className="fa-solid fa-pen-to-square"></i>
+                          </Button>
+                          <Button
+                            variant="danger"
+                            onClick={async () => {
+                              setIsLoading(true);
+                              await onDelete(transaction);
+                              setIsLoading(false);
+                            }}>
+                              <i className="fa-solid fa-trash-can"></i>
+                          </Button>
+                        </div>
                       </>
                     )
                   }

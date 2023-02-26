@@ -26,11 +26,23 @@
     }
 
     .action-buttons {
-      display: flex;
-      padding-right: 1rem;
-
-      button:not(:last-child) {
+      .btn-group, button:not(:last-child):not(.dropdown-toggle) {
         margin-right: 1rem;
+      }
+      .dropdown-menu {
+        background-color: $secondary;
+        .dropdown-item {
+          color: $white;
+          &:hover {
+            background-color: $secondary-2;
+          }
+          &:not(:last-child) {
+            border-bottom: solid 1px $secondary-2;
+          }
+          i {
+            margin-right: 0.5rem;
+          }
+        }
       }
     }
 

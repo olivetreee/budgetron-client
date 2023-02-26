@@ -1,11 +1,9 @@
-import { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import dateUtils from 'date-and-time';
 
 import { useTransactions } from '../components/TransactionsProvider';
 import { VendorTransactionsTile } from '../components/VendorTransactionsTile';
 import { CATEGORY_ICON } from '../constants';
-import { EditTransactionModal } from '../components/EditTransactionsModal';
 import { LoadingIndicator } from '../components/LoadingIndicator';
 import { printMoney } from '../utils';
 
@@ -34,8 +32,6 @@ const groupByVendorOrderByAmount = (transactions) => transactions.reduce((acc, t
 export const CategoryTransactions = ({ date = new Date() }) => {
   const location = useLocation();
   const [{ loading, items, grouping }, { deleteTransaction }] = useTransactions();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [transactionToEdit, setTransactionToEdit] = useState({});
 
   if (loading) {
     return (
@@ -50,23 +46,10 @@ export const CategoryTransactions = ({ date = new Date() }) => {
 
   const categoryTransactionIds = grouping.category[category];
 
-  const onEditClick = (transaction) => {
-    setTransactionToEdit(transaction);
-    setIsModalOpen(true);
-  }
-
   const onDeleteClick = async (transaction) => {
     if (window.confirm(`Are you sure you want to delete this ${printMoney(transaction.amount)} transaction at ${transaction.vendor}?`)){
       await deleteTransaction(transaction);
     }
-  }
-
-  const onSuccess = () => {
-    setIsModalOpen(false);
-  }
-
-  const onEditCancel = () => {
-    setIsModalOpen(false);
   }
 
   if (!categoryTransactionIds || !categoryTransactionIds.length) {
@@ -96,15 +79,9 @@ export const CategoryTransactions = ({ date = new Date() }) => {
       </h1>
       {
         Object.entries(groupedTransactions).map(([vendorName, transactions]) => (
-          <VendorTransactionsTile vendorName={vendorName} transactions={transactions} onEdit={onEditClick} onDelete={onDeleteClick} key={vendorName}/>
+          <VendorTransactionsTile vendorName={vendorName} transactions={transactions} onDelete={onDeleteClick} key={vendorName}/>
         ))
       }
-      <EditTransactionModal
-        isOpen={isModalOpen}
-        transaction={transactionToEdit}
-        onSuccess={onSuccess}
-        onCancel={onEditCancel}
-        />
     </div>
   );
 };

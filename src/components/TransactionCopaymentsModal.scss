@@ -1,0 +1,34 @@
+@import "../template.scss";
+
+.edit-copayments-modal {
+  .divider {
+    border-bottom: solid 2px $dark-2;
+    width: 90%;
+    margin: 1rem auto;
+  }
+
+  .copayment-item {
+    .action-buttons {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  .add-button {
+    width: 100%;
+  }
+
+  .modal-footer {
+    justify-content: space-between;
+
+    .footer-buttons {
+      display: flex;
+      justify-content: space-between;
+
+      .btn:first-child {
+        margin-right: 1rem;
+      }
+    }
+  }
+}

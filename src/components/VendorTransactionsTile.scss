@@ -50,3 +50,17 @@
     }
   }
 }
+
+.popover {
+  text-align: center;
+  .popover-header {
+    color: $dark-2;
+  }
+  p {
+    margin-bottom: 0.5rem;
+    font-size: 16px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

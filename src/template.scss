@@ -46,3 +46,16 @@ $orange: #f39c12;
     }
   }
 }
+
+.modal-content {
+  background-color: $dark-1;
+
+  section {
+    border-top: solid 1px $white;
+    padding-top: 1rem;
+  }
+
+  .btn-close {
+    color: $white
+  }
+}

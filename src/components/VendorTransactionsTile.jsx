@@ -34,9 +34,7 @@ const CopaymentPopover = ({ transaction }) => (
   </OverlayTrigger>
 )
 
-const calculateamountAfterCopayments = transaction => transaction.amount
-  - (transaction.copayments || []).reduce((acc, copayment) => acc + copayment.amount, 0
-);
+const calculateamountAfterCopayments = transaction => transaction.amount - (transaction.copayments?.total || 0);
 
 export const VendorTransactionsTile = ({ vendorName, transactions, onDelete }) => {
   const [isLoading, setIsLoading] = useState(false);

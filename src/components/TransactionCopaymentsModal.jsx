@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -10,6 +10,10 @@ import { printMoney } from '../utils';
 
 import "./TransactionCopaymentsModal.scss";
 
+const INITIAL_COPAYMENTS = {
+  total: 0,
+  items: []
+};
 
 export const TransactionCopaymentsModal = ({
   isOpen,
@@ -17,7 +21,7 @@ export const TransactionCopaymentsModal = ({
   onSuccess,
   onCancel,
 }) => {
-  const [copayments, setCopayments] = useState(transaction?.copayments || []);
+  const [copayments, setCopayments] = useState(transaction?.copayments || INITIAL_COPAYMENTS);
   const [copayIdxToEdit, setCopayIdxToEdit] = useState();
   const [editedCopayment, setEditedCopayment] = useState();
   const [isLoading, setIsLoading] = useState(false);
@@ -25,13 +29,8 @@ export const TransactionCopaymentsModal = ({
   const [,{ editTransaction }] = useTransactions();
 
   useEffect(() => {
-    setCopayments(transaction?.copayments || []);
+    setCopayments(transaction?.copayments || INITIAL_COPAYMENTS);
   }, [transaction]);
-
-  const sumOfCopays = useMemo(() =>
-    copayments.reduce((acc, copay) => acc + copay.amount, 0),
-    [copayments]
-  );
 
   const makePatchBody = () => ({
     monthYear: transaction.monthYear,
@@ -62,8 +61,8 @@ export const TransactionCopaymentsModal = ({
       </Modal.Header>
       <Modal.Body>
         {
-          copayments?.map((copay, idx) => (
-            <Row className="copayment-item">
+          copayments?.items?.map((copay, idx) => (
+            <Row className="copayment-item" key={idx}>
               <Col sm={9}>
                 <Form.Group className="mb-3">
                   <Form.Label>Payer</Form.Label>
@@ -91,13 +90,16 @@ export const TransactionCopaymentsModal = ({
                       onClick={async () => {
                         setCopayIdxToEdit();
                         setEditedCopayment();
-                        const newCopayments = [...copayments];
-                        newCopayments[idx] = editedCopayment;
+                        const newCopaymentItems = [...copayments.items];
+                        newCopaymentItems[idx] = editedCopayment;
                         if (!editedCopayment.amount) {
                           setEditedCopayment({ ...editedCopayment, amount: 0 });
-                          newCopayments[idx].amount = 0;
+                          newCopaymentItems[idx].amount = 0;
                         }
-                        setCopayments(newCopayments);
+                        // Just subtract the original value and add the new one to get the updated total,
+                        // instead of having to reduce the whole array again
+                        const newTotal = copayments.total - copayments.items[idx].amount + editedCopayment.amount;
+                        setCopayments({ items: newCopaymentItems, total: newTotal });
                       }}>
                         <i className="fa-solid fa-circle-check"></i>
                     </Button>
@@ -117,9 +119,13 @@ export const TransactionCopaymentsModal = ({
                   onClick={async () => {
                     setCopayIdxToEdit();
                     setEditedCopayment();
-                    const newCopayments = [...copayments];
-                    newCopayments.splice(idx, 1);
-                    setCopayments(newCopayments);
+                    const newCopaymentItems = [...copayments.items];
+                    newCopaymentItems.splice(idx, 1);
+
+                    // Just subtract the original value,
+                    // instead of having to reduce the whole array again
+                    const newTotal = copayments.total - copayments.items[idx].amount;
+                    setCopayments({ total: newTotal, items: newCopaymentItems });
                   }}>
                     <i className="fa-solid fa-trash-can"></i>
                 </Button>
@@ -133,28 +139,28 @@ export const TransactionCopaymentsModal = ({
           onClick={() => {
             const newCopay = { payer: '', amount: 0 };
             setEditedCopayment(newCopay);
-            setCopayments(copayments.concat(newCopay));
-            setCopayIdxToEdit(copayments.length);
+            setCopayments({...copayments, items: copayments.items.concat(newCopay)});
+            setCopayIdxToEdit(copayments.items.length);
           }} >
           Add
         </Button>
       </Modal.Body>
       <Modal.Footer>
         <p>
-          New Total: {printMoney(transaction.amount - sumOfCopays)}
+          New Total: {printMoney(transaction.amount - copayments.total)}
         </p>
         <div className="footer-buttons">
           <Button
             disabled={isLoading}
             variant="secondary"
             onClick={() => {
-              setCopayments(transaction.copayments || []);
+              setCopayments(transaction.copayments || INITIAL_COPAYMENTS);
               onCancel();
             }}>
             Close
           </Button>
           <Button
-            disabled={isLoading || transaction.amount - sumOfCopays < 0}
+            disabled={isLoading || transaction.amount - copayments.total < 0}
             variant="success"
             onClick={onSave}
           >

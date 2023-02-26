@@ -14,7 +14,7 @@ export const Header = ({ title, canNavigateBack }) => {
         {
           canNavigateBack && (
             <Button variant="link" onClick={() => navigate(-1)}>
-              <i class="fa-solid fa-circle-chevron-left"></i>
+              <i className="fa-solid fa-circle-chevron-left"></i>
             </Button>
           )
         }

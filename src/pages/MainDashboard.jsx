@@ -16,7 +16,7 @@ const aggregateExpansesPerCategory = (itemIdsInCategory = [], allItems) =>
       const amount = typeof rawAmount === "string" && rawAmount.includes("$")
         ? parseFloat(rawAmount.replace("$",""))
         : rawAmount;
-      const copayments = (currentItem.copayments || []).reduce((acc, copay) => acc + copay.amount, 0);
+      const copayments = currentItem.copayments?.total || 0;
       return acc + amount - copayments
     },
     0
@@ -32,7 +32,7 @@ export const MainDashboard = () => {
 
   const balances = useMemo(() => {
     const expenses = Object.values(transactionData.items || {}).reduce((acc, item) => {
-      const copayments = (item.copayments || []).reduce((acc, copay) => acc + copay.amount, 0);
+      const copayments = item.copayments?.total || 0;
       return acc + item.amount - copayments;
     }, 0);
     const expenseLimit = (expenseCategories || []).reduce((acc, categoryType) => categoryLimits[categoryType].isActive

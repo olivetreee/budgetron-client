@@ -10,12 +10,14 @@ import "./MainDashboard.scss";
 const aggregateExpansesPerCategory = (itemIdsInCategory = [], allItems) =>
   itemIdsInCategory.reduce(
     (acc, itemId) => {
-      const rawAmount = allItems[itemId].amount;
+      const currentItem = allItems[itemId];
+      const rawAmount = currentItem.amount;
       // Make it back-compat with older data that was saved as a string
       const amount = typeof rawAmount === "string" && rawAmount.includes("$")
         ? parseFloat(rawAmount.replace("$",""))
         : rawAmount;
-      return acc + amount
+      const copayments = (currentItem.copayments || []).reduce((acc, copay) => acc + copay.amount, 0);
+      return acc + amount - copayments
     },
     0
   );
@@ -29,7 +31,10 @@ export const MainDashboard = () => {
   }] = useCategories();
 
   const balances = useMemo(() => {
-    const expenses = Object.values(transactionData.items || {}).reduce((acc, item) => acc + item.amount, 0);
+    const expenses = Object.values(transactionData.items || {}).reduce((acc, item) => {
+      const copayments = (item.copayments || []).reduce((acc, copay) => acc + copay.amount, 0);
+      return acc + item.amount - copayments;
+    }, 0);
     const expenseLimit = (expenseCategories || []).reduce((acc, categoryType) => categoryLimits[categoryType].isActive
       ? acc + categoryLimits[categoryType].limit
       : acc, 0);

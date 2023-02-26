@@ -118,7 +118,7 @@ export const EditTransactionModal = ({ transaction, onSuccess, onCancel, isOpen 
           </Button>
         )
       }
-      <Button disabled={isLoading} variant="primary" onClick={onSave}>
+      <Button disabled={isLoading} variant="success" onClick={onSave}>
         Save Changes
       </Button>
     </Modal.Footer>

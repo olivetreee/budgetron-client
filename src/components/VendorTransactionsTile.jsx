@@ -35,7 +35,7 @@ const CopaymentPopover = ({ transaction }) => (
 )
 
 const calculateamountAfterCopayments = transaction => transaction.amount
-  - (transaction.copayments || []).reduce((acc, copayment) => acc - copayment.amount, 0
+  - (transaction.copayments || []).reduce((acc, copayment) => acc + copayment.amount, 0
 );
 
 export const VendorTransactionsTile = ({ vendorName, transactions, onDelete }) => {
@@ -82,7 +82,7 @@ export const VendorTransactionsTile = ({ vendorName, transactions, onDelete }) =
                 <td className="money">
                   {printMoney(calculateamountAfterCopayments(transaction))}&nbsp;
                   {
-                    transaction.copayments?.length && <CopaymentPopover transaction={transaction} />
+                    transaction.copayments?.length ? <CopaymentPopover transaction={transaction} /> : null
                   }
                 </td>
                 <td className="author">{transaction.author[0]}</td>

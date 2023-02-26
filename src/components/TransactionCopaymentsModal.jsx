@@ -22,39 +22,38 @@ export const TransactionCopaymentsModal = ({
   const [editedCopayment, setEditedCopayment] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const toaster = useToaster();
-  const [,{ editTransaction, createTransaction }] = useTransactions();
+  const [,{ editTransaction }] = useTransactions();
 
   useEffect(() => {
     setCopayments(transaction?.copayments || []);
   }, [transaction]);
 
   const sumOfCopays = useMemo(() =>
-    copayments.reduce((acc, copay) => acc + copay.amount, 0)
+    copayments.reduce((acc, copay) => acc + copay.amount, 0),
+    [copayments]
   );
 
-  // const makePatchBody = () => ({
-  //   monthYear: editedTransaction.monthYear,
-  //   emailId: editedTransaction.emailId,
-  //   changes: [
-  //     { path: 'category', newValue: editedTransaction.category },
-  //     { path: 'author', newValue: editedTransaction.author },
-  //     { path: 'amount', newValue: editedTransaction.amount },
-  //   ],
-  // });
+  const makePatchBody = () => ({
+    monthYear: transaction.monthYear,
+    emailId: transaction.emailId,
+    changes: [
+      { path: 'copayments', newValue: copayments },
+    ],
+  });
 
-  // const onSave = async () => {
-  //   const patchData = makePatchBody();
-  //   setIsLoading(true);
-  //   try {
-  //     await editTransaction(patchData);
-  //     onSuccess();
-  //   } catch (err) {
-  //     toaster({ body: err.message, isAutohide: false, variant: "warning" });
-  //     console.error("Error when PATCHING");
-  //     console.error(err);
-  //   }
-  //   setIsLoading(false);
-  // }
+  const onSave = async () => {
+    const patchData = makePatchBody();
+    setIsLoading(true);
+    try {
+      await editTransaction(patchData);
+      onSuccess();
+    } catch (err) {
+      toaster({ body: err.message, isAutohide: false, variant: "warning" });
+      console.error("Error when PATCHING");
+      console.error(err);
+    }
+    setIsLoading(false);
+  }
 
   return (
     <Modal className="edit-copayments-modal" show={isOpen} onHide={onCancel}>
@@ -157,7 +156,7 @@ export const TransactionCopaymentsModal = ({
           <Button
             disabled={isLoading || transaction.amount - sumOfCopays < 0}
             variant="success"
-            onClick={() => {}}
+            onClick={onSave}
           >
             Save Changes
           </Button>

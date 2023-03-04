@@ -5,8 +5,8 @@ import {
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { MainDashboard } from "./pages/MainDashboard";
-import { TransactionsProvider } from './components/TransactionsProvider';
-import { CategoriesProvider } from './components/CategoriesProvider';
+import { TransactionsProvider } from './providers/TransactionsProvider';
+import { CategoriesProvider } from './providers/CategoriesProvider';
 import { FixVendors } from "./pages/FixVendors";
 import { AuthProvider, ProtectedRoute } from "./components/AuthProvider";
 import { Login } from "./pages/Login";
@@ -16,7 +16,7 @@ import { ToasterProvider } from "./components/ToasterProvider";
 import { Categories } from "./pages/Categories";
 import { ThisMonth } from "./pages/ThisMonth";
 import { PAGE_DATA } from "./constants";
-import { PeriodProvider } from "./components/PeriodProvider";
+import { PeriodProvider } from "./providers/PeriodProvider";
 
 import './App.scss';
 

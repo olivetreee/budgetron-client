@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { CategoryTile } from "../components/CategoryTile";
-import { useTransactions } from "../components/TransactionsProvider";
-import { useCategories } from "../components/CategoriesProvider";
+import { useTransactions } from "../providers/TransactionsProvider";
+import { useCategories } from "../providers/CategoriesProvider";
 import { LoadingIndicator } from "../components/LoadingIndicator";
 import { printMoney } from "../utils";
 

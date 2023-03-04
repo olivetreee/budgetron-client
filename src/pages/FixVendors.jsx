@@ -1,5 +1,5 @@
 import { LoadingIndicator } from "../components/LoadingIndicator";
-import { useTransactions } from "../components/TransactionsProvider";
+import { useTransactions } from "../providers/TransactionsProvider";
 import { VendorTile } from "../components/VendorTile";
 
 export const FixVendors = () => {

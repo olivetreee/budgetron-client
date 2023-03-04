@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useReducer } from "react
 import useSWR from 'swr'
 import { BASE_API_URL } from "../constants";
 import { fetcher, simpleFetcher } from "../utils";
-import { useAuth } from "./AuthProvider";
+import { useAuth } from "../components/AuthProvider";
 
 export const CategoriesContext = createContext();
 

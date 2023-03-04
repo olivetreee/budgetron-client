@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import { Row, Col } from 'react-bootstrap';
 
 import { useToaster } from './ToasterProvider';
-import { useTransactions } from './TransactionsProvider';
+import { useTransactions } from '../providers/TransactionsProvider';
 import { printMoney } from '../utils';
 
 import "./TransactionCopaymentsModal.scss";

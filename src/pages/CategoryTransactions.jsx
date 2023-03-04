@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom'
 import dateUtils from 'date-and-time';
 
-import { useTransactions } from '../components/TransactionsProvider';
+import { useTransactions } from '../providers/TransactionsProvider';
 import { VendorTransactionsTile } from '../components/VendorTransactionsTile';
 import { CATEGORY_ICON } from '../constants';
 import { LoadingIndicator } from '../components/LoadingIndicator';

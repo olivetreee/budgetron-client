@@ -5,8 +5,8 @@ import Badge from 'react-bootstrap/Badge';
 import { Link, useLocation } from "react-router-dom";
 import dateUtils from "date-and-time";
 import { PAGE_DATA } from "../constants";
-import { useTransactions } from "./TransactionsProvider";
-import { usePeriod } from "./PeriodProvider";
+import { useTransactions } from "../providers/TransactionsProvider";
+import { usePeriod } from "../providers/PeriodProvider";
 
 import "./Hamburger.scss";
 

@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useState } from "react";
 import { Button, Form, Table } from "react-bootstrap";
-import { useCategories } from "../components/CategoriesProvider";
+import { useCategories } from "../providers/CategoriesProvider";
 import { LoadingIndicator } from "../components/LoadingIndicator";
 import { useToaster } from "../components/ToasterProvider";
 import { printMoney } from "../utils";

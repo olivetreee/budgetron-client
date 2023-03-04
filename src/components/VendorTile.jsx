@@ -9,7 +9,7 @@ import Collapse from 'react-bootstrap/Collapse';
 import { CategoriesDropdown } from './CategoriesDropdown';
 import { LoadingIndicator } from './LoadingIndicator';
 import { BASE_API_URL } from '../constants';
-import { useTransactions } from './TransactionsProvider';
+import { useTransactions } from '../providers/TransactionsProvider';
 import { TransactionsTable } from './TransactionsTable';
 import { fetcher } from '../utils';
 

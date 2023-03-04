@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 
 import { CategoriesDropdown } from '../components/CategoriesDropdown';
 import { useToaster } from './ToasterProvider';
-import { useTransactions } from './TransactionsProvider';
+import { useTransactions } from '../providers/TransactionsProvider';
 
 
 export const EditTransactionModal = ({ transaction, onSuccess, onCancel, isOpen }) => {

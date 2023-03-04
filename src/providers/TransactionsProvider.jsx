@@ -2,8 +2,8 @@ import { createContext, useContext, useMemo, useEffect, useReducer } from "react
 import useSWR from 'swr'
 import { BASE_API_URL } from "../constants";
 import { fetcher, simpleFetcher } from "../utils";
-import { useAuth } from "./AuthProvider";
-import { usePeriod } from "./PeriodProvider";
+import { useAuth } from "../components/AuthProvider";
+import { usePeriod } from "../providers/PeriodProvider";
 
 export const TransactionsContext = createContext();
 

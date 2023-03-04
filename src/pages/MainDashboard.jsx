@@ -26,12 +26,15 @@ export const MainDashboard = () => {
   const [transactionData] = useTransactions();
   const [{
     categoryLimits,
-    categoriesByType: { expense: expenseCategories, all: allCategories },
+    categoriesByType: { expense: expenseCategories = [], all: allCategories },
     loading: categoriesLoading,
   }] = useCategories();
 
   const balances = useMemo(() => {
     const expenses = Object.values(transactionData.items || {}).reduce((acc, item) => {
+      if (!expenseCategories.includes(item.category)) {
+        return acc;
+      }
       const copayments = item.copayments?.total || 0;
       return acc + item.amount - copayments;
     }, 0);

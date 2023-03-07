@@ -1,4 +1,4 @@
-import { CATEGORY_ICON } from "../constants";
+// import { CATEGORY_ICON } from "../constants";
 import './CategoryTile.scss';
 import 'react-circular-progressbar/dist/styles.css';
 

@@ -11,7 +11,7 @@ import "./VendorTransactionsTile.scss";
 import { LoadingIndicator } from './LoadingIndicator';
 import { EditTransactionModal } from './EditTransactionsModal';
 import { TransactionCopaymentsModal } from './TransactionCopaymentsModal';
-import { ButtonGroup, Col, Dropdown, DropdownButton } from 'react-bootstrap';
+import { ButtonGroup, Dropdown, DropdownButton } from 'react-bootstrap';
 
 const CopaymentPopover = ({ transaction }) => (
   <OverlayTrigger

@@ -17,6 +17,7 @@ import { Categories } from "./pages/Categories";
 import { ThisMonth } from "./pages/ThisMonth";
 import { PAGE_DATA } from "./constants";
 import { PeriodProvider } from "./providers/PeriodProvider";
+import { TagsProvider } from "./providers/TagsProvider";
 
 import './App.scss';
 
@@ -100,9 +101,11 @@ function App() {
         <PeriodProvider>
           <ToasterProvider>
             <CategoriesProvider>
-              <TransactionsProvider>
-                <RouterProvider router={router} />
-              </TransactionsProvider>
+              <TagsProvider>
+                <TransactionsProvider>
+                  <RouterProvider router={router} />
+                </TransactionsProvider>
+              </TagsProvider>
             </CategoriesProvider>
           </ToasterProvider>
         </PeriodProvider>

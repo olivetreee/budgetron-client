@@ -3,7 +3,7 @@ import ReactSelectCreatable from "react-select/creatable"
 import { useTags } from "../providers/TagsProvider";
 
 
-export const TagsDropdown = ({ tagsRef, initialTags }) => {
+export const TagsDropdown = ({ tagsRef, initialTags = [] }) => {
   const [{ tags }] = useTags();
 
   const tagOptions = useMemo(() => {

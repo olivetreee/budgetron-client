@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useReducer } from "react";
 import useSWR from 'swr'
 import { BASE_API_URL } from "../constants";
-import { simpleFetcher } from "../utils";
+import { fetcher, makeTransactionId, simpleFetcher } from "../utils";
 import { useAuth } from "../components/AuthProvider";
 
 export const TagsContext = createContext();
@@ -42,6 +42,13 @@ const tagsReducer = (state, { type, payload }) => {
         error: payload
       }
     };
+    case 'add-tag': {
+      return {
+        ...state,
+        tags: state.tags.set(payload.id, payload),
+        size: state.size + 1
+      }
+    }
     case 'update-tag': {
       // const groupingKey = Object.keys(state.grouping)[0];
       // const newGroupings = { ...state.grouping[groupingKey] };
@@ -90,10 +97,31 @@ export const TagsProvider = ({ children }) => {
   }), []);
 
   const apiActions = {
-    createTag: async (tagToCreate) => {
-      console.log('@@@tagToCreate', tagToCreate);
-      return {
-        id: tagToCreate.toLowerCase().replace(/\s/g, "-")
+    createTag: async (tagToCreate, transaction) => {
+      const transactionId = makeTransactionId(transaction);
+      const fetchOptions = {
+        method: "POST",
+        body: JSON.stringify({ name: tagToCreate, transactionId })
+      };
+      try {
+        const response = await fetcher(`${BASE_API_URL}/tags`, fetchOptions);
+        const responseBody = await response.json();
+        if (response.ok) {
+          dispatch({ type: 'add-tag', payload: responseBody });
+          return responseBody;
+        } else {
+          console.debug(responseBody);
+          actions.setError(responseBody);
+          throw new Error(responseBody);
+        }
+      } catch (err) {
+        throw err;
+        // TODO: Seems like setting the error here breaks the app, as
+        // the data vanishes and breaks some components...
+        // Also, we should probably rethrow and let downstream handle it? Or maybe not,
+        // since components have access to the error state itself, and can liste to that
+        // and react accordingly.
+        // actions.setError(err);
       }
     },
     editTag: async (tag) => {

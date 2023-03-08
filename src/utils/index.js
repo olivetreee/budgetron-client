@@ -27,3 +27,5 @@ export const simpleFetcher = async (...params) => {
   const response = await fetcher(...params);
   return response.json();
 }
+
+export const makeTransactionId = transaction => `${transaction.monthYear}+${transaction.emailId}`;

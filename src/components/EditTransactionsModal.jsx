@@ -82,17 +82,17 @@ export const EditTransactionModal = ({ transaction, onSuccess, onCancel, isOpen 
 
     const patchData = makePatchBody(editedTransaction, addToTransaction, removeFromTransaction);
     console.log('@@@patchData', patchData);
-    // try {
-    //   if (splitNewTransaction) {
-    //     await createTransaction(splitNewTransaction);
-    //   }
-    //   await editTransaction(patchData);
-    //   onSuccess();
-    // } catch (err) {
-    //   toaster({ body: err.message, isAutohide: false, variant: "warning" });
-    //   console.error("Error when PATCHING");
-    //   console.error(err);
-    // }
+    try {
+      if (splitNewTransaction) {
+        await createTransaction(splitNewTransaction);
+      }
+      await editTransaction(patchData);
+      onSuccess();
+    } catch (err) {
+      toaster({ body: err.message, isAutohide: false, variant: "warning" });
+      console.error("Error when PATCHING");
+      console.error(err);
+    }
     setIsLoading(false);
   }
 

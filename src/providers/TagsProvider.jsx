@@ -36,9 +36,8 @@ const tagsReducer = (state, { type, payload }) => {
     // eslint-disable-next-line no-lone-blocks
     case 'set-error': {
       return {
+        ...state,
         loading: false,
-        tags: null,
-        size: 0,
         error: payload
       }
     };
@@ -50,32 +49,10 @@ const tagsReducer = (state, { type, payload }) => {
       }
     }
     case 'update-tag': {
-      // const groupingKey = Object.keys(state.grouping)[0];
-      // const newGroupings = { ...state.grouping[groupingKey] };
-      // const currentGroupingValue = state.items[payload.emailId][groupingKey];
-      // const newGroupingValue = payload[groupingKey];
-      // if (currentGroupingValue !== newGroupingValue) {
-      //   const currentGroupingAsSet = new Set(newGroupings[currentGroupingValue]);
-      //   currentGroupingAsSet.delete(payload.emailId);
-      //   newGroupings[currentGroupingValue] = Array.from(currentGroupingAsSet);
-
-      //   const newGroupingAsSet = new Set(newGroupings[newGroupingValue]);
-      //   newGroupingAsSet.add(payload.emailId);
-      //   newGroupings[newGroupingValue] = Array.from(newGroupingAsSet);
-      // }
-
-      // return {
-      //   ...state,
-      //   loading: false,
-      //   items: {
-      //     ...state.items,
-      //     [payload.emailId]: payload
-      //   },
-      //   grouping: {
-      //     [groupingKey]: newGroupings
-      //   }
-      // }
-      return state;
+      return {
+        ...state,
+        tags: state.tags.set(payload.id, payload)
+      }
     }
     default: {
       throw new Error(`Unkown action.type: ${type}`);
@@ -87,7 +64,7 @@ const tagsReducer = (state, { type, payload }) => {
 export const TagsProvider = ({ children }) => {
   const { sub } = useAuth();
   const url = sub ? `${BASE_API_URL}/tags` : "";
-  const { data: tags, error, isLoading } = useSWR(url, simpleFetcher, { revalidateOnFocus: false, shouldRetryOnError: false });
+  const { data: tags, error, isLoading, mutate } = useSWR(url, simpleFetcher, { revalidateOnFocus: false, shouldRetryOnError: false });
   const [state, dispatch] = useReducer(tagsReducer, initialState);
 
   const actions = useMemo(() => ({
@@ -97,6 +74,7 @@ export const TagsProvider = ({ children }) => {
   }), []);
 
   const apiActions = {
+    mutate,
     createTag: async (tagToCreate, transaction) => {
       const transactionId = makeTransactionId(transaction);
       const fetchOptions = {
@@ -124,9 +102,47 @@ export const TagsProvider = ({ children }) => {
         // actions.setError(err);
       }
     },
-    editTag: async (tag) => {
-      console.log('@@@tag', tag);
-    },
+    // removeTransactionFromTag: async (tag, transaction) => {
+    //   const transactionId = makeTransactionId(transaction);
+    //   const currentTagTransactions = new Set(tag.transactions);
+    //   currentTagTransactions.delete(transactionId);
+    //   const tagUpdatedTransactions = Array.from(currentTagTransactions);
+    //   const body = {
+    //     id: tag.id,
+    //     changes: [
+    //       { path: "transactions", newValue: tagUpdatedTransactions }
+    //     ]
+    //   }
+    //   console.log('@@@body', body);
+    //   const fetchOptions = {
+    //     method: "PATCH",
+    //     body: JSON.stringify(body)
+    //   };
+    //   try {
+    //     const response = await fetcher(`${BASE_API_URL}/tags`, fetchOptions);
+    //     const responseBody = await response.json();
+    //     if (response.ok) {
+    //       const updatedTag = {
+    //         ...tag,
+    //         transactions: tagUpdatedTransactions
+    //       }
+    //       dispatch({ type: 'update-tag', payload: updatedTag });
+    //       return responseBody;
+    //     } else {
+    //       console.debug(responseBody);
+    //       actions.setError(responseBody);
+    //       throw new Error(responseBody);
+    //     }
+    //   } catch (err) {
+    //     throw err;
+    //     // TODO: Seems like setting the error here breaks the app, as
+    //     // the data vanishes and breaks some components...
+    //     // Also, we should probably rethrow and let downstream handle it? Or maybe not,
+    //     // since components have access to the error state itself, and can liste to that
+    //     // and react accordingly.
+    //     // actions.setError(err);
+    //   }
+    // },
   }
 
   useEffect(() => {

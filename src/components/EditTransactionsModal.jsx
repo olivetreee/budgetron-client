@@ -11,26 +11,26 @@ import { useTags } from '../providers/TagsProvider';
 
 const classifyTagsForRequest = (selectedTags, currentTransactionTags = []) => {
   const tagsToCreate = [];
-  const addToTransaction = [];
+  const addTagsToTransaction = [];
   selectedTags.forEach(tag => {
     if (tag.__isNew__) {
       tagsToCreate.push(tag.label);
       return;
     }
-    addToTransaction.push(tag.value);
+    addTagsToTransaction.push(tag.value);
   });
 
-  const removeFromTransaction = [];
+  const removeTagsFromTransaction = [];
   currentTransactionTags.forEach(tag => {
     if (!selectedTags.some(t => t.value === tag)) {
-      removeFromTransaction.push(tag);
+      removeTagsFromTransaction.push(tag);
     }
   });
 
   return {
     tagsToCreate,
-    removeFromTransaction,
-    addToTransaction
+    removeTagsFromTransaction,
+    addTagsToTransaction
   };
 }
 
@@ -46,7 +46,14 @@ const makePatchBody = (transaction, tagsToAdd, tagsToRemove) => {
       { path: 'category', newValue: transaction.category },
       { path: 'author', newValue: transaction.author },
       { path: 'amount', newValue: transaction.amount },
-      { path: 'tags', newValue: Array.from(newTransactionTags) },
+      {
+        path: 'tags',
+        newValue: Array.from(newTransactionTags),
+        tags: {
+          link: tagsToAdd,
+          unlink: tagsToRemove
+        }
+      },
     ],
   }
 };
@@ -59,7 +66,7 @@ export const EditTransactionModal = ({ transaction, onSuccess, onCancel, isOpen 
   const tagsRef = useRef(null);
   const toaster = useToaster();
   const [,{ editTransaction, createTransaction }] = useTransactions();
-  const [,{ createTag, editTag }] = useTags();
+  const [,{ mutate, createTag }] = useTags();
 
   useEffect(() => {
     setEditedTransaction(transaction);
@@ -71,22 +78,30 @@ export const EditTransactionModal = ({ transaction, onSuccess, onCancel, isOpen 
     const currentTransactionTags = editedTransaction.tags;
     const {
       tagsToCreate,
-      removeFromTransaction,
-      addToTransaction
+      removeTagsFromTransaction,
+      addTagsToTransaction
     } = classifyTagsForRequest(selectedTags, currentTransactionTags);
     let newTags = [];
+
     if (tagsToCreate.length) {
       newTags = await Promise.all(tagsToCreate.map(tag => createTag(tag, transaction)));
-      newTags.forEach(tag => addToTransaction.push(tag.id));
+      newTags.forEach(tag => addTagsToTransaction.push(tag.id));
     }
 
-    const patchData = makePatchBody(editedTransaction, addToTransaction, removeFromTransaction);
+    // TODO: This can be optimized so that it only contains changes for what has
+    // actually been edited
+    const patchData = makePatchBody(editedTransaction, addTagsToTransaction, removeTagsFromTransaction);
     console.log('@@@patchData', patchData);
     try {
       if (splitNewTransaction) {
         await createTransaction(splitNewTransaction);
       }
       await editTransaction(patchData);
+      // TODO: we're just calling mutate here to grab latest from API.
+      // That's just so we can grab the transaction IDs that were linked to each tag.
+      // It's probably better to update local state instead...
+      // At the very least, don't call this if no tags update.
+      mutate();
       onSuccess();
     } catch (err) {
       toaster({ body: err.message, isAutohide: false, variant: "warning" });

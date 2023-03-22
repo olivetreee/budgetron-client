@@ -34,27 +34,42 @@ const classifyTagsForRequest = (selectedTags, currentTransactionTags = []) => {
   };
 }
 
-const makePatchBody = (transaction, tagsToAdd, tagsToRemove) => {
+const makePatchBody = (transaction, editedTransaction, tagsToAdd, tagsToRemove) => {
   // This should init to all current tags + newly added tags. Duplicates are removed when
   // the Set is created.
   const newTransactionTags = new Set((transaction.tags || []).concat(tagsToAdd));
   tagsToRemove.forEach(tagId => newTransactionTags.delete(tagId));
+  const newTransactionTagsArray = Array.from(newTransactionTags);
+
+  const changes = [];
+  if (transaction.category !== editedTransaction.category) {
+    changes.push({ path: 'category', newValue: editedTransaction.category });
+  }
+  if (transaction.author !== editedTransaction.author) {
+    changes.push({ path: 'author', newValue: editedTransaction.author },);
+  }
+  if (transaction.amount !== editedTransaction.amount) {
+    changes.push({ path: 'amount', newValue: editedTransaction.amount });
+  }
+
+  const hasTagChanges = transaction.tags.length !== newTransactionTagsArray.length
+    || newTransactionTagsArray.some(editedTag => !transaction.tags.includes(editedTag));
+    if (hasTagChanges) {
+    const tagsToLink = tagsToAdd.filter(tagId => !transaction.tags.includes(tagId));
+    changes.push({
+      path: 'tags',
+      newValue: newTransactionTagsArray,
+      tags: {
+        link: tagsToLink,
+        unlink: tagsToRemove
+      }
+    });
+  }
+
   return {
     monthYear: transaction.monthYear,
     emailId: transaction.emailId,
-    changes: [
-      { path: 'category', newValue: transaction.category },
-      { path: 'author', newValue: transaction.author },
-      { path: 'amount', newValue: transaction.amount },
-      {
-        path: 'tags',
-        newValue: Array.from(newTransactionTags),
-        tags: {
-          link: tagsToAdd,
-          unlink: tagsToRemove
-        }
-      },
-    ],
+    changes,
   }
 };
 
@@ -90,8 +105,7 @@ export const EditTransactionModal = ({ transaction, onSuccess, onCancel, isOpen 
 
     // TODO: This can be optimized so that it only contains changes for what has
     // actually been edited
-    const patchData = makePatchBody(editedTransaction, addTagsToTransaction, removeTagsFromTransaction);
-    console.log('@@@patchData', patchData);
+    const patchData = makePatchBody(transaction, editedTransaction, addTagsToTransaction, removeTagsFromTransaction);
     try {
       if (splitNewTransaction) {
         await createTransaction(splitNewTransaction);
@@ -101,7 +115,9 @@ export const EditTransactionModal = ({ transaction, onSuccess, onCancel, isOpen 
       // That's just so we can grab the transaction IDs that were linked to each tag.
       // It's probably better to update local state instead...
       // At the very least, don't call this if no tags update.
-      mutate();
+      if (patchData.changes.some(change => change.path === "tags")) {
+        mutate();
+      }
       onSuccess();
     } catch (err) {
       toaster({ body: err.message, isAutohide: false, variant: "warning" });

@@ -127,7 +127,11 @@ nav.hamburger-menu aside {
 }
 nav.hamburger-menu {
   color: $white;            /* menu font color */
-  background-color: $indigo;      /* menu background color */
+  background: $indigo-blue;      /* menu background color */
+
+  aside {
+    background: $indigo-blue;      /* menu background color */
+  }
 }
 nav.hamburger-menu aside ul li.current> a {
   font-weight: bold;

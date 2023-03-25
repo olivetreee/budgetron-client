@@ -20,6 +20,8 @@ $pomegrenate: #c0392b;
 $sunflower: #f1c40f;
 $orange: #f39c12;
 
+$indigo-blue: linear-gradient(0deg, $blue 0%, $indigo 100%);
+
 .tile {
   background-color: $dark-2;
   border-radius: 7px;

@@ -3,7 +3,7 @@ import ReactSelectCreatable from "react-select/creatable"
 import { useTags } from "../providers/TagsProvider";
 
 
-export const TagsDropdown = ({ tagsRef, initialTags = [] }) => {
+export const TagsDropdown = ({ tagsRef, initialTags, isMulti }) => {
   const [{ tags }] = useTags();
 
   const tagOptions = useMemo(() => {
@@ -21,7 +21,7 @@ export const TagsDropdown = ({ tagsRef, initialTags = [] }) => {
     <ReactSelectCreatable
       ref={tagsRef}
       defaultValue={initialTags.map(t => ({ label: tags.get(t).name, value: t }))}
-      isMulti
+      isMulti={isMulti}
       options={tagOptions}
       styles={{
         menuList: baseStyles => ({
@@ -35,4 +35,9 @@ export const TagsDropdown = ({ tagsRef, initialTags = [] }) => {
       }}
     />
   )
+};
+
+TagsDropdown.defaultProps = {
+  initialTags: [],
+  isMulti: true
 };

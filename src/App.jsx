@@ -5,19 +5,23 @@ import {
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import { MainDashboard } from "./pages/MainDashboard";
-import { TransactionsProvider } from './providers/TransactionsProvider';
-import { CategoriesProvider } from './providers/CategoriesProvider';
-import { FixVendors } from "./pages/FixVendors";
-import { AuthProvider, ProtectedRoute } from "./components/AuthProvider";
 import { Login } from "./pages/Login";
-import { Header } from "./components/Header";
 import { CategoryTransactions } from "./pages/CategoryTransactions";
-import { ToasterProvider } from "./components/ToasterProvider";
 import { Categories } from "./pages/Categories";
 import { ThisMonth } from "./pages/ThisMonth";
-import { PAGE_DATA } from "./constants";
+import { FixVendors } from "./pages/FixVendors";
+import { TagReport } from "./pages/TagReport";
+
+import { TransactionsProvider } from './providers/TransactionsProvider';
+import { CategoriesProvider } from './providers/CategoriesProvider';
 import { PeriodProvider } from "./providers/PeriodProvider";
 import { TagsProvider } from "./providers/TagsProvider";
+
+import { AuthProvider, ProtectedRoute } from "./components/AuthProvider";
+import { Header } from "./components/Header";
+import { ToasterProvider } from "./components/ToasterProvider";
+
+import { PAGE_DATA } from "./constants";
 
 import './App.scss';
 
@@ -77,6 +81,17 @@ const router = createHashRouter([
         <Header title={PAGE_DATA.categories.name}/>
         <div className="body-wrapper">
           <Categories />
+        </div>
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: PAGE_DATA.tagReport.path,
+    element: (
+      <ProtectedRoute>
+        <Header title={PAGE_DATA.tagReport.name}/>
+        <div className="body-wrapper">
+          <TagReport />
         </div>
       </ProtectedRoute>
     ),

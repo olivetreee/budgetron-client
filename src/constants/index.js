@@ -35,6 +35,11 @@ export const PAGE_DATA = {
     icon: "fa-credit-card",
     hideFromNav: true,
   },
+  tagReport: {
+    path: '/tag-report',
+    name: "Tag Report",
+    icon: "fa-tags",
+  },
   thisMonth: {
     path: '/this-month',
     name: "This Month",

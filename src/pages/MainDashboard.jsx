@@ -23,7 +23,7 @@ const aggregateExpansesPerCategory = (itemIdsInCategory = [], allItems) =>
   );
 
 export const MainDashboard = () => {
-  const [transactionData] = useTransactions();
+  const { state: transactionData } = useTransactions({});
   const [{
     categoryLimits,
     categoriesByType: { expense: expenseCategories = [], all: allCategories },

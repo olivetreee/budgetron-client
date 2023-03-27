@@ -3,7 +3,7 @@ import { useTransactions } from "../providers/TransactionsProvider";
 import { VendorTile } from "../components/VendorTile";
 
 export const FixVendors = () => {
-  const [transactionData] = useTransactions();
+  const { state: transactionData } = useTransactions({});
   if (transactionData.loading) {
     return <LoadingIndicator />;
   };

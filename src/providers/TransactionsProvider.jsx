@@ -7,8 +7,6 @@ import { usePeriod } from "../providers/PeriodProvider";
 
 export const TransactionsContext = createContext();
 
-export const useTransactions = () => useContext(TransactionsContext);
-
 const getInitialState = (data, error, isLoading) => ({
   loading: isLoading,
   items: data?.items,
@@ -124,16 +122,46 @@ const transactionsReducer = (state, { type, payload }) => {
   }
 }
 
-export const TransactionsProvider = ({
-  groupBy = "category",
-  children
-}) => {
+export const TransactionsProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(transactionsReducer, getInitialState());
+
+  return (
+    <TransactionsContext.Provider value={[ state, dispatch ]}>
+      {children}
+    </TransactionsContext.Provider>
+  )
+}
+
+export const useTransactions = ({ groupBy = "category" }) => {
+  const [state, dispatch ] = useContext(TransactionsContext);
   const [date] = usePeriod();
   const { sub } = useAuth();
   const dateToQuery = date.replace("/", "-");
+  // TODO: need to figure out now:
+  // * is this a problem, now that it's running this useSWR every time we call this hook? I think not due to swr caching, but need to make sure
+  // * how can I store ALL transactions in state, and make sure I have lists for specific pages in there too? for example,
+  // the TagReport might load up expenses not from this month, so I need to make sure they don't show up on the MainDashboard.
+  // MAAAAAAAAYBE I can keey state by dateToQuery? 🤔 so key off of date and tag, if present:
+  // {
+  //   ...restOfState,
+  //   items: {
+  //     ...allTransactions
+  //   },
+  //   {
+  //     listsByQuery: {
+  //       date: {
+  //         12/2022: [id1, id2...], 1/2023: [id4, id5...]
+  //       },
+  //       tag: {
+  //         tag1: [id1, id4...],
+  //         tag2: [id42, id43... ]
+  //       }
+  //     }
+  //   }
+  // }
   const url = sub ? `${BASE_API_URL}/transactions?date=${dateToQuery}&groupBy=${groupBy}` : "";
   const { data, error, isLoading } = useSWR(url, simpleFetcher, { revalidateOnFocus: false, shouldRetryOnError: false });
-  const [state, dispatch] = useReducer(transactionsReducer, getInitialState(data, error, isLoading));
+
 
   const actions = useMemo(() => {
     return {
@@ -142,7 +170,7 @@ export const TransactionsProvider = ({
       setError: payload => dispatch({ type: 'set-error', payload }),
       updateTransaction: payload => dispatch({ type: 'update-transaction', payload }),
     }
-  }, []);
+  }, [dispatch]);
 
   const apiActions = {
     editTransaction: async (transactionData) => {
@@ -252,14 +280,13 @@ export const TransactionsProvider = ({
     data && actions.setTransactions(data);
   }, [data, error, actions]);
 
-  if (error) {
-    console.error(error);
-    return null;
-  }
+  // if (error) {
+  //   console.error(error);
+  //   return null;
+  // }
 
-  return (
-    <TransactionsContext.Provider value={[ state, { ...actions, ...apiActions }, error ]}>
-      {children}
-    </TransactionsContext.Provider>
-  )
-}
+  return {
+    state,
+    actions: { ...actions, ...apiActions }
+  }
+};

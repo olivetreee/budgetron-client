@@ -37,7 +37,7 @@ const PeriodPicker = () => {
 export const Hamburger = () => {
   const location = useLocation();
   const [shouldCollapse, setShouldCollapse] = useState(false);
-  const [{ grouping }] = useTransactions();
+  const { state: { grouping }} = useTransactions({});
   const numberOfMissingCategories = grouping?.category?.["MISSING CATEGORY"]?.length;
 
   return (

@@ -80,7 +80,7 @@ export const EditTransactionModal = ({ transaction, onSuccess, onCancel, isOpen 
   const [isLoading, setIsLoading] = useState(false);
   const tagsRef = useRef(null);
   const toaster = useToaster();
-  const [,{ editTransaction, createTransaction }] = useTransactions();
+  const { actions: { editTransaction, createTransaction }} = useTransactions({});
   const [,{ mutate, createTag }] = useTags();
 
   useEffect(() => {

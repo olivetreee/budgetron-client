@@ -52,10 +52,10 @@ const makePatchBody = (transaction, editedTransaction, tagsToAdd, tagsToRemove) 
     changes.push({ path: 'amount', newValue: editedTransaction.amount });
   }
 
-  const hasTagChanges = transaction.tags.length !== newTransactionTagsArray.length
-    || newTransactionTagsArray.some(editedTag => !transaction.tags.includes(editedTag));
+  const hasTagChanges = transaction.tags?.length !== newTransactionTagsArray.length
+    || newTransactionTagsArray.some(editedTag => !transaction.tags?.includes(editedTag));
     if (hasTagChanges) {
-    const tagsToLink = tagsToAdd.filter(tagId => !transaction.tags.includes(tagId));
+    const tagsToLink = tagsToAdd.filter(tagId => !transaction.tags?.includes(tagId));
     changes.push({
       path: 'tags',
       newValue: newTransactionTagsArray,

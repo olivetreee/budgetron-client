@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import { LoadingIndicator } from "../components/LoadingIndicator";
 import { TagsDropdown } from "../components/TagsDropdown"
@@ -30,13 +30,16 @@ const groupByVendorOrderByAmount = (transactions) => transactions.reduce((acc, t
 
 export const TagReport = () => {
   const tagRef = useRef(null);
-  const { state: { items: stateTransactions } } = useTransactions({});
+  const { state: { items: stateTransactions, idsByView }, actions: { setTransactions } } = useTransactions();
+  const relevantTransactionIds = Array.from(idsByView.tagReport || []);
+
   const [{ tags }] = useTags();
-  const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const totalSpent = transactions.reduce((acc, transaction) => acc += transaction.amount, 0);
-  const transactionsGroupedByVendor = groupByVendorOrderByAmount(transactions);
+  const totalSpent = relevantTransactionIds.reduce((acc, transactionId) => acc += stateTransactions[transactionId].amount, 0);
+  const transactionsGroupedByVendor = groupByVendorOrderByAmount(
+    relevantTransactionIds.map(id => stateTransactions[id])
+  );
 
   const fetchTransactionsFromTag = async () => {
     const tagId = tagRef.current.state.selectValue[0]?.value;
@@ -45,22 +48,25 @@ export const TagReport = () => {
     }
     const transactionIds = tags.get(tagId)?.transactions;
     // TODO: handle empty array (no transactions)
-    const transactionResources = [];
+    const transactionResources = {};
     const transactionsToFetch = [];
     transactionIds.forEach(transactionId => {
-      const transactionFromState = stateTransactions[transactionId];
-      if (!transactionFromState) {
-        transactionsToFetch.push(transactionId);
+      const emailId = transactionId.split("+").pop();
+      const transactionFromState = stateTransactions[emailId];
+      if (transactionFromState) {
+        transactionResources[emailId] = transactionFromState;
       } else {
-        transactionResources.push(transactionFromState);
+        transactionsToFetch.push(transactionId);
       }
     });
     setIsLoading(true);
     await Promise.all(transactionsToFetch.map(async transactionId => {
       const response = await simpleFetcher(`${BASE_API_URL}/transactions/${encodeURIComponent(transactionId)}`);
-      transactionResources.push(response);
+      const emailId = transactionId.split("+").pop();
+      transactionResources[emailId] = response;
     }));
-    setTransactions(transactionResources);
+    const data = { items: transactionResources };
+    setTransactions({ data, view: "tagReport" });
     setIsLoading(false);
   }
 

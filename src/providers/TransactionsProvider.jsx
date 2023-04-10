@@ -4,7 +4,6 @@ import { BASE_API_URL } from "../constants";
 import { fetcher, simpleFetcher } from "../utils";
 import { useAuth } from "../components/AuthProvider";
 import { usePeriod } from "../providers/PeriodProvider";
-import { useTags } from "./TagsProvider";
 
 export const TransactionsContext = createContext();
 

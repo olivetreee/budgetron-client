@@ -23,7 +23,13 @@ const aggregateExpansesPerCategory = (itemIdsInCategory = [], allItems) =>
   );
 
 export const MainDashboard = () => {
-  const { state: transactionData } = useTransactions({});
+  const { state: transactionData } = useTransactions();
+  const {
+    items: allTransactions,
+    idsByView: {
+      dashboard: relevantTransIds = {}
+    }
+   } = transactionData;
   const [{
     categoryLimits,
     categoriesByType: { expense: expenseCategories = [], all: allCategories },
@@ -31,7 +37,8 @@ export const MainDashboard = () => {
   }] = useCategories();
 
   const balances = useMemo(() => {
-    const expenses = Object.values(transactionData.items || {}).reduce((acc, item) => {
+    const expenses = Array.from(relevantTransIds || []).reduce((acc, transId) => {
+      const item = allTransactions[transId];
       if (!expenseCategories.includes(item.category)) {
         return acc;
       }
@@ -46,19 +53,20 @@ export const MainDashboard = () => {
       totalExpense: expenses,
       currentBalance: expenseLimit - expenses
     };
-  }, [categoryLimits, expenseCategories, transactionData]);
+  }, [categoryLimits, expenseCategories, allTransactions, relevantTransIds]);
 
   // This would only be present if an expense has a category that:
   // * isn't one of the current categories
   // * is currnetly inactive
   const otherCategoriesTransactions = useMemo(() => {
     const categoriesSet = new Set(allCategories);
-    return Object.entries(transactionData?.items || {}).reduce((acc, [id, data]) => {
+    return Array.from(relevantTransIds || []).reduce((acc, id) => {
+      const data = allTransactions[id];
       const category = data.category;
       const isValidCategory = categoriesSet.has(category) || categoryLimits[category]?.isActive;
       return isValidCategory ? acc : [...acc, id];
     }, [])
-  }, [allCategories, transactionData.items, categoryLimits])
+  }, [allCategories, allTransactions, relevantTransIds, categoryLimits])
 
   if (transactionData.loading || categoriesLoading) {
     return (
@@ -68,7 +76,7 @@ export const MainDashboard = () => {
     )
   }
 
-  if (!transactionData.size) {
+  if (!relevantTransIds?.size) {
     return (
       <div className="main-dashboard">
         No transactions found.
@@ -77,7 +85,7 @@ export const MainDashboard = () => {
   }
   const spentPerCategory = expenseCategories.reduce((acc, category) => ({
     ...acc,
-    [category]: aggregateExpansesPerCategory(transactionData.grouping.category[category], transactionData.items)
+    [category]: aggregateExpansesPerCategory(transactionData.grouping.category[category], allTransactions)
   }), {})
 
   expenseCategories
@@ -128,7 +136,7 @@ export const MainDashboard = () => {
           otherCategoriesTransactions.map(id => (
             <CategoryTile
               key={id}
-              category={transactionData?.items[id].category}
+              category={allTransactions[id].category}
               limit={0}
               amountSpent={1} />
           ))

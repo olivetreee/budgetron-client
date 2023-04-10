@@ -26,7 +26,7 @@ export const TransactionCopaymentsModal = ({
   const [editedCopayment, setEditedCopayment] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const toaster = useToaster();
-  const { actions: { editTransaction }} = useTransactions({});
+  const { actions: { editTransaction }} = useTransactions();
 
   useEffect(() => {
     setCopayments(transaction?.copayments || INITIAL_COPAYMENTS);

@@ -13,6 +13,7 @@ const getInitialState = (data, error, isLoading) => ({
   items: data?.items,
   size: data?.size,
   grouping: data?.grouping,
+  idsByView: {},
   error: error
 });
 
@@ -27,8 +28,17 @@ const transactionsReducer = (state, { type, payload }) => {
     };
     // eslint-disable-next-line no-lone-blocks
     case 'set-transactions': {
+      const { data, view } = payload;
       return {
-        ...payload,
+        ...data,
+        items: {
+          ...state.items,
+          ...data.items
+        },
+        idsByView: {
+          ...state.idsByView,
+          [view]: new Set(Object.keys(data.items))
+        },
         loading: false,
         error: null
       };
@@ -242,14 +252,14 @@ export const TransactionsProvider = ({ children }) => {
   )
 }
 
-export const useTransactions = ({ groupBy = "category" }) => {
+export const useTransactions = () => {
   const [state, actions, apiActions] = useContext(TransactionsContext);
   const [date] = usePeriod();
   const { sub } = useAuth();
   const dateToQuery = date.replace("/", "-");
 
-  const url = sub ? `${BASE_API_URL}/transactions?date=${dateToQuery}&groupBy=${groupBy}` : "";
-  const { data, error, isLoading } = useSWR(
+  const url = sub ? `${BASE_API_URL}/transactions?date=${dateToQuery}&groupBy=category` : "";
+  const { data, error, isLoading, mutate } = useSWR(
     url,
     simpleFetcher,
     {
@@ -264,7 +274,7 @@ export const useTransactions = ({ groupBy = "category" }) => {
 
     error && actions.setError(error);
 
-    data && actions.setTransactions(data);
+    data && actions.setTransactions({ data, view: "dashboard" });
   }, [isLoading, data, error, actions]);
 
   // if (error) {
@@ -276,7 +286,8 @@ export const useTransactions = ({ groupBy = "category" }) => {
     state,
     actions: {
       ...actions,
-      ...apiActions
+      ...apiActions,
+      mutate,
     }
   }
 };

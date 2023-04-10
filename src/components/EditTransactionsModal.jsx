@@ -80,8 +80,8 @@ export const EditTransactionModal = ({ transaction, onSuccess, onCancel, isOpen 
   const [isLoading, setIsLoading] = useState(false);
   const tagsRef = useRef(null);
   const toaster = useToaster();
-  const { actions: { editTransaction, createTransaction }} = useTransactions({});
-  const [,{ mutate, createTag }] = useTags();
+  const { actions: { editTransaction, createTransaction, mutate: mutateTransactions }} = useTransactions();
+  const [,{ mutate: mutateTags, createTag }] = useTags();
 
   useEffect(() => {
     setEditedTransaction(transaction);
@@ -116,7 +116,8 @@ export const EditTransactionModal = ({ transaction, onSuccess, onCancel, isOpen 
       // It's probably better to update local state instead...
       // At the very least, don't call this if no tags update.
       if (patchData.changes.some(change => change.path === "tags")) {
-        mutate();
+        mutateTags();
+        mutateTransactions();
       }
       onSuccess();
     } catch (err) {

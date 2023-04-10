@@ -43,7 +43,7 @@ const StatusIcon = ({ status }) => (
 );
 
 const RelevantTransactions = ({ transactionIds }) => {
-  const { state: allTransactions } = useTransactions({});
+  const { state: allTransactions } = useTransactions();
   const relatedTransactions = transactionIds.map(id => allTransactions.items[id]);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -73,7 +73,7 @@ const RelevantTransactions = ({ transactionIds }) => {
 }
 
 export const VendorTile = ({ vendor }) => {
-  const { state: { items: transactions }, actions: { editTransaction }} = useTransactions({});
+  const { state: { items: transactions }, actions: { editTransaction }} = useTransactions();
   const [vendorName, setVendorName] = useState(vendor.name);
   const [vendorHumanName, setVendorHumanName] = useState(vendor.name);
   const [category, setCategory] = useState(vendor.category);

@@ -31,7 +31,7 @@ const groupByVendorOrderByAmount = (transactions) => transactions.reduce((acc, t
 
 export const CategoryTransactions = ({ date = new Date() }) => {
   const location = useLocation();
-  const { state: { loading, items, grouping }, actions: { deleteTransaction }} = useTransactions({});
+  const { state: { loading, items, grouping }, actions: { deleteTransaction }} = useTransactions();
 
   if (loading) {
     return (

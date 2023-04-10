@@ -1,9 +1,10 @@
 import { useMemo } from "react";
 import ReactSelectCreatable from "react-select/creatable"
+import Select from 'react-select';
 import { useTags } from "../providers/TagsProvider";
 
 
-export const TagsDropdown = ({ tagsRef, initialTags, isMulti }) => {
+export const TagsDropdown = ({ canCreate, tagsRef, initialTags, isMulti }) => {
   const [{ tags }] = useTags();
 
   const tagOptions = useMemo(() => {
@@ -17,8 +18,10 @@ export const TagsDropdown = ({ tagsRef, initialTags, isMulti }) => {
     return result;
   }, [tags]);
 
+  const SelectToUse = canCreate ? ReactSelectCreatable : Select;
+
   return (
-    <ReactSelectCreatable
+    <SelectToUse
       ref={tagsRef}
       defaultValue={initialTags.map(t => ({ label: tags.get(t).name, value: t }))}
       isMulti={isMulti}
@@ -35,9 +38,11 @@ export const TagsDropdown = ({ tagsRef, initialTags, isMulti }) => {
       }}
     />
   )
+
 };
 
 TagsDropdown.defaultProps = {
   initialTags: [],
-  isMulti: true
+  isMulti: true,
+  canCreate: true,
 };

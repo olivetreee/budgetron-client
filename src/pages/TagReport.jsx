@@ -76,7 +76,7 @@ export const TagReport = () => {
         <h2>Select a tag:</h2>
         <Row>
           <Col xs={9}>
-            <TagsDropdown tagsRef={tagRef} isMulti={false}/>
+            <TagsDropdown tagsRef={tagRef} isMulti={false} canCreate={false} />
           </Col>
           <Col xs={3}>
             <Button

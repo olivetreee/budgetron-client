@@ -50,10 +50,12 @@ export const VendorTransactionsTile = ({ vendorName, transactions, onDelete }) =
 
   const onEditSuccess = () => {
     setIsEditModalOpen(false);
+    setTransactionToEdit({});
   };
 
   const onEditCancel = () => {
     setIsEditModalOpen(false);
+    setTransactionToEdit({});
   };
 
   const onAddCopayClick = (transaction) => {

@@ -32,7 +32,7 @@ export const MainDashboard = () => {
    } = transactionData;
   const [{
     categoryLimits,
-    categoriesByType: { expense: expenseCategories = [], all: allCategories },
+    categoriesByType: { expense: expenseCategories = [], income: incomeCategories = [], all: allCategories },
     loading: categoriesLoading,
   }] = useCategories();
 
@@ -45,15 +45,24 @@ export const MainDashboard = () => {
       const copayments = item.copayments?.total || 0;
       return acc + item.amount - copayments;
     }, 0);
+    const incomes = Array.from(relevantTransIds || []).reduce((acc, transId) => {
+      const item = allTransactions[transId];
+      if (!incomeCategories.includes(item.category)) {
+        return acc;
+      }
+      const copayments = item.copayments?.total || 0;
+      return acc + item.amount - copayments;
+    }, 0);
     const expenseLimit = (expenseCategories || []).reduce((acc, categoryType) => categoryLimits[categoryType].isActive
       ? acc + categoryLimits[categoryType].limit
       : acc, 0);
     return {
       expenseLimit,
       totalExpense: expenses,
+      totalIncome: incomes,
       currentBalance: expenseLimit - expenses
     };
-  }, [categoryLimits, expenseCategories, allTransactions, relevantTransIds]);
+  }, [categoryLimits, expenseCategories, incomeCategories, allTransactions, relevantTransIds]);
 
   // This would only be present if an expense has a category that:
   // * isn't one of the current categories
@@ -106,6 +115,10 @@ export const MainDashboard = () => {
   return (
     <div className="main-dashboard">
       <section className="balances tile no-title">
+        <h3 className="line">
+          Current Income
+          <span>{printMoney(balances.totalIncome, false)}</span>
+        </h3>
         <h3 className="line">
           Expense Limit
           <span>{printMoney(balances.expenseLimit, false)}</span>

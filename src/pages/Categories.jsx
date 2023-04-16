@@ -34,7 +34,7 @@ export const Categories = () => {
   const [
     {
       categoryLimits,
-      categoriesByType: { expense: expenseCategories, intake: intakeCategories },
+      categoriesByType: { expense: expenseCategories, income: incomeCategories },
       loading
     },
     { batchEditCategories }
@@ -54,12 +54,12 @@ export const Categories = () => {
     );
   }
 
-  const intakeBalance = intakeCategories.reduce((acc, category) => acc + limitsToRender[category]?.limit, 0);
+  const incomeBalance = incomeCategories.reduce((acc, category) => acc + limitsToRender[category]?.limit, 0);
   const expenseBalance = expenseCategories.reduce((acc, category) => categoryLimits[category].isActive
     ? acc + limitsToRender[category]?.limit
     : acc,
   0);
-  const totalBalance = intakeBalance - expenseBalance;
+  const totalBalance = incomeBalance - expenseBalance;
 
   return (
     <div className="categories">
@@ -67,11 +67,11 @@ export const Categories = () => {
         <h2>Balance: <span className={ totalBalance < 0 ? "negative" : "positive" }>{printMoney(totalBalance, false)}</span></h2>
       </section>
       <section className="tile pb-0">
-        <h2>Intake ({ printMoney(intakeBalance, false) })</h2>
+        <h2>Income ({ printMoney(incomeBalance, false) })</h2>
         <Table>
           <tbody>
             {
-              intakeCategories.map(category => (
+              incomeCategories.map(category => (
                 <tr key={category}>
                   <td className="category">{category}</td>
                   <td className="category-limit">

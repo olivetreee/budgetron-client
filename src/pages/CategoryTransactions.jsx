@@ -8,6 +8,7 @@ import { LoadingIndicator } from '../components/LoadingIndicator';
 import { printMoney } from '../utils';
 
 import "./CategoryTransactions.scss";
+import { usePeriod } from '../providers/PeriodProvider';
 
 const groupByVendorOrderByAmount = (transactions) => transactions.reduce((acc, transaction) => {
   const vendorTransactions = (acc[transaction.vendor] || [])
@@ -29,9 +30,10 @@ const groupByVendorOrderByAmount = (transactions) => transactions.reduce((acc, t
   };
 }, {})
 
-export const CategoryTransactions = ({ date = new Date() }) => {
+export const CategoryTransactions = () => {
   const location = useLocation();
   const { state: { loading, items, grouping }, actions: { deleteTransaction }} = useTransactions();
+  const [date] = usePeriod();
 
   if (loading) {
     return (

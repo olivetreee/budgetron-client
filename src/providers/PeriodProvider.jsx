@@ -6,8 +6,7 @@ export const PeriodContext = createContext();
 export const usePeriod = () => useContext(PeriodContext);
 
 export const PeriodProvider = ({ children }) => {
-  const currentPeriod = dateUtils.format(new Date(), "M/YYYY");
-  const [selectedPeriod, setSelectedPeriod] = useState(currentPeriod);
+  const [selectedPeriod, setSelectedPeriod] = useState(new Date());
   return (
     <PeriodContext.Provider value={[selectedPeriod, setSelectedPeriod]}>
       {children}

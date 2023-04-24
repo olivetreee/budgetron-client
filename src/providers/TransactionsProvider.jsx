@@ -1,5 +1,6 @@
 import { createContext, useContext, useMemo, useEffect, useReducer } from "react";
 import useSWR from 'swr'
+import dateUtils from 'date-and-time';
 import { BASE_API_URL } from "../constants";
 import { fetcher, simpleFetcher } from "../utils";
 import { useAuth } from "../components/AuthProvider";
@@ -255,7 +256,7 @@ export const useTransactions = () => {
   const [state, actions, apiActions] = useContext(TransactionsContext);
   const [date] = usePeriod();
   const { sub } = useAuth();
-  const dateToQuery = date.replace("/", "-");
+  const dateToQuery = dateUtils.format(date, "M-YYYY");
 
   const url = sub ? `${BASE_API_URL}/transactions?date=${dateToQuery}&groupBy=category` : "";
   const { data, error, isLoading, mutate } = useSWR(

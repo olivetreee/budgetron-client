@@ -25,7 +25,10 @@ const PeriodPicker = () => {
   return (
     <>
       <h4>Period Picker:</h4>
-      <DropdownButton variant="light" onSelect={setSelectedPeriod} title={dateUtils.transform(selectedPeriod, "M/YYYY", "MMM/YYYY")}>
+      <DropdownButton
+        variant="light"
+        onSelect={v => setSelectedPeriod(dateUtils.parse(v, "M/YYYY"))} title={dateUtils.format(selectedPeriod, "MMM/YYYY")}
+      >
         {periods.map(period => (
           <Dropdown.Item key={period} eventKey={period}>{dateUtils.transform(period, "M/YYYY", "MMM/YYYY")}</Dropdown.Item>
         ))}

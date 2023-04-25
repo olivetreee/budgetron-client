@@ -116,20 +116,16 @@ export const MainDashboard = () => {
     <div className="main-dashboard">
       <section className="balances tile no-title">
         <h3 className="line">
-          Current Income
-          <span>{printMoney(balances.totalIncome, false)}</span>
+          <p>Income</p>
+          <p>{printMoney(balances.totalIncome, false)}</p>
         </h3>
         <h3 className="line">
-          Expense Limit
-          <span>{printMoney(balances.expenseLimit, false)}</span>
+          <p>Expenses</p>
+          <p>{printMoney(balances.totalExpense, false)} <span className="expense-limit">/ {printMoney(balances.expenseLimit, false)}</span></p>
         </h3>
         <h3 className="line">
-          Current Expenses
-          <span>{printMoney(balances.totalExpense, false)}</span>
-        </h3>
-        <h3 className="line">
-          Balance
-          <span className={balances.currentBalance > 0 ? "positive" : "negative"}>{printMoney(balances.currentBalance, false)}</span>
+          <p>Balance</p>
+          <p className={balances.currentBalance > 0 ? "positive" : "negative"}>{printMoney(balances.currentBalance, false)}</p>
         </h3>
       </section>
       <section className="category-breakdown">

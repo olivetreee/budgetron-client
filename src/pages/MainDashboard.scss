@@ -36,8 +36,16 @@
     align-items: center;
   }
 
-  .incorrect-categories {
+  .income-categories,.incorrect-categories {
     border-top: solid 3px $dark-2;
-    padding-top: 1rem;
+    // padding-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    .category-tile {
+      margin: 1rem 2rem;
+    }
   }
 }

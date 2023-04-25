@@ -8,13 +8,20 @@ import { Link } from "react-router-dom";
 export const CategoryTile = ({
   category,
   limit,
-  amountSpent
+  amountSpent,
+  invertScale = false
 }) => {
   const percentageConsumed = Math.ceil((amountSpent/limit) * 100);
   let status = "good";
-  if (percentageConsumed > 50) status = "warning";
-  if (percentageConsumed > 75) status = "danger";
-  if (percentageConsumed > 100) status = "surpassed";
+  if (invertScale) {
+    if (percentageConsumed > 100) status = "achieved";
+    if (percentageConsumed < 75) status = "warning";
+    if (percentageConsumed < 50) status = "danger";
+  } else {
+    if (percentageConsumed > 50) status = "warning";
+    if (percentageConsumed > 75) status = "danger";
+    if (percentageConsumed > 100) status = "surpassed";
+  }
 
   const categoryCode = category.replace(" ", "_");
   return (

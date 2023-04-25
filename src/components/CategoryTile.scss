@@ -91,6 +91,27 @@
       }
 
     }
+
+    &.achieved {
+      background-color: $nephritis;
+      color: #dbcdcb;
+
+      .CircularProgressbar .CircularProgressbar-path {
+        stroke: $dark-5;
+      }
+
+      .circular-progress-bar-content {
+        .amount-spent {
+          font-size: 1.75em;
+          border-color: $dark-5;
+        }
+
+        .limit {
+          color: $dark-5;
+        }
+      }
+
+    }
 }
 
 @media (min-width: 667px) {

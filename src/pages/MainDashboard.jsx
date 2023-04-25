@@ -7,7 +7,7 @@ import { printMoney } from "../utils";
 
 import "./MainDashboard.scss";
 
-const aggregateExpansesPerCategory = (itemIdsInCategory = [], allItems) =>
+const aggregateTransactionsPerCategory = (itemIdsInCategory = [], allItems) =>
   itemIdsInCategory.reduce(
     (acc, itemId) => {
       const currentItem = allItems[itemId];
@@ -92,9 +92,9 @@ export const MainDashboard = () => {
       </div>
     )
   }
-  const spentPerCategory = expenseCategories.reduce((acc, category) => ({
+  const spentPerCategory = allCategories.reduce((acc, category) => ({
     ...acc,
-    [category]: aggregateExpansesPerCategory(transactionData.grouping.category[category], allTransactions)
+    [category]: aggregateTransactionsPerCategory(transactionData.grouping.category[category], allTransactions)
   }), {})
 
   expenseCategories
@@ -139,6 +139,17 @@ export const MainDashboard = () => {
             category={category}
             limit={categoryLimits[category].limit}
             amountSpent={spentPerCategory[category]}
+          />
+        ))}
+      </section>
+      <section className="income-categories">
+        {incomeCategories.map(category => (
+          <CategoryTile
+            key={category}
+            category={category}
+            limit={categoryLimits[category].limit}
+            amountSpent={spentPerCategory[category]}
+            invertScale={true}
           />
         ))}
       </section>

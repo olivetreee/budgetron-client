@@ -1,28 +1,53 @@
 import AnyChart from 'anychart-react'
+import { printMoney } from '../utils';
 
 export const SankeyGraph = ({ data }) => {
-    // const data = [
-    //     {from: 'First Class', to: 'Child', value: 6},
-    //     {from: 'Second Class', to: 'Child', value: 24},
-    //     {from: 'Third Class', to: 'Child', value: 79},
-    //     {from: 'Crew', to: 'Child', value: 0},
-    //     {from: 'First Class', to: 'Adult', value: 319},
-    //     {from: 'Second Class', to: 'Adult', value: 261},
-    //     {from: 'Third Class', to: 'Adult', value: 627},
-    //     {from: 'Crew', to: 'Adult', value: 300},
-    //     {from: 'Crew', to: 'Adult', value: 585},
-    //     {from: 'Child', to: 'Female', value: 45},
-    //     {from: 'Child', to: 'Male', value: 64},
-    //     {from: 'Adult', to: 'Female', value: 425},
-    //     {from: 'Adult', to: 'Male', value: 1667},
-    // ]
+    // TODO: Maybe some of these would be better coming from the consumer, if we ever get to
+    // multiple Sankey graphs.
+    const flow = {
+        normal: {
+            labels: {
+                enabled: false
+            },
+            fill: function() {
+                return this.to === "Total Income" ? "#2ecc71" : "#e74c3c"
+            }
+        },
+        hovered: {
+            labels: {
+                enabled: false
+            },
+            fill: function() {
+                return this.to === "Total Income" ? "#2ecc71aa" : "#e74c3caa"
+            }
+        },
+        tooltip: {
+            format: function() { return printMoney(this.value, false) }
+        }
+    };
+
+    const node = {
+        tooltip: {
+            format: function() { return printMoney(this.value, false) },
+            titleFormat: function() { return this.name },
+        },
+        fill: function() {
+            return this.name === "Total Income" ? "#2e9a5b" : this.sourceColor
+        }
+    }
 
     return (
         <>
             <AnyChart
                 type="sankey"
                 data={data}
+                background="transparent"
                 height={800}
+                curveFactor={0.5}
+                nodePadding={15}
+                flow={ flow }
+                node={ node }
+                nodeWidth={"20%"}
             />
         </>
     )

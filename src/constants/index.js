@@ -45,6 +45,11 @@ export const PAGE_DATA = {
     name: "This Month",
     icon: "fa-calendar-days",
   },
+  expenseReport: {
+    path: '/report',
+    name: "Expense Report",
+    icon: "fa-magnifying-glass-chart",
+  },
 }
 
 export const BASE_API_URL = "https://yc323wz0jd.execute-api.us-west-2.amazonaws.com";

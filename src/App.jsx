@@ -1,3 +1,4 @@
+import { Suspense, lazy } from 'react';
 import {
   createHashRouter,
   RouterProvider,
@@ -24,6 +25,20 @@ import { ToasterProvider } from "./components/ToasterProvider";
 import { PAGE_DATA } from "./constants";
 
 import './App.scss';
+import { LoadingIndicator } from './components/LoadingIndicator';
+
+const MainWrapper = ({ title, canNavigateBack, children }) => (
+  <ProtectedRoute>
+    <Header title={title} canNavigateBack={canNavigateBack}/>
+    <div className="body-wrapper">
+      { children}
+    </div>
+  </ProtectedRoute>
+)
+
+// This page renders a component from AnyChart, which has added ~800kb to the gzipped file.
+// Since I don't expect to open this frequently, I'm lazy loading it
+const ExpenseReport = lazy(() => import('./pages/ExpenseReport'));
 
 const router = createHashRouter([
   {
@@ -33,78 +48,70 @@ const router = createHashRouter([
   {
     path: PAGE_DATA.dashboard.path,
     element: (
-      <ProtectedRoute>
-        <Header title={PAGE_DATA.dashboard.name}/>
-        <div className="body-wrapper">
-          <MainDashboard />
-        </div>
-      </ProtectedRoute>
+      <MainWrapper title={PAGE_DATA.dashboard.name} >
+        <MainDashboard />
+      </MainWrapper>
     ),
   },
   {
     path: PAGE_DATA.transactions.path,
     element: (
-      <ProtectedRoute>
-        <Header title={PAGE_DATA.transactions.name} canNavigateBack={true} />
-        <div className="body-wrapper">
-          <CategoryTransactions />
-        </div>
-      </ProtectedRoute>
+      <MainWrapper title={PAGE_DATA.transactions.name} canNavigateBack={true} >
+        <CategoryTransactions />
+      </MainWrapper>
     ),
   },
   // {
   //   path: PAGE_DATA.vendors.path,
   //   element: (
-  //     <ProtectedRoute>
+  //     <MainWrapper>
   //       <Header title={PAGE_DATA.vendors.name}/>
             // <div className="body-wrapper">
             //   <div>Placeholder for Vendors page</div>
             // </div>
-  //     </ProtectedRoute>
+  //     </MainWrapper>
   //   ),
   // },
   {
     path: PAGE_DATA.fixVendors.path,
     element: (
-      <ProtectedRoute>
-        <Header title={PAGE_DATA.fixVendors.name}/>
-        <div className="body-wrapper">
-          <FixVendors />
-        </div>
-      </ProtectedRoute>
+      <MainWrapper title={PAGE_DATA.fixVendors.name}>
+        <FixVendors />
+      </MainWrapper>
     ),
   },
   {
     path: PAGE_DATA.categories.path,
     element: (
-      <ProtectedRoute>
-        <Header title={PAGE_DATA.categories.name}/>
-        <div className="body-wrapper">
-          <Categories />
-        </div>
-      </ProtectedRoute>
+      <MainWrapper title={PAGE_DATA.categories.name}>
+        <Categories />
+      </MainWrapper>
     ),
   },
   {
     path: PAGE_DATA.tagReport.path,
     element: (
-      <ProtectedRoute>
-        <Header title={PAGE_DATA.tagReport.name}/>
-        <div className="body-wrapper">
-          <TagReport />
-        </div>
-      </ProtectedRoute>
+      <MainWrapper title={PAGE_DATA.tagReport.name}>
+        <TagReport />
+      </MainWrapper>
     ),
   },
   {
     path: "this-month",
     element: (
-      <ProtectedRoute>
-        <Header title="This Month"/>
-        <div className="body-wrapper">
-          <ThisMonth />
-        </div>
-      </ProtectedRoute>
+      <MainWrapper title="This Month">
+        <ThisMonth />
+      </MainWrapper>
+    ),
+  },
+  {
+    path: PAGE_DATA.expenseReport.path,
+    element: (
+      <MainWrapper title={PAGE_DATA.expenseReport.name}>
+        <Suspense fallback={<LoadingIndicator />}>
+          <ExpenseReport />
+        </Suspense>
+      </MainWrapper>
     ),
   },
 ]);

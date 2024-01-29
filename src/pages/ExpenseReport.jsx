@@ -48,11 +48,6 @@ export const ExpenseReport = () => {
         return result
         },
     {});
-    // const totalIncome = Object.values(incomeTransactions).reduce((acc, transaction) => acc+= transaction.amount, 0);
-    const incomeTransactionData = {
-        incomeTransactions,
-        totalIncome: Math.round(totalIncome)
-    };
 
     let totalExpense = 0;
     const expenseTransactions = expenseCategories.reduce((acc, category) => {
@@ -72,20 +67,13 @@ export const ExpenseReport = () => {
         return result
         },
     {});
-    const expenseTransactionData = {
-        expenseTransactions,
-        totalExpense: Math.round(totalExpense)
-    };
-
-    console.log('@@@incomeTransactionData', incomeTransactionData);
-    console.log('@@@expenseTransactionData', expenseTransactionData);
 
     const sankeyData = [];
     Object.entries(incomeTransactions).forEach(([category, transactions]) => {
         sankeyData.push({
             from: category,
             to: "Total Income",
-            value: transactions.reduce((acc, t) => Math.round(acc + t.amount), 0)
+            weight: transactions.reduce((acc, t) => Math.round(acc + t.amount), 0)
         });
     })
 

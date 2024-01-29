@@ -93,7 +93,11 @@ export const ExpenseReport = () => {
         sankeyData.push({
             from: "Total Income",
             to: category,
-            value: transactions.reduce((acc, t) => Math.round(acc + t.amount), 0)
+            weight: transactions.reduce((acc, t) => {
+                const expense = Math.round(acc + t.amount);
+                const copayments = t.copayments?.total || 0;
+                return expense - copayments;
+            }, 0)
         });
     })
 

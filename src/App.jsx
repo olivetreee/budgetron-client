@@ -61,17 +61,6 @@ const router = createHashRouter([
       </MainWrapper>
     ),
   },
-  // {
-  //   path: PAGE_DATA.vendors.path,
-  //   element: (
-  //     <MainWrapper>
-  //       <Header title={PAGE_DATA.vendors.name}/>
-            // <div className="body-wrapper">
-            //   <div>Placeholder for Vendors page</div>
-            // </div>
-  //     </MainWrapper>
-  //   ),
-  // },
   {
     path: PAGE_DATA.fixVendors.path,
     element: (

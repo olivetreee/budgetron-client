@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { LoadingIndicator } from '../components/LoadingIndicator';
 import { SankeyGraph } from '../components/SankeyGraph';
 import { useCategories } from '../providers/CategoriesProvider';
@@ -9,7 +8,7 @@ export const ExpenseReport = () => {
     const { items: allTransactions, grouping } = transactionData;
     const { category: transactionsByCatgories } = grouping || {};
     const [{
-        categoriesByType: { expense: expenseCategories = [], income: incomeCategories = [], all: allCategories },
+        categoriesByType: { expense: expenseCategories = [], income: incomeCategories = [] },
         loading: categoriesLoading,
     }] = useCategories();
 
@@ -17,51 +16,24 @@ export const ExpenseReport = () => {
         return <LoadingIndicator />;
     }
 
-    /*
-    {
-        income: {
-            cat1: [{}, {}, {}],
-            cat2: [{}, {}, {}],
-        },
-        expenses: {
-            cat3: [{}, {}, {}],
-            cat4: [{}, {}, {}],
-        }
-    }
-    */
-
-    let totalIncome = 0;
     const incomeTransactions = incomeCategories.reduce((acc, category) => {
         let result = acc;
         if (transactionsByCatgories[category]) {
             result = {
                 ...acc,
-                [category]: transactionsByCatgories[category].map(id => {
-                    const transaction = allTransactions[id];
-                    // Not a super pure function since we're updating totalIncome as a side effect,
-                    // but it also seems dumb to loop through twice just to calculate total...
-                    totalIncome += transaction.amount;
-                    return transaction;
-                })
+                [category]: transactionsByCatgories[category].map(id => allTransactions[id])
             }
         }
         return result
         },
     {});
 
-    let totalExpense = 0;
     const expenseTransactions = expenseCategories.reduce((acc, category) => {
         let result = acc;
         if (transactionsByCatgories[category]) {
             result = {
                 ...acc,
-                [category]: transactionsByCatgories[category].map(id => {
-                    const transaction = allTransactions[id];
-                    // Not a super pure function since we're updating totalIncome as a side effect,
-                    // but it also seems dumb to loop through twice just to calculate total...
-                    totalExpense += transaction.amount;
-                    return transaction;
-                })
+                [category]: transactionsByCatgories[category].map(id => allTransactions[id])
             }
         }
         return result

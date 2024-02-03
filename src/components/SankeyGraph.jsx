@@ -10,7 +10,7 @@ export const SankeyGraph = ({ data }) => {
                 enabled: false
             },
             fill: function() {
-                return this.to === "Total Income" ? "#2ecc71" : "#e74c3c"
+                return this.to === "Total Income" ? "#3498db" : "#e74c3c"
             }
         },
         hovered: {
@@ -18,7 +18,7 @@ export const SankeyGraph = ({ data }) => {
                 enabled: false
             },
             fill: function() {
-                return this.to === "Total Income" ? "#2ecc71aa" : "#e74c3caa"
+                return this.to === "Total Income" ? "#3498dbaa" : "#e74c3caa"
             }
         },
         tooltip: {
@@ -36,6 +36,19 @@ export const SankeyGraph = ({ data }) => {
         }
     }
 
+    const dropoff = {
+        normal: {
+            fill: "#2ecc71"
+        },
+        hovered: {
+            fill: "#2ecc71aa"
+        },
+        tooltip: {
+            format: function() { return printMoney(this.value, false) },
+            titleFormat: "Leftovers",
+        },
+    }
+
     return (
         <>
             <AnyChart
@@ -47,6 +60,7 @@ export const SankeyGraph = ({ data }) => {
                 nodePadding={15}
                 flow={ flow }
                 node={ node }
+                dropoff={ dropoff }
                 nodeWidth={"20%"}
             />
         </>

@@ -67,12 +67,20 @@ export const ExpenseReport = () => {
         });
     })
 
-    const leftovers = totalIncome - totalExpenses;
-    if (leftovers > 0) {
+    const leftoversOrDeficit = totalIncome - totalExpenses;
+    if (leftoversOrDeficit > 0) {
         sankeyData.push({
             from: "Total Income",
             to: null,
-            weight: leftovers
+            weight: leftoversOrDeficit
+        })
+    }
+
+    if (leftoversOrDeficit < 0) {
+        sankeyData.push({
+            from: "DEFICIT",
+            to: "Total Income",
+            weight: leftoversOrDeficit * -1
         })
     }
 

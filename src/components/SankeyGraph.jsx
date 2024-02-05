@@ -10,7 +10,15 @@ export const SankeyGraph = ({ data }) => {
                 enabled: false
             },
             fill: function() {
-                return this.to === "Total Income" ? "#3498db" : "#e74c3c"
+                if (this.from === "DEFICIT") {
+                    return "#384660";
+                }
+
+                if (this.to === "Total Income") {
+                    return "#3498db";
+                }
+
+                return "#e74c3c"
             }
         },
         hovered: {
@@ -18,8 +26,16 @@ export const SankeyGraph = ({ data }) => {
                 enabled: false
             },
             fill: function() {
-                return this.to === "Total Income" ? "#3498dbaa" : "#e74c3caa"
-            }
+                if (this.from === "DEFICIT") {
+                    return "#384660aa";
+                }
+
+                if (this.to === "Total Income") {
+                    return "#3498dbaa";
+                }
+
+                return "#e74c3caa"
+            },
         },
         tooltip: {
             format: function() { return printMoney(this.value, false) }
@@ -32,7 +48,16 @@ export const SankeyGraph = ({ data }) => {
             titleFormat: function() { return this.name },
         },
         fill: function() {
-            return this.name === "Total Income" ? "#2e9a5b" : this.sourceColor
+            if (this.name === "Total Income") {
+                return "#2e9a5b";
+            }
+
+            if (this.name === "DEFICIT") {
+                // return "#95a5a6"
+                return "#7f8c8d"
+            }
+
+            return this.sourceColor;
         }
     }
 
